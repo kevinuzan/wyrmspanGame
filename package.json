@@ -1,0 +1,16 @@
+{
+  "name": "wyrmspan-online",
+  "version": "1.0.0",
+  "description": "Wyrmspan online para 2-5 jogadores (salas por código, WebSocket)",
+  "main": "server.mjs",
+  "private": true,
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

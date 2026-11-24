@@ -1,0 +1,4031 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wyrmspan — Santuário dos Dragões (Online)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment-bg: #f3ead8;
+      --ink-dark: #261d15;
+      --crimson-cavern: #9e2a2b;
+      --golden-grotto: #c88a1e;
+      --amethyst-abyss: #6a3d8a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--parchment-bg);
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(158, 42, 43, 0.09) 0%, transparent 42%),
+        radial-gradient(circle at 90% 20%, rgba(200, 138, 30, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(106, 61, 138, 0.09) 0%, transparent 50%);
+      color: var(--ink-dark);
+      min-height: 100vh;
+    }
+
+    .font-display {
+      font-family: 'Cinzel', serif;
+    }
+
+    .parchment-panel {
+      background: linear-gradient(180deg, #fffdf8 0%, #f6eddc 100%);
+      border: 1px solid #d2be9e;
+      box-shadow: 0 4px 18px rgba(38, 29, 21, 0.08);
+    }
+
+    /* Estilo Físico das Cavernas em Aquarela */
+    .cavern-row-0 {
+      background: linear-gradient(90deg, rgba(158, 42, 43, 0.24) 0%, rgba(220, 145, 140, 0.12) 45%, rgba(255, 250, 245, 0.75) 100%);
+      border-color: rgba(158, 42, 43, 0.55);
+    }
+    .cavern-row-1 {
+      background: linear-gradient(90deg, rgba(200, 138, 30, 0.25) 0%, rgba(235, 185, 95, 0.12) 45%, rgba(255, 252, 245, 0.75) 100%);
+      border-color: rgba(200, 138, 30, 0.6);
+    }
+    .cavern-row-2 {
+      background: linear-gradient(90deg, rgba(106, 61, 138, 0.24) 0%, rgba(175, 135, 205, 0.12) 45%, rgba(252, 248, 255, 0.75) 100%);
+      border-color: rgba(106, 61, 138, 0.55);
+    }
+
+    /* Carta Física de Dragão */
+    .physical-dragon-card {
+      background: linear-gradient(180deg, #fcf8ee 0%, #f4ecda 100%);
+      border: 2px solid #b8a382;
+      box-shadow: 0 3px 10px rgba(38, 29, 21, 0.12), inset 0 0 18px rgba(184, 163, 130, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .physical-dragon-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(38, 29, 21, 0.18);
+      border-color: #8c6d3f;
+    }
+
+    /* Carta Física de Caverna (Quadrada) */
+    .physical-cave-card {
+      background: linear-gradient(180deg, #2d2520 0%, #1c1714 100%);
+      border: 2px solid #786552;
+      box-shadow: 0 3px 10px rgba(28, 23, 20, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .physical-cave-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(28, 23, 20, 0.25);
+    }
+
+    /* Faixa diagonal do traço de personalidade */
+    .trait-ribbon {
+      clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* Animação do Aventureiro explorando */
+    .adventurer-pulse {
+      animation: bouncePulse 0.65s infinite alternate;
+    }
+    @keyframes bouncePulse {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-4px) scale(1.1); }
+    }
+
+    /* Leque de cartas na mão do jogador (sobrepostas, sobem ao passar o mouse) */
+    .hand-fan-container {
+      display: flex;
+      align-items: flex-end;
+      overflow-x: auto;
+      padding: 54px 20px 18px 20px;
+    }
+    .hand-fan-item {
+      width: 215px;
+      min-width: 215px;
+      margin-left: -68px;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1), margin 0.25s ease;
+      transform-origin: bottom center;
+      position: relative;
+      z-index: 10;
+    }
+    .hand-fan-item:first-child {
+      margin-left: 0;
+    }
+    .hand-fan-item:hover {
+      transform: translateY(-42px) scale(1.07) rotate(-1deg);
+      z-index: 50;
+      box-shadow: 0 22px 38px rgba(28, 23, 20, 0.36);
+    }
+
+    /* Animações de deslizamento e colocação suave das cartas no tabuleiro */
+    .card-slotted-anim {
+      animation: cardSlottedDrop 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes cardSlottedDrop {
+      0% {
+        opacity: 0.2;
+        transform: translateY(-28px) scale(1.12);
+        box-shadow: 0 20px 35px rgba(217, 119, 6, 0.45);
+      }
+      70% {
+        opacity: 1;
+        transform: translateY(3px) scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card-flying-clone {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      transition: transform 0.58s cubic-bezier(0.22, 1, 0.36, 1), width 0.58s cubic-bezier(0.22, 1, 0.36, 1), height 0.58s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.58s ease;
+      box-shadow: 0 24px 48px rgba(24, 18, 12, 0.42);
+      border-radius: 0.75rem;
+    }
+
+    .showcase-pop-in {
+      animation: showcaseReveal 0.48s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes showcaseReveal {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Mão Suspensa no canto inferior esquerdo */
+    .hand-panel-floating {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      z-index: 45;
+      width: min(94vw, 680px);
+      box-shadow: 0 16px 40px rgba(24, 18, 12, 0.35);
+      border: 2px solid #9c7c4c;
+    }
+    .hand-panel-floating .hand-fan-item {
+      width: 190px;
+      min-width: 190px;
+      margin-left: -82px;
+    }
+    .hand-panel-floating .hand-fan-item:first-child {
+      margin-left: 0;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #eadec9;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #bfa886;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-950">
+
+  <!-- ========================================================= -->
+  <!-- TELA 1: CONFIGURAÇÃO DA PARTIDA (SETUP)                   -->
+  <!-- ========================================================= -->
+  <div id="setup-screen" class="max-w-5xl mx-auto px-4 py-8">
+    <header class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-900/10 border border-amber-800/25 text-amber-950 text-xs font-bold tracking-wider uppercase mb-3">
+        <span>🐉 Edição Física Digitalizada</span>
+        <span>•</span>
+        <span>Online (2–5 Jogadores)</span>
+      </div>
+      <h1 class="font-display text-4xl sm:text-5xl font-black text-stone-900 tracking-tight">
+        WYRMSPAN
+      </h1>
+      <p class="text-stone-700 mt-2 max-w-2xl mx-auto text-sm sm:text-base">
+        Escave cavernas ocultas, atraia dragões de todos os tamanhos e explore seu santuário ao longo de 4 rodadas para conquistar a Guilda do Dragão.
+      </p>
+    </header>
+
+    <!-- Entrar / criar sala -->
+    <div id="lobby-connect" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 parchment-panel rounded-2xl p-6 space-y-5">
+        <div>
+          <h2 class="font-display text-xl font-bold text-stone-800 mb-2">1. Seu nome</h2>
+          <input id="my-name-input" type="text" maxlength="24" placeholder="Como você quer aparecer na mesa?"
+            class="w-full rounded-xl border border-stone-300 bg-white px-3 py-2.5 text-sm font-semibold text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-600" />
+        </div>
+
+        <div>
+          <h2 class="font-display text-xl font-bold text-stone-800 mb-2">2. Sala</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3">
+              <h3 class="font-display font-bold text-stone-800">Criar sala</h3>
+              <p class="text-xs text-stone-600">Você vira o anfitrião e recebe um código para enviar ao outro jogador.</p>
+              <button id="btn-create-room" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-800 via-amber-800 to-purple-900 text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
+                Criar sala →
+              </button>
+            </div>
+            <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3">
+              <h3 class="font-display font-bold text-stone-800">Entrar numa sala</h3>
+              <input id="join-code-input" type="text" maxlength="4" placeholder="CÓDIGO" autocapitalize="characters"
+                class="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-center font-display text-lg font-extrabold tracking-[0.4em] uppercase text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-600" />
+              <button id="btn-join-room" class="w-full px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-display font-bold tracking-wide shadow-md active:scale-[0.99] transition cursor-pointer">
+                Entrar →
+              </button>
+            </div>
+          </div>
+          <p id="lobby-error" class="text-xs font-semibold text-red-700 min-h-[1rem] mt-2"></p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 space-y-6">
+        <div class="parchment-panel rounded-2xl p-6">
+          <h2 class="font-display text-lg font-bold text-stone-800 mb-3">Como funciona</h2>
+          <ol class="list-decimal pl-5 space-y-1.5 text-xs text-stone-700 leading-relaxed">
+            <li>Um de vocês cria a sala e manda o código (ou o link) para o outro.</li>
+            <li>Cada um escolhe suas 4 cartas e 3 recursos iniciais no próprio aparelho.</li>
+            <li>Na sua vez, você joga normalmente. Quando uma carta fizer o oponente decidir algo, o pop-up aparece na tela dele.</li>
+            <li>Se a conexão cair ou você recarregar a página, a partida continua de onde parou.</li>
+          </ol>
+        </div>
+        <div class="parchment-panel rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="font-display text-lg font-bold text-stone-800">Baralho</h2>
+            <span id="deck-stats-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900">Carregando...</span>
+          </div>
+          <p class="text-xs text-stone-600">As cartas vêm do arquivo <code class="font-mono">cartas.json</code> do servidor.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sala de espera -->
+    <div id="lobby-room" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 parchment-panel rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Código da sala</div>
+            <div id="lobby-room-code" class="font-display text-4xl font-black tracking-[0.3em] text-stone-900">----</div>
+          </div>
+          <button id="btn-copy-link" class="px-4 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-400 text-amber-950 text-xs font-bold transition cursor-pointer">
+            🔗 Copiar link de convite
+          </button>
+        </div>
+
+        <h2 class="font-display text-lg font-bold text-stone-800 mb-2">Dracologistas na sala</h2>
+        <div id="lobby-seats" class="space-y-2 mb-5"></div>
+
+        <div class="border-t border-stone-200 pt-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-stone-600 max-w-sm">
+            <span class="font-bold text-stone-800">Preparação Oficial:</span> cada jogador começa com 6 Moedas, 1 Ovo, 4 cartas (entre 3 Dragões e 3 Cavernas sorteados) e 3 recursos à escolha.
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button id="btn-leave-room" class="px-4 py-3 rounded-xl border border-stone-300 bg-white hover:bg-stone-100 text-xs font-bold text-stone-700 cursor-pointer">Sair</button>
+            <button id="btn-start-game" disabled class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-gradient-to-r from-red-800 via-amber-800 to-purple-900 disabled:opacity-40 disabled:cursor-not-allowed text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
+              Iniciar Partida →
+            </button>
+          </div>
+        </div>
+        <p id="lobby-wait-text" class="hidden mt-3 text-xs font-semibold text-amber-900">⏳ Aguardando o anfitrião iniciar a partida…</p>
+        <p id="lobby-need-text" class="hidden mt-3 text-xs font-semibold text-amber-900">Aguardando pelo menos mais 1 jogador entrar na sala.</p>
+      </div>
+
+      <div class="lg:col-span-5 space-y-6">
+        <div class="parchment-panel rounded-2xl p-6">
+          <h2 class="font-display text-lg font-bold text-stone-800 mb-3">Guilda & Objetivos <span class="text-[10px] font-bold text-stone-500 normal-case">(escolhida pelo anfitrião)</span></h2>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-stone-600 uppercase mb-1">Ficha da Guilda do Dragão</label>
+              <select id="guild-select" class="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm font-semibold text-stone-800 disabled:opacity-60">
+                <option value="random" selected>Aleatória (Recomendado)</option>
+                <option value="navegantes">Guilda dos Navegantes</option>
+                <option value="terras_altas">Guilda das Terras Altas</option>
+                <option value="floresta_tropical">Guilda da Floresta Tropical</option>
+              </select>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-50/90 border border-amber-300/80 text-xs text-stone-700 leading-relaxed">
+              <strong>Regras Fiéis ao Tabuleiro Físico:</strong>
+              <ul class="list-disc pl-4 mt-1 space-y-0.5">
+                <li><strong>Caverna Escarlate:</strong> Trilha concede 🌈 Recursos e estoca 2 recursos no final.</li>
+                <li><strong>Gruta Dourada:</strong> Trilha concede 🐉 Cartas de Dragão e insere 2 dragões no final.</li>
+                <li><strong>Abismo Ametista:</strong> Trilha concede 🪨 Cartas de Caverna e descarta até 2 cartas por 🥚 Ovos no final.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- TELA 2: DRAFT INICIAL (ESCOLHA DE 4 CARTAS E 3 RECURSOS)  -->
+  <!-- ========================================================= -->
+  <div id="draft-screen" class="hidden max-w-6xl mx-auto px-4 py-6">
+    <div id="draft-waiting" class="hidden parchment-panel rounded-2xl p-10 text-center">
+      <div class="text-4xl mb-3">🥚</div>
+      <h2 class="font-display text-2xl font-bold text-stone-900 mb-1">Escolha enviada!</h2>
+      <p id="draft-waiting-text" class="text-sm font-semibold text-amber-900"></p>
+    </div>
+    <div id="draft-main" class="parchment-panel rounded-2xl p-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-stone-200 pb-4 mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Preparação Inicial</span>
+          <h2 id="draft-player-title" class="font-display text-2xl sm:text-3xl font-bold text-stone-900">
+            Vez de Jogador 1
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-600 mt-0.5">
+            Selecione exatamente <strong>4 cartas</strong> no total (entre os 3 Dragões e 3 Cavernas sorteados) e <strong>3 recursos iniciais</strong>.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="px-4 py-2 rounded-xl bg-stone-100 border border-stone-200 text-center">
+            <div class="text-[11px] uppercase font-bold text-stone-500">Cartas</div>
+            <div id="draft-cards-counter" class="text-lg font-extrabold text-stone-900">0 / 4</div>
+          </div>
+          <div class="px-4 py-2 rounded-xl bg-stone-100 border border-stone-200 text-center">
+            <div class="text-[11px] uppercase font-bold text-stone-500">Recursos</div>
+            <div id="draft-res-counter" class="text-lg font-extrabold text-stone-900">0 / 3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Escolha de Recursos Iniciais -->
+      <div class="mb-6 p-4 rounded-2xl bg-amber-50/80 border border-amber-300">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <span class="text-sm font-bold text-stone-800">Escolha 3 Recursos Iniciais (qualquer combinação):</span>
+          <button id="btn-clear-draft-res" class="text-xs font-bold text-amber-900 underline cursor-pointer">Limpar recursos</button>
+        </div>
+        <div id="draft-resource-buttons" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+      </div>
+
+      <!-- Cartas Sorteadas (3 Dragões + 3 Cavernas) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+        <div class="lg:col-span-6">
+          <h3 class="font-display text-base font-bold text-stone-800 mb-3">🐉 Seus 3 Dragões Sorteados (Clique para selecionar)</h3>
+          <div id="draft-dragons-list" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+        </div>
+        <div class="lg:col-span-4">
+          <h3 class="font-display text-base font-bold text-stone-800 mb-3">🪨 Suas 3 Cavernas Sorteadas</h3>
+          <div id="draft-caves-list" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+        </div>
+        <div class="lg:col-span-2">
+          <h3 class="font-display text-base font-bold text-stone-800 mb-3">✅ Selecionadas</h3>
+          <div id="draft-selected-preview" class="space-y-2 p-3 rounded-xl bg-white border border-stone-300 min-h-[180px]"></div>
+        </div>
+      </div>
+
+      <div class="flex justify-end border-t border-stone-200 pt-4">
+        <button id="btn-confirm-draft" disabled class="px-6 py-3 rounded-xl bg-emerald-700 disabled:bg-stone-300 disabled:text-stone-500 text-white font-display font-bold shadow transition cursor-pointer disabled:cursor-not-allowed">
+          Confirmar Escolha Inicial →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- TELA 3: JOGO PRINCIPAL                                    -->
+  <!-- ========================================================= -->
+  <div id="game-screen" class="hidden max-w-[1520px] mx-auto px-3 sm:px-5 py-4 space-y-4">
+    <!-- POP-UP FLUTUANTE FIXO NO TOPO: DESFAZER / CONFIRMAR JOGADA -->
+    <div id="floating-turn-banner" class="hidden fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[94vw] max-w-xl rounded-2xl bg-stone-950/95 text-amber-50 border-2 border-amber-400 shadow-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
+      <div class="flex items-center gap-2.5">
+        <span class="w-3 h-3 rounded-full bg-amber-400 animate-ping"></span>
+        <div>
+          <div id="floating-turn-title" class="font-display text-xs sm:text-sm font-extrabold text-amber-200 uppercase tracking-wide">
+            Jogada em Andamento
+          </div>
+          <div id="floating-turn-subtitle" class="text-[11px] text-stone-300">
+            Revise seu tabuleiro ou faça trocas 2:1 antes de confirmar.
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 ml-auto">
+        <button id="btn-floating-undo" class="hidden px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-extrabold shadow transition cursor-pointer">
+          ↩️ Desfazer
+        </button>
+        <button id="btn-floating-confirm" class="hidden px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow transition cursor-pointer">
+          ✅ Confirmar Jogada
+        </button>
+      </div>
+    </div>
+
+    <div id="waiting-banner" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-full bg-stone-950/90 text-amber-100 border border-amber-400 text-xs font-bold shadow-xl"></div>
+
+    <!-- Barra Superior: Rodada, Objetivos Públicos, Jogadores e Controles -->
+    <header class="parchment-panel rounded-2xl p-3 sm:p-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Info da Rodada -->
+        <div class="flex items-center gap-3">
+          <div class="px-3.5 py-2 rounded-xl bg-stone-900 text-amber-100 text-center shadow-xs">
+            <div class="text-[10px] uppercase tracking-widest text-amber-300/80 font-bold">Rodada</div>
+            <div id="hud-round" class="font-display text-xl font-black leading-none mt-0.5">1 / 4</div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="hud-active-player-dot" class="w-3.5 h-3.5 rounded-full inline-block border border-white shadow-xs"></span>
+              <h1 id="hud-active-player-name" class="font-display text-lg sm:text-xl font-bold text-stone-900">
+                Turno de Jogador 1
+              </h1>
+              <span id="hud-first-player-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 text-[10px] font-bold uppercase">
+                ★ Jogador Inicial
+              </span>
+              <span id="conn-pill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900">🟢 Online</span>
+              <span id="hud-room-code" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-200 text-stone-700"></span>
+            </div>
+            <p class="text-xs text-stone-600">
+              Realize <strong>1 ação</strong> (Escavar, Atrair ou Explorar uma das 3 cavernas) ou <strong>Passe a rodada</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Trilha de Objetivos das 4 Rodadas -->
+        <div id="hud-objectives" class="flex flex-wrap items-center gap-2"></div>
+
+        <!-- Botões Rápidos (Regras, Conversão 2:1, Passar) -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-open-trade-2to1" class="px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-400 text-amber-950 text-xs font-bold transition cursor-pointer" title="A qualquer momento, troque 2 recursos quaisquer por 1 recurso à sua escolha">
+            🔄 Trocar 2:1
+          </button>
+          <button id="btn-open-rules" class="px-3 py-2 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-700 text-xs font-bold transition cursor-pointer">
+            📖 Regras
+          </button>
+          <button id="btn-pass-round" class="px-4 py-2 rounded-xl bg-red-800 hover:bg-red-700 text-white text-xs font-bold shadow-sm transition cursor-pointer">
+            Passar Rodada
+          </button>
+        </div>
+      </div>
+
+      <!-- Abas de Jogadores -->
+      <div class="mt-3 pt-3 border-t border-stone-200/80 flex flex-wrap items-center justify-between gap-2">
+        <div id="player-tabs" class="flex flex-wrap items-center gap-2"></div>
+        <div id="viewing-opponent-banner" class="hidden text-xs font-bold text-amber-950 bg-amber-200/80 px-3 py-1 rounded-full border border-amber-400">
+          👁️ Inspecionando Tabuleiro de Oponente
+        </div>
+      </div>
+    </header>
+
+    <!-- Grid Principal: Tabuleiro Individual (Esquerda) + Mercado, Guilda e Log (Direita) -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+      <!-- COLUNA ESQUERDA (8 cols): Tabuleiro Individual + Mão do Jogador -->
+      <div id="left-play-column" class="xl:col-span-8 flex flex-col gap-4">
+        <!-- Tabuleiro Individual Estilo Físico -->
+        <div id="individual-board-panel" class="parchment-panel rounded-2xl p-3 sm:p-4 order-1">
+          <!-- Barra de Recursos e Ações de Escavar / Atrair -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-stone-200">
+            <div id="player-resources-bar" class="flex flex-wrap items-center gap-2"></div>
+
+            <div id="action-buttons-bar" class="flex flex-wrap items-center gap-2">
+              <button id="btn-action-excavate" class="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                <span>⛏️ Escavar</span>
+                <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">1💰+</span>
+              </button>
+              <button id="btn-action-entice" class="px-3.5 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                <span>🐉 Atrair</span>
+                <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">1💰+Custo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Corpo do Tabuleiro Individual (Coluna de Regras & Ninhos à Esquerda + 3 Cavernas) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
+            <!-- Painel Esquerdo do Tabuleiro Físico -->
+            <div class="lg:col-span-2 rounded-xl bg-gradient-to-b from-rose-950/10 via-amber-900/10 to-purple-950/10 border border-stone-300 p-2.5 flex flex-col justify-between text-xs">
+              <div class="space-y-2.5">
+                <div class="p-2 rounded-lg bg-white/80 border border-stone-200">
+                  <div class="font-display font-bold text-[11px] text-stone-900 uppercase">Escavar</div>
+                  <div class="text-[10px] text-stone-600 leading-tight mt-0.5">1💰 + custo coluna. Jogue 🪨 mais à esquerda.</div>
+                </div>
+                <div class="p-2 rounded-lg bg-white/80 border border-stone-200">
+                  <div class="font-display font-bold text-[11px] text-stone-900 uppercase">Atrair</div>
+                  <div class="text-[10px] text-stone-600 leading-tight mt-0.5">1💰 + custo 🐉 no espaço escavado mais à esquerda.</div>
+                </div>
+                <div class="p-2 rounded-lg bg-white/80 border border-stone-200">
+                  <div class="font-display font-bold text-[11px] text-stone-900 uppercase">Explorar</div>
+                  <div class="text-[10px] text-stone-600 leading-tight mt-0.5">Mova 🧭 da esq. p/ dir. até alcançar um ⛔.</div>
+                </div>
+              </div>
+
+              <!-- Base do Aventureiro e 2 Ninhos Iniciais -->
+              <div class="mt-3 space-y-2">
+                <div class="p-2 rounded-xl bg-white border border-stone-300 flex items-center gap-2 shadow-2xs">
+                  <span id="adventurer-token" class="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold shadow">🧭</span>
+                  <div>
+                    <div class="text-[10px] font-bold uppercase text-stone-500">Base</div>
+                    <div class="text-[11px] font-bold text-stone-800 leading-none">Aventureiro</div>
+                  </div>
+                </div>
+
+                <div class="p-2 rounded-xl bg-white border border-stone-300 text-center shadow-2xs">
+                  <div class="text-[10px] font-bold uppercase text-stone-500 mb-1">Armazene 2 Ovos:</div>
+                  <div id="base-nests-container" class="flex items-center justify-center gap-2"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- As 3 Cavernas (Escarlate, Dourada, Ametista) -->
+            <div id="caverns-board" class="lg:col-span-10 space-y-3"></div>
+          </div>
+        </div>
+
+        <!-- Mão do Jogador (Com Leque Interativo e 3 Posições: Abaixo, Acima ou Suspensa) -->
+        <div id="player-hand-panel" class="parchment-panel rounded-2xl p-3 sm:p-4 order-2 transition-all">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+            <div class="flex items-center gap-2">
+              <h2 class="font-display text-base font-bold text-stone-900">🃏 Mão do Jogador</h2>
+              <span id="hand-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-stone-200 text-stone-800">0 / 9</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px] text-stone-500 hidden sm:inline mr-1">Posição da mão:</span>
+              <button id="btn-hand-pos-bottom" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900" title="Exibir mão abaixo do tabuleiro">
+                ⬇️ Abaixo
+              </button>
+              <button id="btn-hand-pos-top" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Exibir mão acima do tabuleiro">
+                ⬆️ Acima
+              </button>
+              <button id="btn-hand-pos-floating" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Deixar mão suspensa no canto inferior esquerdo">
+                ↙️ Suspensa
+              </button>
+            </div>
+          </div>
+          <div class="text-[11px] text-stone-500 mb-1">Passe o mouse sobre uma carta para erguê-la e ler; clique para jogar.</div>
+          <div id="player-hand-container" class="hand-fan-container"></div>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA (4 cols): Exibição de Cartas, Guilda do Dragão e Log -->
+      <div class="xl:col-span-4 space-y-4">
+        <!-- Vitrine Pública da Última Jogada (Visível para todos na mesa) -->
+        <div id="public-last-play-panel" class="parchment-panel rounded-2xl p-4 border-2 border-amber-500/50 bg-gradient-to-b from-amber-50/90 to-[#f6eddc]">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="font-display text-sm font-extrabold text-amber-950 uppercase tracking-wider flex items-center gap-1.5">
+              <span>📣 Última Jogada na Mesa</span>
+            </h2>
+            <span class="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-950 text-[10px] font-bold uppercase">Público</span>
+          </div>
+          <div id="public-last-play-content" class="text-xs text-stone-600">
+            Aguardando a primeira ação da partida...
+          </div>
+        </div>
+
+        <!-- Exibição Central de Cartas -->
+        <div class="parchment-panel rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="font-display text-base font-bold text-stone-900">🏛️ Exibição de Cartas</h2>
+            <div class="flex items-center gap-2 text-[11px] font-bold text-stone-600">
+              <span id="deck-dragons-count">🐉 Baralho: 0</span>
+              <span>•</span>
+              <span id="deck-caves-count">🪨 Baralho: 0</span>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <div class="text-[11px] font-bold uppercase text-stone-500 mb-1.5">Dragões Disponíveis na Exibição</div>
+              <div id="display-dragons" class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-2.5"></div>
+            </div>
+            <div>
+              <div class="text-[11px] font-bold uppercase text-stone-500 mb-1.5">Cartas de Caverna Disponíveis</div>
+              <div id="display-caves" class="grid grid-cols-3 gap-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabuleiro da Guilda do Dragão -->
+        <div class="parchment-panel rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-1">
+            <h2 id="guild-title" class="font-display text-base font-bold text-stone-900">🛡️ Guilda do Dragão</h2>
+            <span class="text-[11px] text-stone-500 font-semibold">Trilha de 12 passos</span>
+          </div>
+          <p id="guild-subtitle" class="text-xs text-stone-600 mb-3"></p>
+
+          <div id="guild-track-grid" class="grid grid-cols-4 gap-1.5 mb-3"></div>
+
+          <div class="rounded-xl bg-amber-950/5 border border-amber-900/20 p-2.5">
+            <div class="text-[11px] font-bold uppercase text-amber-950 mb-1.5">Ficha Central (ao parar nos marcos marrons):</div>
+            <div id="guild-center-slots" class="space-y-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Registro de Eventos (Log) -->
+        <div class="parchment-panel rounded-2xl p-4">
+          <h2 class="font-display text-sm font-bold text-stone-800 uppercase tracking-wider mb-2">📜 Crônicas da Partida</h2>
+          <div id="game-log" class="h-44 overflow-y-auto space-y-1.5 text-xs text-stone-700 pr-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- TELA 4: PLACAR FINAL E PONTUAÇÃO DETALHADA                -->
+  <!-- ========================================================= -->
+  <div id="gameover-screen" class="hidden max-w-5xl mx-auto px-4 py-8">
+    <div class="parchment-panel rounded-2xl p-6 sm:p-8">
+      <div class="text-center mb-6">
+        <div class="inline-block px-4 py-1 rounded-full bg-amber-200 text-amber-950 text-xs font-bold uppercase tracking-wider mb-2">
+          Fim das 4 Rodadas
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-stone-900">
+          🏆 Pontuação Final do Santuário
+        </h1>
+        <p id="winner-announcement" class="text-base sm:text-lg font-semibold text-amber-900 mt-2"></p>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-stone-300 bg-white mb-6">
+        <table id="final-score-table" class="w-full text-sm text-left border-collapse"></table>
+      </div>
+
+      <div class="flex justify-center">
+        <button onclick="requestNewMatch()" class="px-6 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-display font-bold shadow transition cursor-pointer">
+          Nova Partida (voltar à sala)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL GENÉRICO PARA INTERAÇÕES, ESCOLHAS E REGRAS         -->
+  <!-- ========================================================= -->
+  <div id="modal-backdrop" class="hidden fixed inset-0 z-50 bg-stone-950/65 backdrop-blur-xs flex items-center justify-center p-4">
+    <div id="modal-box" class="parchment-panel rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border-2 border-amber-900/40">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-stone-200">
+        <h3 id="modal-title" class="font-display text-lg font-bold text-stone-900">Título</h3>
+        <button id="modal-close-btn" class="w-8 h-8 rounded-full hover:bg-stone-200/80 flex items-center justify-center text-stone-600 font-bold cursor-pointer">✕</button>
+      </div>
+      <div id="modal-body" class="p-5 overflow-y-auto space-y-4 text-sm text-stone-800"></div>
+      <div id="modal-footer" class="px-5 py-3 border-t border-stone-200 flex justify-end gap-2 bg-stone-50/80 rounded-b-2xl"></div>
+    </div>
+  </div>
+
+  <div id="reconnect-banner" class="hidden fixed top-0 inset-x-0 z-[60] bg-amber-500 text-stone-950 text-center text-xs font-extrabold py-1.5">
+    Conexão perdida — tentando reconectar… (a partida continua de onde parou)
+  </div>
+
+  <!-- TOAST DE NOTIFICAÇÃO RÁPIDA -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
+
+  <script>
+    /* =========================================================================
+       1. CONSTANTES, METADADOS DO TABULEIRO FÍSICO E BANCO DE DADOS JSON
+       ========================================================================= */
+    const PLAYER_COLORS = [
+      { name: "Carmesim", hex: "#9e2a2b", bg: "bg-red-800" },
+      { name: "Dourado", hex: "#b45309", bg: "bg-amber-700" },
+      { name: "Ametista", hex: "#6b21a8", bg: "bg-purple-800" },
+      { name: "Esmeralda", hex: "#047857", bg: "bg-emerald-700" },
+      { name: "Safira", hex: "#1d4ed8", bg: "bg-blue-700" }
+    ];
+
+    // Metadados exatos de cada uma das 3 cavernas conforme a arte do tabuleiro físico
+    const CAVERNS_META = [
+      {
+        id: 0,
+        nome: "Caverna Escarlate",
+        cor: "#9e2a2b",
+        lineBg: "#d98284",
+        badge: "bg-red-100 text-red-950 border-red-400",
+        pathSteps: [
+          { icon: "🌈", label: "Ganhe 1 Recurso", type: "resource_any" },
+          { icon: "🛡️", label: "Ganhe 1 Guilda", type: "guild" },
+          { icon: "🌈", label: "Ganhe 1 Recurso", type: "resource_any" },
+          { icon: "🥚", label: "Bote 1 Ovo", type: "egg" }
+        ],
+        fimIcon: "📦",
+        fimDesc: "Estoque até 2 recursos do seu suprimento em quaisquer Dragões."
+      },
+      {
+        id: 1,
+        nome: "Gruta Dourada",
+        cor: "#c88a1e",
+        lineBg: "#e3b964",
+        badge: "bg-amber-100 text-amber-950 border-amber-400",
+        pathSteps: [
+          { icon: "🐉", label: "Ganhe 1 Dragão", type: "dragon_card" },
+          { icon: "🛡️", label: "Ganhe 1 Guilda", type: "guild" },
+          { icon: "🐉", label: "Ganhe 1 Dragão", type: "dragon_card" },
+          { icon: "🥚", label: "Bote 1 Ovo", type: "egg" }
+        ],
+        fimIcon: "🃏",
+        fimDesc: "Insira até 2 Dragões da sua mão em quaisquer Dragões."
+      },
+      {
+        id: 2,
+        nome: "Abismo Ametista",
+        cor: "#6a3d8a",
+        lineBg: "#b38cd1",
+        badge: "bg-purple-100 text-purple-950 border-purple-400",
+        pathSteps: [
+          { icon: "🪨", label: "Ganhe 1 Caverna", type: "cave_card" },
+          { icon: "🛡️", label: "Ganhe 1 Guilda", type: "guild" },
+          { icon: "🪨", label: "Ganhe 1 Caverna", type: "cave_card" },
+          { icon: "🥚", label: "Bote 1 Ovo", type: "egg" }
+        ],
+        fimIcon: "🗑️",
+        fimDesc: "Descarte até 2 cartas da sua mão. Bote 1 Ovo por carta descartada."
+      }
+    ];
+
+    const RESOURCE_META = {
+      carne:   { label: "Carne",   icon: "🥩", color: "bg-rose-100 text-rose-950 border-rose-300" },
+      ouro:    { label: "Ouro",    icon: "🪙", color: "bg-amber-100 text-amber-950 border-amber-300" },
+      cristal: { label: "Cristal", icon: "💎", color: "bg-purple-100 text-purple-950 border-purple-300" },
+      leite:   { label: "Leite",   icon: "🥛", color: "bg-sky-100 text-sky-950 border-sky-300" }
+    };
+
+    const ABILITY_TYPE_META = {
+      jogado:  { label: "Quando Jogado", icon: "📥", badgeBg: "bg-emerald-800 text-white" },
+      ativado: { label: "Se Ativado",    icon: "🧭", badgeBg: "bg-stone-900 text-amber-200" },
+      rodada:  { label: "1x / Rodada",   icon: "⏳", badgeBg: "bg-indigo-900 text-white" },
+      fim:     { label: "Fim de Partida",icon: "🏆", badgeBg: "bg-purple-900 text-white" }
+    };
+
+    const TRAIT_COLORS = {
+      agressivo:  "bg-orange-600 text-white",
+      timido:     "bg-sky-600 text-white",
+      brincalhao: "bg-pink-600 text-white",
+      prestativo: "bg-emerald-600 text-white"
+    };
+
+    const SIZE_LABELS = {
+      filhote: "FILHOTE",
+      pequeno: "PEQUENO",
+      medio: "MÉDIO",
+      grande: "GRANDE"
+    };
+
+    // As cartas (dragões e cavernas) ficam em public/cartas.json — edite lá.
+
+    // Trilha da Guilda do Dragão (12 passos em sentido horário)
+    const GUILD_TRACK_STEPS = [
+      { idx: 0, label: "INÍCIO", icon: "🛡️", isBrown: true, reward: null },
+      { idx: 1, label: "Ovo", icon: "🥚", isBrown: false, reward: { op: "ovo", n: 1 } },
+      { idx: 2, label: "Carne", icon: "🥩", isBrown: false, reward: { op: "ganhe", rec: "carne", n: 1 } },
+      { idx: 3, label: "Dragão", icon: "🐉", isBrown: false, reward: { op: "dragao", n: 1 } },
+      { idx: 4, label: "Caverna", icon: "🪨", isBrown: false, reward: { op: "caverna", n: 1 } },
+      { idx: 5, label: "Cristal", icon: "💎", isBrown: false, reward: { op: "ganhe", rec: "cristal", n: 1 } },
+      { idx: 6, label: "MARCO SUL", icon: "🛡️", isBrown: true, reward: null },
+      { idx: 7, label: "Ovo", icon: "🥚", isBrown: false, reward: { op: "ovo", n: 1 } },
+      { idx: 8, label: "Ouro", icon: "🪙", isBrown: false, reward: { op: "ganhe", rec: "ouro", n: 1 } },
+      { idx: 9, label: "Dragão", icon: "🐉", isBrown: false, reward: { op: "dragao", n: 1 } },
+      { idx: 10, label: "Moeda", icon: "💰", isBrown: false, reward: { op: "moeda", n: 1 } },
+      { idx: 11, label: "Leite", icon: "🥛", isBrown: false, reward: { op: "ganhe", rec: "leite", n: 1 } }
+    ];
+
+    const GUILD_SHEETS = {
+      navegantes: {
+        id: "navegantes",
+        nome: "Guilda dos Navegantes",
+        subtitulo: "Escavação rápida, novos dragões e colunas completas.",
+        slots: [
+          { id: "nav_1", cap: 2, label: "Escave 1 espaço gratuitamente usando uma Carta de Caverna da mão.", type: "imediato", effect: "free_excavate" },
+          { id: "nav_2", cap: 2, label: "Ganhe 1 Moeda e 2 Cartas de Dragão.", type: "imediato", effect: "coin_and_2_dragons" },
+          { id: "nav_3", cap: 2, label: "FIM: Ganhe 3 PV por cada coluna completa com Dragões.", type: "fim", scoreFn: (p) => countFullColumns(p) * 3 },
+          { id: "nav_4", cap: 1, label: "FIM: 6 PV (1 vaga)", type: "fim", scoreFn: () => 6 },
+          { id: "nav_5", cap: 1, label: "FIM: 3 PV (1 vaga)", type: "fim", scoreFn: () => 3 },
+          { id: "nav_6", cap: 99, label: "FIM: 1 PV por marcador (ilimitado)", type: "fim", scoreFn: () => 1 }
+        ]
+      },
+      terras_altas: {
+        id: "terras_altas",
+        nome: "Guilda das Terras Altas",
+        subtitulo: "Grandes ninhadas de ovos e recursos abundantes.",
+        slots: [
+          { id: "ta_1", cap: 2, label: "Bote 3 Ovos em quaisquer espaços de ninho.", type: "imediato", effect: "lay_3_eggs" },
+          { id: "ta_2", cap: 2, label: "Ganhe 3 recursos quaisquer à sua escolha.", type: "imediato", effect: "gain_3_any" },
+          { id: "ta_3", cap: 2, label: "FIM: Ganhe 1 PV para cada 2 Ovos no seu tabuleiro.", type: "fim", scoreFn: (p) => Math.floor(countPlayerEggs(p) / 2) },
+          { id: "ta_4", cap: 1, label: "FIM: 6 PV (1 vaga)", type: "fim", scoreFn: () => 6 },
+          { id: "ta_5", cap: 1, label: "FIM: 3 PV (1 vaga)", type: "fim", scoreFn: () => 3 },
+          { id: "ta_6", cap: 99, label: "FIM: 1 PV por marcador (ilimitado)", type: "fim", scoreFn: () => 1 }
+        ]
+      },
+      floresta_tropical: {
+        id: "floresta_tropical",
+        nome: "Guilda da Floresta Tropical",
+        subtitulo: "Recursos estocados, cartas inseridas e criação de filhotes.",
+        slots: [
+          { id: "ft_1", cap: 2, label: "Estoque até 2 recursos do suprimento geral em quaisquer Dragões.", type: "imediato", effect: "tuck_res_2_general" },
+          { id: "ft_2", cap: 2, label: "Insira até 2 Dragões do baralho embaixo de quaisquer Dragões.", type: "imediato", effect: "tuck_deck_2" },
+          { id: "ft_3", cap: 2, label: "FIM: Ganhe 2 PV por cada Filhote no seu tabuleiro.", type: "fim", scoreFn: (p) => getVisibleDragons(p).filter(d => d.card.tam === "filhote").length * 2 },
+          { id: "ft_4", cap: 1, label: "FIM: 6 PV (1 vaga)", type: "fim", scoreFn: () => 6 },
+          { id: "ft_5", cap: 1, label: "FIM: 3 PV (1 vaga)", type: "fim", scoreFn: () => 3 },
+          { id: "ft_6", cap: 99, label: "FIM: 1 PV por marcador (ilimitado)", type: "fim", scoreFn: () => 1 }
+        ]
+      }
+    };
+
+    const OBJECTIVE_TILES = [
+      { id: "obj_filhotes", titulo: "Filhotes no Tabuleiro", countFn: (p) => getVisibleDragons(p).filter(d => d.card.tam === "filhote").length },
+      { id: "obj_grandes", titulo: "Dragões Grandes no Tabuleiro", countFn: (p) => getVisibleDragons(p).filter(d => d.card.tam === "grande").length },
+      { id: "obj_ovos", titulo: "Ovos no Tabuleiro", countFn: (p) => countPlayerEggs(p) },
+      { id: "obj_estocados", titulo: "Recursos Estocados", countFn: (p) => countTuckedResources(p) },
+      { id: "obj_inseridas", titulo: "Cartas Inseridas em Dragões", countFn: (p) => countTuckedCards(p) },
+      { id: "obj_escavadas", titulo: "Cartas de Caverna Escavadas", countFn: (p) => countExcavatedCards(p) },
+      { id: "obj_total_dragoes", titulo: "Dragões Visíveis no Santuário", countFn: (p) => getVisibleDragons(p).length },
+      { id: "obj_ativados", titulo: "Dragões 'Se Ativado'", countFn: (p) => getVisibleDragons(p).filter(d => d.card.tipo === "ativado").length }
+    ];
+
+    function objCount(obj, player) {
+      const t = OBJECTIVE_TILES.find(o => o.id === obj.id);
+      return t ? t.countFn(player) : 0;
+    }
+    function getGuild() {
+      return GUILD_SHEETS[gameState.guildId];
+    }
+
+    const ROUND_OBJECTIVE_POINTS = [
+      [4, 1, 0],
+      [5, 2, 1],
+      [6, 3, 2],
+      [7, 4, 3]
+    ];
+
+    /* =========================================================================
+       2. ILUSTRAÇÕES VETORIAIS (SVG) PARA CARTAS FÍSICAS DE DRAGÃO E CAVERNA
+       ========================================================================= */
+    function getDragonIllustrationSVG(card) {
+      const hue = ((card.numero * 47) % 360);
+      const primaryColor = `hsl(${hue}, 42%, 34%)`;
+      const accentColor = `hsl(${(hue + 35) % 360}, 55%, 52%)`;
+      const auraColor = `hsl(${hue}, 45%, 88%)`;
+
+      if (card.tam === "filhote") {
+        return `
+          <svg viewBox="0 0 120 74" class="w-full h-16">
+            <circle cx="60" cy="40" r="28" fill="${auraColor}" opacity="0.75"/>
+            <path d="M44 54 C40 36, 52 22, 64 24 C74 26, 78 38, 72 52 Z" fill="${primaryColor}"/>
+            <circle cx="62" cy="24" r="11" fill="${primaryColor}"/>
+            <path d="M55 15 L51 8 L59 14 Z M67 15 L72 8 L64 14 Z" fill="${accentColor}"/>
+            <circle cx="58" cy="22" r="2.2" fill="#fff"/>
+            <circle cx="58" cy="22" r="1.1" fill="#1c1917"/>
+            <path d="M46 36 C32 28, 30 44, 44 45" fill="${accentColor}" opacity="0.85"/>
+            <path d="M72 48 Q86 52 82 40" stroke="${primaryColor}" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </svg>
+        `;
+      }
+
+      if (card.tam === "grande") {
+        return `
+          <svg viewBox="0 0 120 74" class="w-full h-16">
+            <ellipse cx="60" cy="42" rx="36" ry="24" fill="${auraColor}" opacity="0.7"/>
+            <path d="M22 44 C12 20, 38 10, 54 28 C72 8, 102 18, 96 42 C82 34, 68 36, 58 44 C46 36, 34 36, 22 44 Z" fill="${accentColor}" opacity="0.85"/>
+            <path d="M52 56 C48 38, 54 20, 62 14 C68 22, 70 40, 64 58 Q78 64 90 54" stroke="${primaryColor}" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M58 14 L53 6 L61 11 L66 5 L64 14 Z" fill="${primaryColor}"/>
+            <circle cx="61" cy="16" r="1.6" fill="#fef08a"/>
+          </svg>
+        `;
+      }
+
+      if (card.tam === "medio") {
+        return `
+          <svg viewBox="0 0 120 74" class="w-full h-16">
+            <circle cx="62" cy="38" r="26" fill="${auraColor}" opacity="0.75"/>
+            <path d="M32 48 Q46 20 62 34 Q78 16 92 42 Q74 38 60 46 Q46 38 32 48 Z" fill="${accentColor}" opacity="0.8"/>
+            <path d="M36 56 C48 48, 52 24, 64 20 C72 18, 76 26, 68 32 C62 36, 68 52, 84 56" stroke="${primaryColor}" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+            <circle cx="67" cy="22" r="1.6" fill="#fff"/>
+          </svg>
+        `;
+      }
+
+      // Pequeno
+      return `
+        <svg viewBox="0 0 120 74" class="w-full h-16">
+          <circle cx="60" cy="38" r="24" fill="${auraColor}" opacity="0.75"/>
+          <path d="M38 38 C26 24, 46 18, 58 32 C70 18, 90 24, 78 38 Z" fill="${accentColor}" opacity="0.85"/>
+          <path d="M52 52 C50 38, 56 26, 62 24 C68 26, 70 38, 66 52 Q76 58 84 50" stroke="${primaryColor}" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <circle cx="62" cy="26" r="1.5" fill="#fff"/>
+        </svg>
+      `;
+    }
+
+    function getCaveIllustrationSVG(card) {
+      const variants = [
+        { bg: "#5c2628", arch: "#9e2a2b", glow: "#f4a261" },
+        { bg: "#5c4318", arch: "#c88a1e", glow: "#fde047" },
+        { bg: "#3b2352", arch: "#6a3d8a", glow: "#d8b4fe" }
+      ];
+      const v = variants[card.numero % variants.length];
+      return `
+        <svg viewBox="0 0 120 56" class="w-full h-12 rounded-t-lg">
+          <rect width="120" height="56" fill="${v.bg}"/>
+          <circle cx="60" cy="40" r="26" fill="${v.glow}" opacity="0.28"/>
+          <path d="M0 56 L0 12 Q35 2 60 14 Q88 2 120 14 L120 56 L92 56 Q86 24 60 24 Q34 24 28 56 Z" fill="#1f1916"/>
+          <path d="M38 14 L42 26 L46 15 M72 14 L76 25 L80 15" fill="#3a2f2a"/>
+        </svg>
+      `;
+    }
+
+    /* =========================================================================
+       3. ESTADO GLOBAL DO JOGO
+       ========================================================================= */
+    let cardDatabase = { dragoes: [], cavernas: [] };
+
+    let gameState = null;
+    let turnSnapshot = null;
+    let handLayoutMode = "bottom"; // 'bottom' | 'top' | 'floating'
+
+    function stateSig(s) {
+      const { viewingPlayerIdx, justPlacedSlot, adventurerPos, ...rest } = s;
+      return JSON.stringify(rest);
+    }
+
+    function saveTurnSnapshot() {
+      if (!gameState) return;
+      turnSnapshot = stateSig(gameState);
+    }
+
+    function undoCurrentTurn() {
+      if (!turnSnapshot || !engineOwner) return;
+      const keepView = gameState.viewingPlayerIdx;
+      gameState = JSON.parse(turnSnapshot);
+      gameState.viewingPlayerIdx = keepView;
+      gameState.justPlacedSlot = null;
+      gameState.adventurerPos = null;
+      showToast("↩️ Jogada desfeita! Estado do início do turno restaurado.", "info");
+      renderAll();
+    }
+
+    function setHandLayoutMode(mode) {
+      handLayoutMode = mode;
+      const handPanel = document.getElementById("player-hand-panel");
+      const boardPanel = document.getElementById("individual-board-panel");
+      const btnBottom = document.getElementById("btn-hand-pos-bottom");
+      const btnTop = document.getElementById("btn-hand-pos-top");
+      const btnFloat = document.getElementById("btn-hand-pos-floating");
+
+      handPanel.classList.remove("hand-panel-floating", "order-1", "order-2");
+      boardPanel.classList.remove("order-1", "order-2");
+
+      [btnBottom, btnTop, btnFloat].forEach(b => {
+        b.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100";
+      });
+
+      if (mode === "top") {
+        handPanel.classList.add("order-1");
+        boardPanel.classList.add("order-2");
+        btnTop.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
+      } else if (mode === "floating") {
+        handPanel.classList.add("hand-panel-floating");
+        btnFloat.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
+      } else {
+        boardPanel.classList.add("order-1");
+        handPanel.classList.add("order-2");
+        btnBottom.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
+      }
+    }
+
+    /* =========================================================================
+       4. UTILITÁRIOS GERAIS E FORMATAÇÃO
+       ========================================================================= */
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function formatCardText(text) {
+      if (!text) return "";
+      return text
+        .replace(/\[Milk\]/g, `<span class="inline-block text-xs mx-0.5" title="Leite">🥛</span>`)
+        .replace(/\[Meat\]/g, `<span class="inline-block text-xs mx-0.5" title="Carne">🥩</span>`)
+        .replace(/\[Gold\]/g, `<span class="inline-block text-xs mx-0.5" title="Ouro">🪙</span>`)
+        .replace(/\[Crystal\]/g, `<span class="inline-block text-xs mx-0.5" title="Cristal">💎</span>`)
+        .replace(/\[AnyResource\]/g, `<span class="inline-block text-xs mx-0.5" title="Recurso Qualquer">🌈</span>`)
+        .replace(/\[Coin\]/g, `<span class="inline-block text-xs mx-0.5" title="Moeda">💰</span>`)
+        .replace(/\[Egg\]/g, `<span class="inline-block text-xs mx-0.5" title="Ovo">🥚</span>`)
+        .replace(/\[DragonCard\]/g, `<span class="inline-block text-xs mx-0.5" title="Carta de Dragão">🐉</span>`)
+        .replace(/\[CaveCard\]/g, `<span class="inline-block text-xs mx-0.5" title="Carta de Caverna">🪨</span>`)
+        .replace(/\[DragonGuild\]/g, `<span class="inline-block text-xs mx-0.5" title="Avanço na Guilda">🛡️</span>`)
+        .replace(/\[WhenPlayed\]/g, `<span class="inline-block text-xs mx-0.5" title="Quando Jogado">📥</span>`)
+        .replace(/\[Adventurer\]/g, `<span class="inline-block text-xs mx-0.5" title="Se Ativado">🧭</span>`)
+        .replace(/\[OncePerRound(?:-v2)?\]/g, `<span class="inline-block text-xs mx-0.5" title="Uma vez por rodada">⏳</span>`)
+        .replace(/\[EndGame\]/g, `<span class="inline-block text-xs mx-0.5" title="Fim de Partida">🏆</span>`)
+        .replace(/\[VP-(\d+)\]/g, `<span class="inline-flex items-center px-1 rounded bg-amber-200/80 text-stone-950 font-extrabold text-[10px] mx-0.5" title="$1 Pontos de Vitória">⭐$1</span>`);
+    }
+
+    function formatCostIconsOnly(custo) {
+      if (!custo || Object.keys(custo).length === 0) {
+        return `<span class="text-[10px] font-bold text-amber-200/80 uppercase tracking-wider">Sem Custo</span>`;
+      }
+      const map = { ovo: "🥚", moeda: "💰", carne: "🥩", ouro: "🪙", cristal: "💎", leite: "🥛" };
+      let html = "";
+      for (const [k, v] of Object.entries(custo)) {
+        for (let i = 0; i < v; i++) {
+          html += `<span class="inline-flex items-center justify-center text-xs drop-shadow-xs">${map[k] || k}</span>`;
+        }
+      }
+      return html;
+    }
+
+    function showToast(msg, type = "info") {
+      const container = document.getElementById("toast-container");
+      const el = document.createElement("div");
+      const colors = {
+        info: "bg-stone-900 text-amber-50 border-amber-500/40",
+        success: "bg-emerald-900 text-emerald-50 border-emerald-400/40",
+        warn: "bg-amber-900 text-amber-50 border-amber-300/40",
+        error: "bg-red-900 text-red-50 border-red-400/40"
+      };
+      el.className = `px-4 py-2.5 rounded-xl border shadow-lg text-xs font-semibold transition-all duration-300 ${colors[type] || colors.info}`;
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        setTimeout(() => el.remove(), 300);
+      }, 3200);
+    }
+
+    function addLog(msg) {
+      if (!gameState) return;
+      const timestamp = `R${gameState.round}`;
+      gameState.logs.unshift({ round: timestamp, text: msg });
+      if (gameState.logs.length > 80) gameState.logs.pop();
+      renderLog();
+    }
+
+    /* =========================================================================
+       5. CONFIGURAÇÃO INICIAL (SETUP SCREEN)
+       ========================================================================= */
+    function updateDeckStatsBadge() {
+      const totalDragons = cardDatabase.dragoes.reduce((acc, c) => acc + (c.copias || 1), 0);
+      const totalCaves = cardDatabase.cavernas.reduce((acc, c) => acc + (c.copias || 1), 0);
+      document.getElementById("deck-stats-badge").textContent = `${totalDragons} Dragões • ${totalCaves} Cavernas`;
+    }
+
+    /* =========================================================================
+       6. CONSTRUÇÃO DO BARALHO E FASE DE DRAFT INICIAL
+       ========================================================================= */
+    function buildDecks() {
+      let dragonDeck = [];
+      cardDatabase.dragoes.forEach((d, idx) => {
+        const copies = d.copias || 1;
+        for (let c = 0; c < copies; c++) {
+          dragonDeck.push({ ...JSON.parse(JSON.stringify(d)), uid: `D_${d.numero}_${idx}_${c}`, cardType: "dragon" });
+        }
+      });
+
+      let caveDeck = [];
+      cardDatabase.cavernas.forEach((cv, idx) => {
+        const copies = cv.copias || 1;
+        for (let c = 0; c < copies; c++) {
+          caveDeck.push({ ...JSON.parse(JSON.stringify(cv)), uid: `C_${cv.numero}_${idx}_${c}`, cardType: "cave" });
+        }
+      });
+
+      return {
+        dragonDeck: shuffle(dragonDeck),
+        caveDeck: shuffle(caveDeck)
+      };
+    }
+
+    function startDraftPhase() {
+      if (!NET.room || mySeat !== NET.hostSeat) return;
+      if (!cardsLoaded) { showToast("As cartas (cartas.json) ainda não foram carregadas.", "warn"); return; }
+
+      const seated = [];
+      NET.seats.forEach((s, seat) => { if (s && s.connected) seated.push({ name: s.name, seat }); });
+      if (seated.length < 2) { showToast("São necessários pelo menos 2 jogadores conectados.", "warn"); return; }
+
+      const count = seated.length;
+      const guildChoice = document.getElementById("guild-select").value;
+      const guildKeys = Object.keys(GUILD_SHEETS);
+      const chosenGuildKey = guildChoice === "random"
+        ? guildKeys[Math.floor(Math.random() * guildKeys.length)]
+        : guildChoice;
+
+      const { dragonDeck, caveDeck } = buildDecks();
+
+      const players = seated.map((s, i) => {
+        const draftDragons = [dragonDeck.pop(), dragonDeck.pop(), dragonDeck.pop()].filter(Boolean);
+        const draftCaves = [caveDeck.pop(), caveDeck.pop(), caveDeck.pop()].filter(Boolean);
+
+        const caverns = [0, 1, 2].map(cavId => ({
+          id: cavId,
+          explorationsThisRound: 0,
+          cols: [0, 1, 2, 3].map(colIdx => ({
+            col: colIdx,
+            excavated: colIdx === 0,
+            caveCard: null,
+            dragonSlot: null
+          }))
+        }));
+
+        return {
+          id: i,
+          seat: s.seat,
+          name: s.name,
+          color: PLAYER_COLORS[i],
+          coins: 6,
+          resources: { carne: 0, ouro: 0, cristal: 0, leite: 0 },
+          baseEggs: 1,
+          hand: [],
+          caverns,
+          guildPos: 0,
+          guildMarkersUsed: 0,
+          passed: false,
+          draftDone: false,
+          objectiveScores: [0, 0, 0, 0],
+          draftPool: { dragons: draftDragons, caves: draftCaves }
+        };
+      });
+
+      const objectives = shuffle(OBJECTIVE_TILES).slice(0, 4).map(o => ({ id: o.id, titulo: o.titulo }));
+
+      gameState = {
+        phase: "draft",
+        players,
+        dragonDeck,
+        dragonDiscard: [],
+        caveDeck,
+        caveDiscard: [],
+        displayDragons: [dragonDeck.pop(), dragonDeck.pop(), dragonDeck.pop()].filter(Boolean),
+        displayCaves: [caveDeck.pop(), caveDeck.pop(), caveDeck.pop()].filter(Boolean),
+        guildId: chosenGuildKey,
+        guildSlotOccupants: {},
+        objectives,
+        round: 1,
+        firstPlayerIdx: Math.floor(Math.random() * count),
+        activePlayerIdx: 0,
+        viewingPlayerIdx: 0,
+        adventurerPos: null,
+        logs: [],
+        pendingTurnConfirmation: false,
+        lastActionShowcase: null,
+        justPlacedSlot: null
+      };
+
+      gameState.activePlayerIdx = gameState.firstPlayerIdx;
+      myIdx = players.findIndex(p => p.seat === mySeat);
+      gameState.viewingPlayerIdx = myIdx;
+      draftShownIdx = null;
+      draftSentSel = null;
+      NET.phase = "draft";
+      sendState(false);
+      routePhase();
+    }
+
+    let currentDraftSelectedCards = new Set();
+    let currentDraftSelectedResources = [];
+
+    function renderDraftForPlayer(pIdx) {
+      const player = gameState.players[pIdx];
+      currentDraftSelectedCards = new Set();
+      currentDraftSelectedResources = [];
+
+      document.getElementById("draft-player-title").textContent = `Preparação de ${player.name} (${player.color.name})`;
+
+      const updateCounters = () => {
+        document.getElementById("draft-cards-counter").textContent = `${currentDraftSelectedCards.size} / 4`;
+        document.getElementById("draft-res-counter").textContent = `${currentDraftSelectedResources.length} / 3`;
+        const valid = currentDraftSelectedCards.size === 4 && currentDraftSelectedResources.length === 3;
+        document.getElementById("btn-confirm-draft").disabled = !valid;
+
+        const previewEl = document.getElementById("draft-selected-preview");
+        if (previewEl) {
+          const allOffered = [...player.draftPool.dragons, ...player.draftPool.caves];
+          const selectedObjs = allOffered.filter(c => currentDraftSelectedCards.has(c.uid));
+          previewEl.innerHTML = selectedObjs.length === 0
+            ? `<div class="text-xs text-stone-400 text-center py-6">Nenhuma carta selecionada ainda</div>`
+            : selectedObjs.map(c => `
+                <div class="p-2 rounded-lg border ${c.cardType === 'dragon' ? 'bg-emerald-50 border-emerald-300' : 'bg-amber-50 border-amber-300'} text-xs">
+                  <div class="font-bold text-stone-900 truncate">${c.cardType === 'dragon' ? `🐉 ${c.nome}` : `🪨 Caverna #${c.numero}`}</div>
+                  <div class="text-[10px] text-stone-600 mt-0.5">${c.cardType === 'dragon' ? formatCostIconsOnly(c.custo) : 'Carta de Caverna'}</div>
+                </div>
+              `).join("");
+        }
+      };
+
+      const resContainer = document.getElementById("draft-resource-buttons");
+      const renderResBtns = () => {
+        resContainer.innerHTML = "";
+        Object.entries(RESOURCE_META).forEach(([key, meta]) => {
+          const count = currentDraftSelectedResources.filter(r => r === key).length;
+          const btn = document.createElement("button");
+          btn.className = `p-3 rounded-xl border ${meta.color} flex items-center justify-between font-bold text-sm shadow-xs hover:brightness-95 transition cursor-pointer`;
+          btn.innerHTML = `<span>${meta.icon} ${meta.label}</span><span class="px-2 py-0.5 rounded-full bg-white/85 text-xs">${count}</span>`;
+          btn.onclick = () => {
+            if (currentDraftSelectedResources.length < 3) {
+              currentDraftSelectedResources.push(key);
+              renderResBtns();
+              updateCounters();
+            }
+          };
+          resContainer.appendChild(btn);
+        });
+      };
+
+      document.getElementById("btn-clear-draft-res").onclick = () => {
+        currentDraftSelectedResources = [];
+        renderResBtns();
+        updateCounters();
+      };
+
+      renderResBtns();
+
+      const dList = document.getElementById("draft-dragons-list");
+      dList.innerHTML = "";
+      player.draftPool.dragons.forEach(card => {
+        const el = createCardElement(card, {
+          selectable: true,
+          selected: currentDraftSelectedCards.has(card.uid),
+          onClick: () => {
+            if (currentDraftSelectedCards.has(card.uid)) {
+              currentDraftSelectedCards.delete(card.uid);
+            } else if (currentDraftSelectedCards.size < 4) {
+              currentDraftSelectedCards.add(card.uid);
+            }
+            const isSel = currentDraftSelectedCards.has(card.uid);
+            el.classList.toggle("ring-4", isSel);
+            el.classList.toggle("ring-emerald-600", isSel);
+            el.querySelector(".draft-selected-badge")?.classList.toggle("hidden", !isSel);
+            updateCounters();
+          }
+        });
+        el.insertAdjacentHTML("afterbegin", `<div class="draft-selected-badge hidden bg-emerald-600 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionada</div>`);
+        dList.appendChild(el);
+      });
+
+      const cList = document.getElementById("draft-caves-list");
+      cList.innerHTML = "";
+      player.draftPool.caves.forEach(card => {
+        const el = createCardElement(card, {
+          selectable: true,
+          selected: currentDraftSelectedCards.has(card.uid),
+          onClick: () => {
+            if (currentDraftSelectedCards.has(card.uid)) {
+              currentDraftSelectedCards.delete(card.uid);
+            } else if (currentDraftSelectedCards.size < 4) {
+              currentDraftSelectedCards.add(card.uid);
+            }
+            const isSel = currentDraftSelectedCards.has(card.uid);
+            el.classList.toggle("ring-4", isSel);
+            el.classList.toggle("ring-emerald-600", isSel);
+            el.querySelector(".draft-selected-badge")?.classList.toggle("hidden", !isSel);
+            updateCounters();
+          }
+        });
+        el.insertAdjacentHTML("afterbegin", `<div class="draft-selected-badge hidden bg-emerald-600 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionada</div>`);
+        cList.appendChild(el);
+      });
+
+      updateCounters();
+
+      document.getElementById("btn-confirm-draft").onclick = () => {
+        if (currentDraftSelectedCards.size !== 4 || currentDraftSelectedResources.length !== 3) return;
+        draftSentSel = { cards: [...currentDraftSelectedCards], resources: [...currentDraftSelectedResources] };
+        submitDraftChoice(pIdx, draftSentSel);
+      };
+    }
+
+    /* =========================================================================
+       7. HELPERS DE CONTAGEM E REGRAS DO TABULEIRO
+       ========================================================================= */
+    function getVisibleDragons(player) {
+      const list = [];
+      player.caverns.forEach(cav => {
+        cav.cols.forEach(col => {
+          if (col.dragonSlot) {
+            list.push({ cavernId: cav.id, col: col.col, slot: col.dragonSlot, card: col.dragonSlot.card });
+          }
+        });
+      });
+      return list;
+    }
+
+    function countPlayerEggs(player) {
+      let total = player.baseEggs;
+      getVisibleDragons(player).forEach(d => {
+        total += d.slot.eggs;
+      });
+      return total;
+    }
+
+    function countAvailableNestSpace(player) {
+      let space = 2 - player.baseEggs;
+      getVisibleDragons(player).forEach(d => {
+        space += Math.max(0, (d.card.ninhos || 0) - d.slot.eggs);
+      });
+      return space;
+    }
+
+    function countTuckedResources(player) {
+      return getVisibleDragons(player).reduce((acc, d) => acc + d.slot.tuckedResources.length, 0);
+    }
+
+    function countTuckedCards(player) {
+      return getVisibleDragons(player).reduce((acc, d) => acc + d.slot.tuckedCards.length, 0);
+    }
+
+    function countExcavatedCards(player) {
+      let count = 0;
+      player.caverns.forEach(cav => {
+        cav.cols.forEach(col => {
+          if (col.caveCard) count++;
+        });
+      });
+      return count;
+    }
+
+    function countFullColumns(player) {
+      let full = 0;
+      for (let c = 0; c < 4; c++) {
+        if (player.caverns[0].cols[c].dragonSlot &&
+            player.caverns[1].cols[c].dragonSlot &&
+            player.caverns[2].cols[c].dragonSlot) {
+          full++;
+        }
+      }
+      return full;
+    }
+
+    function totalResourcesCount(player) {
+      return Object.values(player.resources).reduce((a, b) => a + b, 0);
+    }
+
+    function drawDragonFromDeck() {
+      if (gameState.dragonDeck.length === 0 && gameState.dragonDiscard.length > 0) {
+        gameState.dragonDeck = shuffle(gameState.dragonDiscard);
+        gameState.dragonDiscard = [];
+      }
+      return gameState.dragonDeck.pop() || null;
+    }
+
+    function drawCaveFromDeck() {
+      if (gameState.caveDeck.length === 0 && gameState.caveDiscard.length > 0) {
+        gameState.caveDeck = shuffle(gameState.caveDiscard);
+        gameState.caveDiscard = [];
+      }
+      return gameState.caveDeck.pop() || null;
+    }
+
+    function refillDisplay() {
+      while (gameState.displayDragons.length < 3) {
+        const card = drawDragonFromDeck();
+        if (!card) break;
+        gameState.displayDragons.push(card);
+      }
+      while (gameState.displayCaves.length < 3) {
+        const card = drawCaveFromDeck();
+        if (!card) break;
+        gameState.displayCaves.push(card);
+      }
+    }
+
+    /* =========================================================================
+       8. RENDERIZAÇÃO DAS CARTAS FÍSICAS E DO TABULEIRO INDIVIDUAL
+       ========================================================================= */
+    function createCardElement(card, options = {}) {
+      const el = document.createElement("div");
+      const isDragon = card.cardType === "dragon";
+
+      if (isDragon) {
+        const habMeta = ABILITY_TYPE_META[card.tipo] || ABILITY_TYPE_META.ativado;
+        const traitClass = TRAIT_COLORS[card.traco] || "bg-stone-600 text-white";
+
+        // 3 retângulos laterais à esquerda (Escarlate, Dourada, Ametista) como na carta física
+        const habRects = [0, 1, 2].map(hIdx => {
+          const active = (card.hab || []).includes(hIdx);
+          const bgColors = ["#9e2a2b", "#c88a1e", "#6a3d8a"];
+          return `<div class="w-3.5 h-5 rounded-r-xs border border-stone-400/80" style="background:${active ? bgColors[hIdx] : '#ffffff'}"></div>`;
+        }).join("");
+
+        // Ícones de ninhos à direita
+        let nestsHtml = "";
+        for (let i = 0; i < (card.ninhos || 0); i++) {
+          nestsHtml += `<span class="text-xs leading-none" title="Espaço de Ninho">🥚</span>`;
+        }
+
+        el.className = `physical-dragon-card rounded-xl flex flex-col justify-between ${options.selectable ? 'cursor-pointer' : ''} ${options.selected ? 'ring-3 ring-emerald-600' : ''}`;
+        el.innerHTML = `
+          <div>
+            <!-- Título no topo estilo pergaminho físico -->
+            <div class="px-2.5 pt-2 pb-1 text-center border-b border-stone-300/70">
+              <h4 class="font-display text-xs font-extrabold text-stone-900 uppercase tracking-tight leading-tight line-clamp-1" title="${card.nome}">
+                ${card.nome}
+              </h4>
+            </div>
+
+            <!-- Faixa marrom escura de custo + Emblema de PV e Tamanho -->
+            <div class="flex items-center justify-between px-2 py-1 bg-gradient-to-r from-[#3a2a21] to-[#594436] text-white">
+              <div class="flex items-center gap-1 flex-wrap">
+                ${formatCostIconsOnly(card.custo)}
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <span class="text-[9px] font-extrabold tracking-wider text-amber-200">${SIZE_LABELS[card.tam] || ''}</span>
+                <span class="w-6 h-6 rounded-full bg-amber-100 border-2 border-amber-500 text-stone-950 font-display text-xs font-black flex items-center justify-center shadow-xs" title="Pontos de Vitória">
+                  ${card.pv}
+                </span>
+              </div>
+            </div>
+
+            <!-- Corpo central: Barras de habitat à esquerda + Arte SVG + Ninhos à direita -->
+            <div class="relative flex items-center justify-between py-1.5 pr-2">
+              <div class="flex flex-col gap-1 z-10">
+                ${habRects}
+                <span class="text-[9px] font-bold text-stone-500 pl-1 mt-0.5">${card.numero}</span>
+              </div>
+
+              <div class="flex-1 px-1 flex items-center justify-center">
+                ${getDragonIllustrationSVG(card)}
+              </div>
+
+              <div class="grid grid-cols-2 gap-0.5 z-10 max-w-[34px] justify-items-center">
+                ${nestsHtml || '<span class="text-[9px] text-stone-400">—</span>'}
+              </div>
+            </div>
+          </div>
+
+          <!-- Faixa diagonal do traço + Caixa inferior de habilidade -->
+          <div>
+            <div class="flex justify-end -mb-1 relative z-10">
+              <span class="trait-ribbon pl-4 pr-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider shadow-2xs ${traitClass}">
+                ${card.traco || ''}
+              </span>
+            </div>
+            <div class="bg-[#efe4cf] border-t-2 border-stone-700/70 p-2">
+              <div class="flex items-start gap-1.5">
+                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold shrink-0 ${habMeta.badgeBg}" title="${habMeta.label}">
+                  ${habMeta.icon}
+                </span>
+                <p class="text-[10.5px] text-stone-900 leading-snug font-medium">
+                  ${formatCardText(card.texto)}
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        // Carta Física de Caverna (Quadrada com entrada de gruta e faixa inferior escura)
+        el.className = `physical-cave-card rounded-xl flex flex-col justify-between ${options.selectable ? 'cursor-pointer' : ''} ${options.selected ? 'ring-3 ring-emerald-500' : ''}`;
+        el.innerHTML = `
+          <div class="relative">
+            ${getCaveIllustrationSVG(card)}
+            <span class="absolute top-1.5 right-2 px-1.5 py-0.2 rounded bg-black/60 text-amber-100 text-[10px] font-bold">
+              #${card.numero}
+            </span>
+          </div>
+          <div class="p-2 bg-[#1c1714] text-amber-50 flex-1 flex items-center gap-1.5 border-t border-stone-600">
+            <span class="px-1 py-0.5 rounded bg-emerald-700 text-white text-[9px] font-bold shrink-0" title="Quando Jogado">📥</span>
+            <p class="text-[10.5px] leading-snug text-stone-100 font-medium">
+              ${formatCardText(card.texto)}
+            </p>
+          </div>
+        `;
+      }
+
+      if (options.onClick) {
+        el.addEventListener("click", options.onClick);
+      }
+
+      return el;
+    }
+
+    function renderAll() {
+      if (!gameState) return;
+      renderHUD();
+      renderPlayerTabs();
+      renderResourcesAndActions();
+      renderCavernsBoard();
+      renderHand();
+      renderPublicLastPlay();
+      renderDisplayMarket();
+      renderGuildBoard();
+      renderLog();
+      if (engineOwner) scheduleSync();
+    }
+
+    function renderPublicLastPlay() {
+      const container = document.getElementById("public-last-play-content");
+      if (!container) return;
+
+      const showcase = gameState.lastActionShowcase;
+      if (!showcase) {
+        container.innerHTML = `<div class="p-3 rounded-xl bg-white/70 border border-dashed border-stone-300 text-center text-xs text-stone-500">Nenhuma carta jogada ainda nesta rodada.</div>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="showcase-pop-in space-y-2.5">
+          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-white/90 border border-amber-300/80">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full shrink-0 border border-white shadow-2xs" style="background:${showcase.playerColor}"></span>
+              <div>
+                <div class="font-bold text-stone-900 text-xs">${showcase.playerName}</div>
+                <div class="text-[11px] text-amber-900 font-semibold">${showcase.actionTitle}</div>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-stone-800 text-amber-100">R${showcase.round}</span>
+          </div>
+          ${showcase.detail ? `<div class="text-[11px] text-stone-700 bg-white/70 px-2.5 py-1.5 rounded-lg border border-stone-200">${showcase.detail}</div>` : ''}
+          <div id="public-showcase-card-slot" class="max-w-[260px] mx-auto"></div>
+        </div>
+      `;
+
+      if (showcase.card) {
+        const cardSlot = document.getElementById("public-showcase-card-slot");
+        if (cardSlot) {
+          cardSlot.appendChild(createCardElement(showcase.card));
+        }
+      }
+    }
+
+    async function animateCardPlacement(card, targetCavernId, targetCol) {
+      const targetEl = document.querySelector(`[data-board-slot="${targetCavernId}-${targetCol}"]`);
+      if (!targetEl) return;
+
+      const targetRect = targetEl.getBoundingClientRect();
+      const sourceEl = document.querySelector(`[data-hand-uid="${card.uid}"]`);
+      const startRect = sourceEl
+        ? sourceEl.getBoundingClientRect()
+        : {
+            left: window.innerWidth / 2 - 90,
+            top: window.innerHeight - 140,
+            width: 180,
+            height: 220
+          };
+
+      const ghost = createCardElement(card);
+      ghost.classList.add("card-flying-clone");
+      ghost.style.left = `${startRect.left}px`;
+      ghost.style.top = `${startRect.top}px`;
+      ghost.style.width = `${startRect.width}px`;
+      ghost.style.height = `${startRect.height}px`;
+      document.body.appendChild(ghost);
+
+      // Força reflow para disparar transição CSS suave
+      ghost.getBoundingClientRect();
+
+      const dx = targetRect.left - startRect.left;
+      const dy = targetRect.top - startRect.top;
+      ghost.style.transform = `translate(${dx}px, ${dy}px) rotate(0deg)`;
+      ghost.style.width = `${targetRect.width}px`;
+      ghost.style.height = `${targetRect.height}px`;
+      ghost.style.opacity = "0.92";
+
+      await new Promise(resolve => setTimeout(resolve, 560));
+      ghost.remove();
+    }
+
+    function renderHUD() {
+      const activePlayer = gameState.players[gameState.activePlayerIdx];
+      document.getElementById("hud-round").textContent = `${gameState.round} / 4`;
+      document.getElementById("hud-room-code").textContent = NET.room ? `Sala ${NET.room}` : "";
+      document.getElementById("hud-active-player-dot").style.backgroundColor = activePlayer.color.hex;
+      document.getElementById("hud-active-player-name").textContent = `Turno de ${activePlayer.name}${gameState.activePlayerIdx === myIdx ? " (você)" : ""}`;
+
+      const isFirst = gameState.activePlayerIdx === gameState.firstPlayerIdx;
+      document.getElementById("hud-first-player-badge").classList.toggle("hidden", !isFirst);
+
+      const objContainer = document.getElementById("hud-objectives");
+      objContainer.innerHTML = "";
+      gameState.objectives.forEach((obj, idx) => {
+        const isCurrent = idx === gameState.round - 1;
+        const isPast = idx < gameState.round - 1;
+        const pts = ROUND_OBJECTIVE_POINTS[idx];
+        const viewingPlayer = gameState.players[gameState.viewingPlayerIdx];
+        const currentVal = objCount(obj, viewingPlayer);
+
+        objContainer.innerHTML += `
+          <div class="px-2.5 py-1.5 rounded-xl border text-xs ${isCurrent ? 'bg-amber-100 border-amber-500 shadow-xs' : isPast ? 'bg-stone-100 border-stone-300 opacity-75' : 'bg-white border-stone-200'}">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-bold text-[10px] uppercase ${isCurrent ? 'text-amber-900' : 'text-stone-500'}">R${idx + 1} (${pts[0]}/${pts[1]}/${pts[2]})</span>
+              <span class="px-1.5 rounded bg-stone-800 text-white text-[10px] font-bold">${currentVal}</span>
+            </div>
+            <div class="font-semibold text-stone-800 truncate max-w-[140px]" title="${obj.titulo}">${obj.titulo}</div>
+          </div>
+        `;
+      });
+    }
+
+    function renderPlayerTabs() {
+      const container = document.getElementById("player-tabs");
+      container.innerHTML = "";
+      gameState.players.forEach((p, idx) => {
+        const isViewing = idx === gameState.viewingPlayerIdx;
+        const isActive = idx === gameState.activePlayerIdx;
+        const btn = document.createElement("button");
+        btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border transition cursor-pointer ${
+          isViewing
+            ? "bg-stone-900 text-white border-stone-900 shadow-xs"
+            : "bg-white hover:bg-stone-100 text-stone-700 border-stone-300"
+        }`;
+        btn.innerHTML = `
+          <span class="w-2.5 h-2.5 rounded-full" style="background:${p.color.hex}"></span>
+          <span>${p.name}</span>
+          <span class="opacity-80">💰${p.coins} 🥚${countPlayerEggs(p)}</span>
+          ${idx === myIdx ? '<span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">Você</span>' : ''}
+          ${isSeatOffline(p) ? '<span class="px-1.5 py-0.2 rounded bg-stone-400 text-white text-[10px]">offline</span>' : ''}
+          ${p.passed ? '<span class="px-1.5 py-0.2 rounded bg-red-600 text-white text-[10px]">Passou</span>' : ''}
+          ${isActive && !p.passed ? '<span class="px-1.5 py-0.2 rounded bg-amber-400 text-stone-950 text-[10px]">Ativo</span>' : ''}
+        `;
+        btn.onclick = () => {
+          gameState.viewingPlayerIdx = idx;
+          renderAll();
+        };
+        container.appendChild(btn);
+      });
+
+      const isObserving = gameState.viewingPlayerIdx !== myIdx;
+      document.getElementById("viewing-opponent-banner").classList.toggle("hidden", !isObserving);
+    }
+
+    function renderResourcesAndActions() {
+      const player = gameState.players[gameState.viewingPlayerIdx];
+      const myTurn = gameState.activePlayerIdx === myIdx && engineOwner;
+      const isActivePlayerView = myTurn && gameState.viewingPlayerIdx === myIdx && !player.passed;
+      const pendingConfirm = Boolean(gameState.pendingTurnConfirmation);
+      const canPerformMainAction = isActivePlayerView && !pendingConfirm;
+
+      const resBar = document.getElementById("player-resources-bar");
+      resBar.innerHTML = `
+        <div class="px-3 py-1.5 rounded-xl bg-amber-200/90 border border-amber-400 text-amber-950 text-xs font-extrabold flex items-center gap-1.5" title="Moedas">
+          <span>💰</span><span class="text-sm">${player.coins}</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-rose-100 border border-rose-300 text-rose-950 text-xs font-bold flex items-center gap-1" title="Carne">
+          <span>🥩</span><span>${player.resources.carne}</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 text-xs font-bold flex items-center gap-1" title="Ouro">
+          <span>🪙</span><span>${player.resources.ouro}</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-purple-100 border border-purple-300 text-purple-950 text-xs font-bold flex items-center gap-1" title="Cristal">
+          <span>💎</span><span>${player.resources.cristal}</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-sky-100 border border-sky-300 text-sky-950 text-xs font-bold flex items-center gap-1" title="Leite">
+          <span>🥛</span><span>${player.resources.leite}</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-stone-100 border border-stone-300 text-stone-800 text-xs font-bold flex items-center gap-1" title="Ovos">
+          <span>🥚</span><span>${countPlayerEggs(player)}</span>
+        </div>
+      `;
+
+      const actionBar = document.getElementById("action-buttons-bar");
+      actionBar.classList.toggle("opacity-40", !canPerformMainAction);
+      actionBar.classList.toggle("pointer-events-none", !canPerformMainAction);
+
+      // Controle do Pop-up Flutuante Fixo no Topo (Desfazer / Confirmar Jogada)
+      const floatingBanner = document.getElementById("floating-turn-banner");
+      const floatingUndoBtn = document.getElementById("btn-floating-undo");
+      const floatingConfirmBtn = document.getElementById("btn-floating-confirm");
+      const floatingTitle = document.getElementById("floating-turn-title");
+      const floatingSub = document.getElementById("floating-turn-subtitle");
+      const passBtn = document.getElementById("btn-pass-round");
+
+      const currentSnapshotMatches = turnSnapshot && stateSig(gameState) === turnSnapshot;
+      const showUndo = myTurn && !currentSnapshotMatches;
+      const showConfirm = myTurn && pendingConfirm;
+      const myName = gameState.players[myIdx] ? gameState.players[myIdx].name : player.name;
+
+      floatingBanner.classList.toggle("hidden", !showUndo && !showConfirm);
+      floatingUndoBtn.classList.toggle("hidden", !showUndo);
+      floatingConfirmBtn.classList.toggle("hidden", !showConfirm);
+
+      if (showConfirm) {
+        floatingTitle.textContent = `${myName}: Ação Concluída!`;
+        floatingSub.textContent = "Clique em Confirmar Jogada para passar a vez ou Desfazer para voltar.";
+      } else if (showUndo) {
+        floatingTitle.textContent = `${myName}: Alteração Detectada`;
+        floatingSub.textContent = "Você pode desfazer esta jogada ou escolher sua ação principal.";
+      }
+
+      passBtn.classList.toggle("hidden", !isActivePlayerView || pendingConfirm);
+
+      floatingUndoBtn.onclick = () => undoCurrentTurn();
+      floatingConfirmBtn.onclick = () => confirmPlayerTurn();
+      document.getElementById("btn-action-excavate").onclick = () => openExcavateModal();
+      document.getElementById("btn-action-entice").onclick = () => openEnticeModal();
+      document.getElementById("btn-open-trade-2to1").onclick = () => openTrade2To1Modal();
+      document.getElementById("btn-open-trade-2to1").disabled = !isActivePlayerView;
+      document.getElementById("btn-open-trade-2to1").classList.toggle("opacity-50", !isActivePlayerView);
+      passBtn.onclick = () => handlePassRound();
+      passBtn.disabled = !canPerformMainAction;
+      passBtn.classList.toggle("opacity-50", !canPerformMainAction);
+    }
+
+    function renderCavernsBoard() {
+      const player = gameState.players[gameState.viewingPlayerIdx];
+      const isMyTurn = gameState.viewingPlayerIdx === myIdx && gameState.activePlayerIdx === myIdx && engineOwner && !player.passed && !gameState.pendingTurnConfirmation;
+
+      const advToken = document.getElementById("adventurer-token");
+      advToken.style.backgroundColor = player.color.hex;
+      advToken.classList.toggle("hidden", Boolean(gameState.adventurerPos && gameState.viewingPlayerIdx === gameState.activePlayerIdx));
+
+      const nestsContainer = document.getElementById("base-nests-container");
+      nestsContainer.innerHTML = "";
+      for (let i = 0; i < 2; i++) {
+        const hasEgg = i < player.baseEggs;
+        nestsContainer.innerHTML += `
+          <div class="w-8 h-8 rounded-full border-2 ${hasEgg ? 'bg-amber-100 border-amber-500' : 'bg-stone-100 border-dashed border-stone-300'} flex items-center justify-center text-base">
+            ${hasEgg ? '🥚' : ''}
+          </div>
+        `;
+      }
+
+      const board = document.getElementById("caverns-board");
+      board.innerHTML = "";
+
+      player.caverns.forEach(cav => {
+        const meta = CAVERNS_META[cav.id];
+        const exploreCount = cav.explorationsThisRound;
+        const exploreCostText = exploreCount === 0 ? "1💰" : exploreCount === 1 ? "1💰+1🥚" : exploreCount === 2 ? "1💰+2🥚" : "Máx";
+        const canExplore = isMyTurn && exploreCount < 3 && player.coins >= 1 && countPlayerEggs(player) >= exploreCount;
+
+        const rowEl = document.createElement("div");
+        rowEl.className = `rounded-2xl border-2 p-3 cavern-row-${cav.id} shadow-xs`;
+
+        let colsHtml = "";
+        cav.cols.forEach(col => {
+          const stepInfo = meta.pathSteps[col.col];
+          const isAdvHere = gameState.adventurerPos &&
+                            gameState.viewingPlayerIdx === gameState.activePlayerIdx &&
+                            gameState.adventurerPos.cavernId === cav.id &&
+                            gameState.adventurerPos.col === col.col;
+
+          const isJustPlaced = gameState.justPlacedSlot &&
+                               gameState.justPlacedSlot.cavernId === cav.id &&
+                               gameState.justPlacedSlot.col === col.col;
+
+          const excavateCost = col.col === 1 ? "1💰" : col.col === 2 ? "1💰 + 1🥚" : col.col === 3 ? "1💰 + 2🥚" : "Aberta";
+
+          // Trilha inferior com ícone de Aventureiro + Benefício específico daquela caverna + Sinal de PARE (⛔)
+          const pathFooterHtml = `
+            <div class="mt-1.5 pt-1.5 border-t-2 flex items-center justify-between px-1.5 py-1 rounded-lg bg-white/90 shadow-2xs" style="border-color: ${meta.lineBg}">
+              <div class="flex items-center gap-1.5">
+                <span class="px-1 py-0.2 rounded bg-stone-900 text-white text-[9px] font-bold" title="Ativado ao passar">🧭</span>
+                <span class="text-xs font-extrabold text-stone-900 leading-none" title="${stepInfo.label}">+${stepInfo.icon}</span>
+              </div>
+              ${!col.dragonSlot ? `<span class="text-xs leading-none" title="Sinal de PARE: a exploração termina aqui se não houver dragão">⛔</span>` : `<span class="text-[9px] font-bold text-emerald-700">✓</span>`}
+            </div>
+          `;
+
+          if (!col.excavated) {
+            colsHtml += `
+              <div data-board-slot="${cav.id}-${col.col}" class="rounded-xl border border-dashed border-stone-500/70 bg-white/60 p-2 flex flex-col justify-between min-h-[215px]">
+                <div class="flex items-center justify-between text-[10px] font-bold text-stone-600">
+                  <span>Col. ${col.col + 1}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-stone-800 text-amber-100 text-[9px]">${excavateCost}</span>
+                </div>
+                <div class="text-center my-auto py-2">
+                  <div class="text-2xl opacity-60">🪨</div>
+                  <div class="text-[11px] font-bold text-stone-700 mt-1">Não Escavado</div>
+                  ${col.col === 3 ? '<div class="text-[9px] text-amber-900 font-bold mt-1 bg-amber-100/90 rounded px-1 py-0.5">Cobrir: 3 itens → 1💰</div>' : ''}
+                </div>
+                ${pathFooterHtml}
+              </div>
+            `;
+          } else if (col.dragonSlot) {
+            const d = col.dragonSlot.card;
+            const eggs = col.dragonSlot.eggs;
+            const tuckedRes = col.dragonSlot.tuckedResources.length;
+            const tuckedCards = col.dragonSlot.tuckedCards.length;
+            const habMeta = ABILITY_TYPE_META[d.tipo] || ABILITY_TYPE_META.ativado;
+            const traitClass = TRAIT_COLORS[d.traco] || "bg-stone-600 text-white";
+
+            const habRects = [0, 1, 2].map(hIdx => {
+              const active = (d.hab || []).includes(hIdx);
+              const bgColors = ["#9e2a2b", "#c88a1e", "#6a3d8a"];
+              return `<div class="w-2.5 h-3.5 rounded-r-xs border border-stone-400/80" style="background:${active ? bgColors[hIdx] : '#ffffff'}"></div>`;
+            }).join("");
+
+            let nestsVisual = "";
+            for (let nIdx = 0; nIdx < (d.ninhos || 0); nIdx++) {
+              const filled = nIdx < eggs;
+              nestsVisual += `<span class="text-[11px] leading-none ${filled ? 'opacity-100 scale-110' : 'opacity-30 grayscale'}" title="${filled ? 'Ovo colocado' : 'Ninho vazio'}">🥚</span>`;
+            }
+
+            colsHtml += `
+              <div data-board-slot="${cav.id}-${col.col}" onclick="inspectPlacedDragon(${cav.id}, ${col.col})" class="physical-dragon-card rounded-xl flex flex-col justify-between min-h-[215px] cursor-pointer relative ${isJustPlaced ? 'card-slotted-anim' : ''}">
+                ${isAdvHere ? `<div class="absolute -top-3 -right-2 z-20 w-7 h-7 rounded-full text-white flex items-center justify-center text-xs font-bold shadow-lg adventurer-pulse border-2 border-white" style="background:${player.color.hex}">🧭</div>` : ''}
+                
+                <div>
+                  <div class="px-2 pt-1.5 pb-1 text-center border-b border-stone-300/70">
+                    <span class="font-display text-[10px] font-extrabold text-stone-900 uppercase leading-tight line-clamp-1 block" title="${d.nome}">${d.nome}</span>
+                  </div>
+
+                  <div class="flex items-center justify-between px-1.5 py-0.5 bg-gradient-to-r from-[#3a2a21] to-[#594436] text-white">
+                    <div class="flex items-center gap-0.5 flex-wrap">${formatCostIconsOnly(d.custo)}</div>
+                    <div class="flex items-center gap-1 shrink-0">
+                      <span class="text-[8px] font-extrabold text-amber-200">${SIZE_LABELS[d.tam] || ''}</span>
+                      <span class="w-5 h-5 rounded-full bg-amber-100 border border-amber-500 text-stone-950 font-display text-[10px] font-black flex items-center justify-center">${d.pv}</span>
+                    </div>
+                  </div>
+
+                  <div class="relative flex items-center justify-between py-1 pr-1.5">
+                    <div class="flex flex-col gap-0.5 z-10">
+                      ${habRects}
+                      <span class="text-[8px] font-bold text-stone-500 pl-0.5">${d.numero}</span>
+                    </div>
+                    <div class="flex-1 px-0.5 flex items-center justify-center scale-90">
+                      ${getDragonIllustrationSVG(d)}
+                    </div>
+                    <div class="grid grid-cols-2 gap-0.5 z-10 max-w-[30px] justify-items-center">
+                      ${nestsVisual || '<span class="text-[8px] text-stone-400">—</span>'}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between px-1.5 -mb-0.5 relative z-10">
+                    <div class="flex items-center gap-1">
+                      ${tuckedRes > 0 ? `<span class="px-1 rounded bg-emerald-800 text-white text-[9px] font-bold shadow-2xs" title="Recursos Estocados">📦${tuckedRes}</span>` : ''}
+                      ${tuckedCards > 0 ? `<span class="px-1 rounded bg-indigo-800 text-white text-[9px] font-bold shadow-2xs" title="Cartas Inseridas">🃏${tuckedCards}</span>` : ''}
+                      ${col.caveCard ? `<span class="px-1 rounded bg-stone-700 text-amber-100 text-[8px] font-bold" title="Escavada com Caverna #${col.caveCard.numero}">🪨#${col.caveCard.numero}</span>` : ''}
+                    </div>
+                    <span class="trait-ribbon pl-3 pr-2 py-0.2 text-[8px] font-extrabold uppercase ${traitClass}">${d.traco || ''}</span>
+                  </div>
+
+                  <div class="bg-[#efe4cf] border-t border-stone-700/70 p-1.5">
+                    <div class="flex items-start gap-1">
+                      <span class="px-1 py-0.2 rounded text-[8px] font-bold shrink-0 ${habMeta.badgeBg}">${habMeta.icon}</span>
+                      <p class="text-[9.5px] text-stone-900 leading-tight line-clamp-2 font-medium">${formatCardText(d.texto)}</p>
+                    </div>
+                  </div>
+
+                  <div class="px-1.5 pb-1.5 bg-[#efe4cf]">
+                    ${pathFooterHtml}
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            // Espaço Escavado sem Dragão: mostra a Carta Física de Caverna completa se houver (colunas 2, 3, 4) ou entrada aberta (coluna 1)
+            colsHtml += `
+              <div data-board-slot="${cav.id}-${col.col}" class="${col.caveCard ? 'physical-cave-card' : 'rounded-xl border-2 border-emerald-700/60 bg-emerald-50/75'} rounded-xl flex flex-col justify-between min-h-[215px] relative overflow-hidden ${isJustPlaced ? 'card-slotted-anim' : ''}">
+                ${isAdvHere ? `<div class="absolute -top-3 -right-2 z-20 w-7 h-7 rounded-full text-white flex items-center justify-center text-xs font-bold shadow-lg adventurer-pulse border-2 border-white" style="background:${player.color.hex}">🧭</div>` : ''}
+                
+                ${col.caveCard ? `
+                  <div>
+                    <div class="relative">
+                      ${getCaveIllustrationSVG(col.caveCard)}
+                      <span class="absolute top-1 left-1.5 px-1.5 py-0.2 rounded bg-black/70 text-emerald-300 text-[9px] font-extrabold uppercase">Escavada</span>
+                      <span class="absolute top-1 right-1.5 px-1.5 py-0.2 rounded bg-black/70 text-amber-100 text-[9px] font-bold">#${col.caveCard.numero}</span>
+                    </div>
+                    <div class="p-1.5 bg-[#1c1714] text-amber-50 border-t border-stone-600">
+                      <p class="text-[9.5px] leading-tight text-stone-200 line-clamp-2">${formatCardText(col.caveCard.texto)}</p>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="p-2 flex-1 flex flex-col justify-between">
+                    <div class="flex items-center justify-between text-[10px] font-bold text-emerald-950">
+                      <span>Col. 1 (Inicial)</span>
+                      <span class="px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-950 text-[9px]">Aberta</span>
+                    </div>
+                    <div class="text-center my-auto">
+                      <div class="text-lg">🕳️</div>
+                      <div class="text-xs font-extrabold text-emerald-950">Entrada Escavada</div>
+                      <div class="text-[9.5px] text-emerald-800">Pronta para Dragão</div>
+                    </div>
+                  </div>
+                `}
+
+                <div class="p-1.5 ${col.caveCard ? 'bg-[#1c1714]' : ''}">
+                  ${pathFooterHtml}
+                </div>
+              </div>
+            `;
+          }
+        });
+
+        rowEl.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-3.5 h-3.5 rounded-full border border-white shadow-xs" style="background:${meta.cor}"></span>
+              <h3 class="font-display text-sm sm:text-base font-extrabold text-stone-900 uppercase tracking-wide">${meta.nome}</h3>
+              <span class="text-[10px] font-semibold text-stone-700 bg-white/75 px-2 py-0.5 rounded-full border border-stone-300/70 hidden md:inline">
+                Fim: ${meta.fimIcon} ${meta.fimDesc}
+              </span>
+            </div>
+            <button data-explore-cav="${cav.id}" ${canExplore ? '' : 'disabled'}
+              class="px-3 py-1.5 rounded-xl text-xs font-extrabold shadow-xs transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center gap-1.5"
+              style="background-color: ${meta.cor}">
+              <span>🧭 Explorar (${exploreCostText})</span>
+              <span class="bg-black/25 px-1.5 py-0.2 rounded text-[10px]">${exploreCount}/3</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            ${colsHtml}
+          </div>
+        `;
+
+        const expBtn = rowEl.querySelector(`[data-explore-cav="${cav.id}"]`);
+        if (expBtn && canExplore) {
+          expBtn.onclick = () => exploreCavern(cav.id);
+        }
+
+        board.appendChild(rowEl);
+      });
+    }
+
+    function renderHand() {
+      const player = gameState.players[gameState.viewingPlayerIdx];
+      const isMyTurn = gameState.viewingPlayerIdx === myIdx && gameState.activePlayerIdx === myIdx && engineOwner && !player.passed && !gameState.pendingTurnConfirmation;
+      const container = document.getElementById("player-hand-container");
+      const badge = document.getElementById("hand-count-badge");
+
+      badge.textContent = `${player.hand.length} / 9`;
+      badge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${player.hand.length > 9 ? 'bg-red-600 text-white' : 'bg-stone-200 text-stone-800'}`;
+
+      document.getElementById("btn-hand-pos-bottom").onclick = () => setHandLayoutMode("bottom");
+      document.getElementById("btn-hand-pos-top").onclick = () => setHandLayoutMode("top");
+      document.getElementById("btn-hand-pos-floating").onclick = () => setHandLayoutMode("floating");
+
+      container.innerHTML = "";
+      if (gameState.viewingPlayerIdx !== myIdx) {
+        container.innerHTML = `<div class="w-full text-center py-6 text-xs text-stone-600 bg-stone-100/70 rounded-xl border border-dashed border-stone-300">🂠 ${player.name} tem ${player.hand.length} carta(s) na mão (ocultas). Clique na sua aba para ver a sua.</div>`;
+        return;
+      }
+      if (player.hand.length === 0) {
+        container.innerHTML = `<div class="w-full text-center py-6 text-xs text-stone-500 bg-stone-100/70 rounded-xl border border-dashed border-stone-300">Nenhuma carta na mão deste jogador.</div>`;
+        return;
+      }
+
+      player.hand.forEach(card => {
+        const el = createCardElement(card, {
+          selectable: isMyTurn,
+          onClick: () => {
+            if (!isMyTurn) return;
+            if (card.cardType === "dragon") openEnticeModal(card.uid);
+            else openExcavateModal(card.uid);
+          }
+        });
+        el.dataset.handUid = card.uid;
+        el.classList.add("hand-fan-item");
+        container.appendChild(el);
+      });
+    }
+
+    function renderDisplayMarket() {
+      document.getElementById("deck-dragons-count").textContent = `🐉 Baralho: ${gameState.dragonDeck.length}`;
+      document.getElementById("deck-caves-count").textContent = `🪨 Baralho: ${gameState.caveDeck.length}`;
+
+      const dContainer = document.getElementById("display-dragons");
+      dContainer.innerHTML = "";
+      gameState.displayDragons.forEach(card => {
+        dContainer.appendChild(createCardElement(card));
+      });
+
+      const cContainer = document.getElementById("display-caves");
+      cContainer.innerHTML = "";
+      gameState.displayCaves.forEach(card => {
+        cContainer.appendChild(createCardElement(card));
+      });
+    }
+
+    function renderGuildBoard() {
+      const sheet = getGuild();
+      document.getElementById("guild-title").textContent = `🛡️ ${sheet.nome}`;
+      document.getElementById("guild-subtitle").textContent = sheet.subtitulo;
+
+      const grid = document.getElementById("guild-track-grid");
+      grid.innerHTML = "";
+
+      GUILD_TRACK_STEPS.forEach(step => {
+        const playersHere = gameState.players.filter(p => p.guildPos === step.idx);
+        const markersHtml = playersHere.map(p =>
+          `<span class="w-3 h-3 rounded-full border border-white shadow-xs" style="background:${p.color.hex}" title="${p.name}"></span>`
+        ).join("");
+
+        grid.innerHTML += `
+          <div class="p-1.5 rounded-lg border text-center ${step.isBrown ? 'bg-amber-900 text-amber-50 border-amber-950' : 'bg-white border-stone-200 text-stone-800'}">
+            <div class="text-[9px] font-bold opacity-75">#${step.idx}</div>
+            <div class="text-xs font-bold leading-tight">${step.icon} ${step.label}</div>
+            <div class="flex justify-center gap-0.5 mt-1 min-h-[12px]">${markersHtml}</div>
+          </div>
+        `;
+      });
+
+      const slotsContainer = document.getElementById("guild-center-slots");
+      slotsContainer.innerHTML = "";
+      sheet.slots.forEach(slot => {
+        const occupants = gameState.guildSlotOccupants[slot.id] || [];
+        const occHtml = occupants.map(pid => {
+          const p = gameState.players[pid];
+          return `<span class="w-3.5 h-3.5 rounded-xs inline-block border border-white" style="background:${p.color.hex}" title="${p.name}"></span>`;
+        }).join(" ");
+
+        slotsContainer.innerHTML += `
+          <div class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-white border border-stone-200 text-xs">
+            <span class="text-stone-700 leading-tight">${slot.label}</span>
+            <div class="flex items-center gap-1 shrink-0">${occHtml || `<span class="text-[10px] text-stone-400">(${slot.cap === 99 ? '∞' : slot.cap}v)</span>`}</div>
+          </div>
+        `;
+      });
+    }
+
+    function renderLog() {
+      const container = document.getElementById("game-log");
+      container.innerHTML = gameState.logs.map(entry => `
+        <div class="p-1.5 rounded-lg bg-white/80 border border-stone-200/80 leading-snug">
+          <span class="font-bold text-amber-900">[${entry.round}]</span> ${entry.text}
+        </div>
+      `).join("");
+    }
+
+    /* =========================================================================
+       9. MODAIS INTERATIVOS E MOTOR DE EFEITOS DAS CARTAS
+       ========================================================================= */
+    function openModal({ title, bodyHtml, footerButtons = [], closable = true, owner = null }) {
+      endMirror();
+      const backdrop = document.getElementById("modal-backdrop");
+      const closeBtn = document.getElementById("modal-close-btn");
+      document.getElementById("modal-title").textContent = title;
+      document.getElementById("modal-body").innerHTML = bodyHtml;
+
+      const footer = document.getElementById("modal-footer");
+      footer.innerHTML = "";
+      footerButtons.forEach(btnCfg => {
+        const btn = document.createElement("button");
+        btn.className = btnCfg.className || "px-4 py-2 rounded-xl bg-stone-800 text-white text-xs font-bold cursor-pointer";
+        btn.textContent = btnCfg.text;
+        btn.onclick = btnCfg.onClick;
+        footer.appendChild(btn);
+      });
+
+      closeBtn.classList.toggle("hidden", !closable);
+      closeBtn.onclick = closeModal;
+
+      // Decisão de OUTRO jogador: o pop-up fica oculto aqui e é espelhado na tela dele.
+      const ownerIdx = (owner === null || owner === undefined) ? myIdx : owner;
+      const remote = gameState && ownerIdx !== myIdx && gameState.players[ownerIdx];
+      if (remote) {
+        backdrop.classList.add("hidden");
+        showWaiting(`⏳ Aguardando ${gameState.players[ownerIdx].name} decidir…`);
+        const id = ++mirrorSeq;
+        activeMirror = { ownerIdx, id, payload: null };
+        queueMicrotask(() => {   // espera quem chamou terminar de montar o conteúdo (cartas etc.)
+          if (!activeMirror || activeMirror.id !== id) return;
+          activeMirror.payload = snapshotModal();
+          sendMirror();
+        });
+      } else {
+        backdrop.classList.remove("hidden");
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("modal-backdrop").classList.add("hidden");
+      endMirror();
+    }
+
+    window.inspectPlacedDragon = function(cavernId, colIdx) {
+      const player = gameState.players[gameState.viewingPlayerIdx];
+      const slot = player.caverns[cavernId].cols[colIdx].dragonSlot;
+      if (!slot) return;
+      const d = slot.card;
+
+      openModal({
+        title: `${d.nome} (#${d.numero})`,
+        bodyHtml: `
+          <div class="space-y-3">
+            <div class="flex flex-wrap gap-2 text-xs font-bold">
+              <span class="px-2.5 py-1 rounded-lg bg-stone-900 text-amber-300">⭐ ${d.pv} PV Base</span>
+              <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-950">🥚 Ovos: ${slot.eggs} / ${d.ninhos}</span>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-950">📦 Recursos Estocados: ${slot.tuckedResources.length}</span>
+              <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-950">🃏 Cartas Inseridas: ${slot.tuckedCards.length}</span>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-sm">
+              <strong>Habilidade (${ABILITY_TYPE_META[d.tipo].label}):</strong><br/>
+              ${formatCardText(d.texto)}
+            </div>
+            ${slot.tuckedResources.length > 0 ? `<div class="text-xs text-stone-600"><strong>Recursos aqui:</strong> ${slot.tuckedResources.map(r => RESOURCE_META[r]?.icon || r).join(" ")}</div>` : ''}
+          </div>
+        `,
+        footerButtons: [{ text: "Fechar", onClick: closeModal }]
+      });
+    };
+
+    function openTrade2To1Modal() {
+      const player = gameState.players[gameState.activePlayerIdx];
+      if (totalResourcesCount(player) < 2) {
+        showToast("Você precisa de pelo menos 2 recursos para fazer uma troca 2:1.", "warn");
+        return;
+      }
+
+      let selectedToPay = [];
+      let selectedToGain = "carne";
+
+      const renderTradeBody = () => {
+        const payBtns = Object.entries(RESOURCE_META).map(([k, m]) => {
+          const avail = player.resources[k] - selectedToPay.filter(x => x === k).length;
+          return `<button data-pay="${k}" ${avail <= 0 || selectedToPay.length >= 2 ? 'disabled' : ''}
+            class="px-3 py-2 rounded-xl border ${m.color} text-xs font-bold disabled:opacity-40 cursor-pointer">
+            ${m.icon} ${m.label} (Disp: ${avail})
+          </button>`;
+        }).join("");
+
+        const gainBtns = Object.entries(RESOURCE_META).map(([k, m]) => `
+          <button data-gain="${k}"
+            class="px-3 py-2 rounded-xl border text-xs font-bold cursor-pointer ${selectedToGain === k ? 'ring-2 ring-stone-900 ' + m.color : 'bg-white border-stone-300'}">
+            ${m.icon} ${m.label}
+          </button>
+        `).join("");
+
+        document.getElementById("modal-body").innerHTML = `
+          <p class="text-xs text-stone-600">Regra Oficial: A qualquer momento da partida, troque 2 recursos em qualquer combinação por 1 recurso à sua escolha.</p>
+          <div>
+            <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">1. Selecione 2 recursos para pagar (${selectedToPay.length}/2):</div>
+            <div class="grid grid-cols-2 gap-2">${payBtns}</div>
+            <div class="mt-2 text-xs font-semibold text-stone-700">Selecionados: ${selectedToPay.map(k => RESOURCE_META[k].icon + RESOURCE_META[k].label).join(" + ") || "Nenhum"}
+              ${selectedToPay.length > 0 ? '<button id="btn-reset-2to1" class="ml-2 text-red-700 underline cursor-pointer">Limpar</button>' : ''}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">2. Escolha 1 recurso para receber:</div>
+            <div class="grid grid-cols-2 gap-2">${gainBtns}</div>
+          </div>
+        `;
+
+        document.querySelectorAll("[data-pay]").forEach(b => {
+          b.onclick = () => {
+            selectedToPay.push(b.dataset.pay);
+            renderTradeBody();
+          };
+        });
+        document.querySelectorAll("[data-gain]").forEach(b => {
+          b.onclick = () => {
+            selectedToGain = b.dataset.gain;
+            renderTradeBody();
+          };
+        });
+        const rst = document.getElementById("btn-reset-2to1");
+        if (rst) rst.onclick = () => { selectedToPay = []; renderTradeBody(); };
+      };
+
+      openModal({
+        title: "🔄 Conversão de Recursos (2 por 1)",
+        bodyHtml: "",
+        footerButtons: [
+          { text: "Cancelar", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 cursor-pointer", onClick: closeModal },
+          {
+            text: "Confirmar Troca",
+            className: "px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-bold cursor-pointer",
+            onClick: () => {
+              if (selectedToPay.length !== 2) {
+                showToast("Selecione exatamente 2 recursos para pagar.", "warn");
+                return;
+              }
+              selectedToPay.forEach(r => player.resources[r]--);
+              player.resources[selectedToGain]++;
+              addLog(`${player.name} converteu 2 recursos por 1 ${RESOURCE_META[selectedToGain].label}.`);
+              closeModal();
+              renderAll();
+            }
+          }
+        ]
+      });
+      renderTradeBody();
+    }
+
+    function payPlayerEggs(player, amount) {
+      let remaining = amount;
+      while (remaining > 0 && player.baseEggs > 0) {
+        player.baseEggs--;
+        remaining--;
+      }
+      if (remaining > 0) {
+        for (const d of getVisibleDragons(player)) {
+          while (remaining > 0 && d.slot.eggs > 0) {
+            d.slot.eggs--;
+            remaining--;
+          }
+        }
+      }
+    }
+
+    async function layEggsForPlayer(player, count, constraint = null) {
+      for (let i = 0; i < count; i++) {
+        const validTargets = [];
+        if (!constraint && player.baseEggs < 2) {
+          validTargets.push({ type: "base", label: `Ninho Base (${player.baseEggs}/2)` });
+        }
+        getVisibleDragons(player).forEach(d => {
+          if (d.slot.eggs < (d.card.ninhos || 0)) {
+            if (constraint && constraint.type === "here" && (d.cavernId !== constraint.cavernId || d.col !== constraint.col)) return;
+            if (constraint && constraint.type === "cavern" && d.cavernId !== constraint.cavernId) return;
+            validTargets.push({
+              type: "dragon",
+              cavernId: d.cavernId,
+              col: d.col,
+              label: `${d.card.nome} (${CAVERNS_META[d.cavernId].nome}, Ovos ${d.slot.eggs}/${d.card.ninhos})`
+            });
+          }
+        });
+
+        if (validTargets.length === 0) {
+          showToast(`${player.name} não possui espaço de ninho disponível para botar mais Ovos.`, "warn");
+          break;
+        }
+
+        if (validTargets.length === 1) {
+          const t = validTargets[0];
+          if (t.type === "base") player.baseEggs++;
+          else player.caverns[t.cavernId].cols[t.col].dragonSlot.eggs++;
+        } else {
+          await new Promise(resolve => {
+            openModal({
+              title: `🥚 ${player.name}: Escolha onde botar o Ovo (${i + 1}/${count})`,
+              owner: player.id,
+              closable: false,
+              bodyHtml: `
+                <div class="space-y-2">
+                  ${validTargets.map((t, idx) => `
+                    <button data-egg-target="${idx}" class="w-full text-left px-4 py-2.5 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-500 text-xs font-bold cursor-pointer">
+                      🥚 ${t.label}
+                    </button>
+                  `).join("")}
+                </div>
+              `
+            });
+            document.querySelectorAll("[data-egg-target]").forEach(btn => {
+              btn.onclick = () => {
+                const t = validTargets[parseInt(btn.dataset.eggTarget, 10)];
+                if (t.type === "base") player.baseEggs++;
+                else player.caverns[t.cavernId].cols[t.col].dragonSlot.eggs++;
+                closeModal();
+                resolve();
+              };
+            });
+          });
+        }
+      }
+      renderAll();
+    }
+
+    async function promptChooseResource(player, titleText = "Escolha 1 recurso") {
+      return new Promise(resolve => {
+        openModal({
+          title: `🌈 ${player.name}: ${titleText}`,
+          owner: player.id,
+          closable: false,
+          bodyHtml: `
+            <div class="grid grid-cols-2 gap-3">
+              ${Object.entries(RESOURCE_META).map(([k, m]) => `
+                <button data-pick-res="${k}" class="p-3 rounded-xl border ${m.color} font-bold text-sm hover:brightness-95 cursor-pointer">
+                  ${m.icon} ${m.label}
+                </button>
+              `).join("")}
+            </div>
+          `
+        });
+        document.querySelectorAll("[data-pick-res]").forEach(btn => {
+          btn.onclick = () => {
+            const res = btn.dataset.pickRes;
+            player.resources[res]++;
+            closeModal();
+            renderAll();
+            resolve(res);
+          };
+        });
+      });
+    }
+
+    async function promptGainCard(player, cardType, source = "any") {
+      const isDragon = cardType === "dragon";
+      const displayArr = isDragon ? gameState.displayDragons : gameState.displayCaves;
+      const label = isDragon ? "Carta de Dragão" : "Carta de Caverna";
+
+      if (source === "deck" || (source === "any" && displayArr.length === 0)) {
+        const drawn = isDragon ? drawDragonFromDeck() : drawCaveFromDeck();
+        if (drawn) {
+          player.hand.push(drawn);
+          addLog(`${player.name} comprou ${label} do baralho.`);
+        }
+        renderAll();
+        return drawn;
+      }
+
+      return new Promise(resolve => {
+        openModal({
+          title: `🃏 ${player.name}: Ganhe 1 ${label}`,
+          owner: player.id,
+          closable: false,
+          bodyHtml: `
+            <div class="space-y-3">
+              ${source === "any" ? `
+                <button id="btn-draw-from-deck" class="w-full p-3 rounded-xl bg-stone-900 text-amber-100 font-bold text-xs hover:bg-stone-800 cursor-pointer">
+                  🎲 Comprar do Topo do Baralho Fechado
+                </button>
+              ` : ''}
+              <div class="text-xs font-bold uppercase text-stone-500">Ou escolha uma carta da Exibição:</div>
+              <div id="modal-display-cards" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5"></div>
+            </div>
+          `
+        });
+
+        const deckBtn = document.getElementById("btn-draw-from-deck");
+        if (deckBtn) {
+          deckBtn.onclick = () => {
+            const drawn = isDragon ? drawDragonFromDeck() : drawCaveFromDeck();
+            if (drawn) player.hand.push(drawn);
+            closeModal();
+            renderAll();
+            resolve(drawn);
+          };
+        }
+
+        const grid = document.getElementById("modal-display-cards");
+        displayArr.forEach((card, idx) => {
+          const el = createCardElement(card, {
+            selectable: true,
+            onClick: () => {
+              const picked = displayArr.splice(idx, 1)[0];
+              player.hand.push(picked);
+              closeModal();
+              renderAll();
+              resolve(picked);
+            }
+          });
+          grid.appendChild(el);
+        });
+      });
+    }
+
+    async function gainGuildStep(player, steps = 1) {
+      for (let s = 0; s < steps; s++) {
+        player.guildPos = (player.guildPos + 1) % 12;
+        const stepObj = GUILD_TRACK_STEPS[player.guildPos];
+        addLog(`🛡️ ${player.name} avançou na Guilda do Dragão para a casa #${stepObj.idx} (${stepObj.icon} ${stepObj.label}).`);
+        showToast(`🛡️ ${player.name} avançou na Guilda: ${stepObj.icon} ${stepObj.label}!`, "success");
+        renderGuildBoard();
+        await new Promise(r => setTimeout(r, 380));
+
+        if (stepObj.reward) {
+          await executeEffectList(player, [stepObj.reward]);
+        } else if (stepObj.isBrown && player.guildMarkersUsed < 4) {
+          const availableSlots = getGuild().slots.filter(sl => {
+            const occ = gameState.guildSlotOccupants[sl.id] || [];
+            return occ.length < sl.cap;
+          });
+
+          if (availableSlots.length > 0) {
+            await new Promise(resolve => {
+              openModal({
+                title: `🛡️ ${player.name}: Marco da Guilda do Dragão!`,
+                owner: player.id,
+                closable: false,
+                bodyHtml: `
+                  <p class="text-xs text-stone-600">Você alcançou um espaço marrom da trilha! Escolha um espaço disponível na Ficha Central para colocar 1 dos seus Marcadores (${player.guildMarkersUsed + 1}/4):</p>
+                  <div class="space-y-2 mt-2">
+                    ${availableSlots.map(sl => `
+                      <button data-guild-slot="${sl.id}" class="w-full text-left p-3 rounded-xl border border-amber-300 bg-amber-50/70 hover:bg-amber-100 text-xs font-bold text-stone-900 cursor-pointer">
+                        🛡️ ${sl.label}
+                      </button>
+                    `).join("")}
+                  </div>
+                `
+              });
+
+              document.querySelectorAll("[data-guild-slot]").forEach(btn => {
+                btn.onclick = async () => {
+                  const slotId = btn.dataset.guildSlot;
+                  if (!gameState.guildSlotOccupants[slotId]) gameState.guildSlotOccupants[slotId] = [];
+                  gameState.guildSlotOccupants[slotId].push(player.id);
+                  player.guildMarkersUsed++;
+                  closeModal();
+                  renderAll();
+
+                  const chosenSlot = getGuild().slots.find(x => x.id === slotId);
+                  if (chosenSlot && chosenSlot.type === "imediato") {
+                    await resolveGuildImmediateBonus(player, chosenSlot.effect);
+                  }
+                  resolve();
+                };
+              });
+            });
+          }
+        }
+      }
+      renderAll();
+    }
+
+    async function advanceDragonGuild(player, steps = 1) {
+      return gainGuildStep(player, steps);
+    }
+
+    async function resolveGuildImmediateBonus(player, effectCode) {
+      if (effectCode === "coin_and_2_dragons") {
+        player.coins++;
+        await promptGainCard(player, "dragon", "any");
+        await promptGainCard(player, "dragon", "any");
+      } else if (effectCode === "lay_3_eggs") {
+        await layEggsForPlayer(player, 3);
+      } else if (effectCode === "gain_3_any") {
+        for (let i = 0; i < 3; i++) await promptChooseResource(player, `Recurso da Guilda (${i + 1}/3)`);
+      } else if (effectCode === "tuck_deck_2") {
+        const dragons = getVisibleDragons(player);
+        if (dragons.length > 0) {
+          for (let i = 0; i < 2; i++) {
+            const c = drawDragonFromDeck();
+            if (c) dragons[0].slot.tuckedCards.push(c);
+          }
+          addLog(`${player.name} inseriu 2 Dragões do baralho via bônus da Guilda.`);
+        }
+      } else if (effectCode === "tuck_res_2_general") {
+        const dragons = getVisibleDragons(player);
+        if (dragons.length > 0) {
+          dragons[0].slot.tuckedResources.push("ouro", "cristal");
+          addLog(`${player.name} estocou 2 recursos do suprimento geral via bônus da Guilda.`);
+        }
+      } else if (effectCode === "free_excavate") {
+        const cavesInHand = player.hand.filter(c => c.cardType === "cave");
+        if (cavesInHand.length > 0) {
+          await openExcavateModal(null, true, player.id);
+        }
+      }
+    }
+
+    async function executeEffectList(player, effects, context = {}) {
+      if (!Array.isArray(effects)) return;
+
+      for (const eff of effects) {
+        if (eff.op === "moeda") {
+          player.coins += eff.n || 1;
+          addLog(`${player.name} ganhou ${eff.n || 1} Moeda(s).`);
+        } else if (eff.op === "ganhe") {
+          const count = eff.n || 1;
+          for (let i = 0; i < count; i++) {
+            if (eff.rec === "qualquer") {
+              await promptChooseResource(player);
+            } else if (player.resources[eff.rec] !== undefined) {
+              player.resources[eff.rec]++;
+              addLog(`${player.name} ganhou 1 ${RESOURCE_META[eff.rec].label}.`);
+            }
+          }
+        } else if (eff.op === "ovo") {
+          const constraint = eff.aqui ? { type: "here", cavernId: context.cavernId, col: context.col }
+                           : eff.onde === "caverna" ? { type: "cavern", cavernId: context.cavernId }
+                           : null;
+          await layEggsForPlayer(player, eff.n || 1, constraint);
+        } else if (eff.op === "dragao") {
+          for (let i = 0; i < (eff.n || 1); i++) {
+            await promptGainCard(player, "dragon", "any");
+          }
+        } else if (eff.op === "caverna") {
+          for (let i = 0; i < (eff.n || 1); i++) {
+            await promptGainCard(player, "cave", "any");
+          }
+        } else if (eff.op === "guilda" || eff.op === "avancarGuilda") {
+          await gainGuildStep(player, eff.n || 1);
+        } else if (eff.op === "estocar") {
+          const dragons = getVisibleDragons(player);
+          if (dragons.length > 0 && totalResourcesCount(player) > 0) {
+            await promptTuckResource(player, eff.rec || "qualquer", eff.n || 1, eff.aqui ? context : null);
+          }
+        } else if (eff.op === "inserir") {
+          const dragons = getVisibleDragons(player);
+          if (dragons.length > 0) {
+            if (eff.origem === "baralho") {
+              for (let i = 0; i < (eff.n || 1); i++) {
+                const c = drawDragonFromDeck();
+                if (c) dragons[0].slot.tuckedCards.push(c);
+              }
+              addLog(`${player.name} inseriu ${eff.n || 1} Dragão(ões) do baralho.`);
+            } else {
+              await promptTuckHandDragon(player, eff.n || 1, eff.aqui ? context : null);
+            }
+          }
+        } else if (eff.op === "oponentes") {
+          const totalP = gameState.players.length;
+          for (let offset = 1; offset < totalP; offset++) {
+            const opp = gameState.players[(player.id + offset) % totalP];
+            if (eff.efeito) {
+              await executeEffectList(opp, eff.efeito, context);
+            } else if (eff.escolha) {
+              await executeEffectList(opp, [{ op: "escolha", ...eff.escolha }], context);
+            }
+          }
+        } else if (eff.op === "escolha") {
+          const numDiff = eff.diferentes || 1;
+          let chosenIndices = new Set();
+          for (let step = 0; step < numDiff; step++) {
+            await new Promise(resolve => {
+              openModal({
+                title: `✨ ${player.name}: Escolha benefício (${step + 1}/${numDiff})`,
+                owner: player.id,
+                closable: false,
+                bodyHtml: `
+                  <div class="space-y-2">
+                    ${eff.opcoes.map((opt, idx) => `
+                      <button data-choice-idx="${idx}" ${chosenIndices.has(idx) ? 'disabled' : ''}
+                        class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 disabled:opacity-40 text-xs font-bold uppercase cursor-pointer">
+                        ${opt.rotulo}
+                      </button>
+                    `).join("")}
+                  </div>
+                `
+              });
+              document.querySelectorAll("[data-choice-idx]").forEach(btn => {
+                btn.onclick = async () => {
+                  const idx = parseInt(btn.dataset.choiceIdx, 10);
+                  chosenIndices.add(idx);
+                  closeModal();
+                  await executeEffectList(player, eff.opcoes[idx].efeito, context);
+                  resolve();
+                };
+              });
+            });
+          }
+        } else if (eff.op === "troca") {
+          const maxTimes = eff.ate || 1;
+          for (let t = 0; t < maxTimes; t++) {
+            const canPay = checkCanPaySimple(player, eff.pague);
+            if (!canPay) break;
+            const accepted = await new Promise(resolve => {
+              openModal({
+                title: `🔁 ${player.name}: Realizar troca (${t + 1}/${maxTimes})?`,
+                owner: player.id,
+                closable: false,
+                bodyHtml: `<p class="text-xs text-stone-700">Deseja pagar <strong>${JSON.stringify(eff.pague)}</strong> para receber o benefício?</p>`,
+                footerButtons: [
+                  { text: "Não", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } },
+                  { text: "Sim, Trocar", className: "px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }
+                ]
+              });
+            });
+            if (!accepted) break;
+            applyPaySimple(player, eff.pague);
+            await executeEffectList(player, eff.ganhe, context);
+          }
+        } else if (eff.op === "ativarOutro") {
+          const candidates = getVisibleDragons(player).filter(d => d.card.tipo === eff.tipo);
+          if (candidates.length > 0) {
+            await executeEffectList(player, candidates[0].card.efeito, { cavernId: candidates[0].cavernId, col: candidates[0].col });
+          }
+        }
+      }
+      renderAll();
+    }
+
+    function checkCanPaySimple(player, pague) {
+      if (!pague) return true;
+      if (pague.moeda && player.coins < pague.moeda) return false;
+      if (pague.ovo && countPlayerEggs(player) < pague.ovo) return false;
+      if (pague.dragao && player.hand.filter(c => c.cardType === "dragon").length < pague.dragao) return false;
+      if (pague.caverna && player.hand.filter(c => c.cardType === "cave").length < pague.caverna) return false;
+      if (pague.qualquer && totalResourcesCount(player) < pague.qualquer) return false;
+      for (const r of ["carne", "ouro", "cristal", "leite"]) {
+        if (pague[r] && player.resources[r] < pague[r]) return false;
+      }
+      return true;
+    }
+
+    function applyPaySimple(player, pague) {
+      if (!pague) return;
+      if (pague.moeda) player.coins -= pague.moeda;
+      if (pague.ovo) payPlayerEggs(player, pague.ovo);
+      if (pague.dragao) {
+        for (let i = 0; i < pague.dragao; i++) {
+          const idx = player.hand.findIndex(c => c.cardType === "dragon");
+          if (idx >= 0) gameState.dragonDiscard.push(player.hand.splice(idx, 1)[0]);
+        }
+      }
+      if (pague.caverna) {
+        for (let i = 0; i < pague.caverna; i++) {
+          const idx = player.hand.findIndex(c => c.cardType === "cave");
+          if (idx >= 0) gameState.caveDiscard.push(player.hand.splice(idx, 1)[0]);
+        }
+      }
+      if (pague.qualquer) {
+        let rem = pague.qualquer;
+        for (const r of ["carne", "ouro", "cristal", "leite"]) {
+          while (rem > 0 && player.resources[r] > 0) {
+            player.resources[r]--;
+            rem--;
+          }
+        }
+      }
+      for (const r of ["carne", "ouro", "cristal", "leite"]) {
+        if (pague[r]) player.resources[r] -= pague[r];
+      }
+    }
+
+    async function promptTuckResource(player, recType, maxCount, targetContext = null) {
+      const dragons = targetContext
+        ? [getVisibleDragons(player).find(d => d.cavernId === targetContext.cavernId && d.col === targetContext.col)].filter(Boolean)
+        : getVisibleDragons(player);
+      if (dragons.length === 0) return;
+
+      for (let i = 0; i < maxCount; i++) {
+        const availTypes = recType === "qualquer"
+          ? Object.keys(RESOURCE_META).filter(r => player.resources[r] > 0)
+          : (player.resources[recType] > 0 ? [recType] : []);
+        if (availTypes.length === 0) break;
+
+        await new Promise(resolve => {
+          openModal({
+            title: `📦 ${player.name}: Estocar recurso em Dragão (${i + 1}/${maxCount})`,
+            owner: player.id,
+            closable: false,
+            bodyHtml: `
+              <p class="text-xs text-stone-600 mb-2">Escolha qual recurso do seu suprimento deseja estocar (vale 1 PV no fim da partida):</p>
+              <div class="grid grid-cols-2 gap-2">
+                ${availTypes.map(r => `
+                  <button data-tuck-r="${r}" class="p-2.5 rounded-xl border ${RESOURCE_META[r].color} text-xs font-bold cursor-pointer">
+                    ${RESOURCE_META[r].icon} Estocar ${RESOURCE_META[r].label}
+                  </button>
+                `).join("")}
+              </div>
+            `,
+            footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(); } }]
+          });
+
+          document.querySelectorAll("[data-tuck-r]").forEach(btn => {
+            btn.onclick = async () => {
+              const r = btn.dataset.tuckR;
+              player.resources[r]--;
+              const targetDragon = dragons[0];
+              targetDragon.slot.tuckedResources.push(r);
+              closeModal();
+              addLog(`${player.name} estocou 1 ${RESOURCE_META[r].label} em ${targetDragon.card.nome}.`);
+
+              if (targetDragon.card.tam === "filhote" && targetDragon.card.filhote && targetDragon.card.filhote.aceita === r) {
+                await triggerHatchlingAbility(player, targetDragon);
+              }
+              resolve();
+            };
+          });
+        });
+      }
+    }
+
+    async function promptTuckHandDragon(player, maxCount, targetContext = null) {
+      const dragonsOnBoard = targetContext
+        ? [getVisibleDragons(player).find(d => d.cavernId === targetContext.cavernId && d.col === targetContext.col)].filter(Boolean)
+        : getVisibleDragons(player);
+      if (dragonsOnBoard.length === 0) return;
+
+      for (let i = 0; i < maxCount; i++) {
+        const handDragons = player.hand.filter(c => c.cardType === "dragon");
+        if (handDragons.length === 0) break;
+
+        await new Promise(resolve => {
+          openModal({
+            title: `🃏 ${player.name}: Inserir Dragão da mão (${i + 1}/${maxCount})`,
+            owner: player.id,
+            closable: false,
+            bodyHtml: `
+              <p class="text-xs text-stone-600 mb-2">Escolha um Dragão da sua mão para inserir embaixo de <strong>${dragonsOnBoard[0].card.nome}</strong> (vale 1 PV):</p>
+              <div class="space-y-2">
+                ${handDragons.map(hd => `
+                  <button data-tuck-hd="${hd.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer">
+                    🐉 ${hd.nome} (#${hd.numero})
+                  </button>
+                `).join("")}
+              </div>
+            `,
+            footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(); } }]
+          });
+
+          document.querySelectorAll("[data-tuck-hd]").forEach(btn => {
+            btn.onclick = async () => {
+              const uid = btn.dataset.tuckHd;
+              const idx = player.hand.findIndex(c => c.uid === uid);
+              const removed = player.hand.splice(idx, 1)[0];
+              const targetDragon = dragonsOnBoard[0];
+              targetDragon.slot.tuckedCards.push(removed);
+              closeModal();
+              addLog(`${player.name} inseriu ${removed.nome} embaixo de ${targetDragon.card.nome}.`);
+
+              if (targetDragon.card.tam === "filhote" && targetDragon.card.filhote && targetDragon.card.filhote.aceita === "carta") {
+                await triggerHatchlingAbility(player, targetDragon);
+              }
+              resolve();
+            };
+          });
+        });
+      }
+    }
+
+    async function triggerHatchlingAbility(player, dragonEntry) {
+      const f = dragonEntry.card.filhote;
+      if (!f) return;
+      const count = f.aceita === "carta"
+        ? dragonEntry.slot.tuckedCards.length
+        : dragonEntry.slot.tuckedResources.filter(r => r === f.aceita).length;
+
+      addLog(`🐣 Filhote ${dragonEntry.card.nome} ativado (${count}/3)!`);
+      if (f.ganha && f.ganha.length > 0) {
+        await executeEffectList(player, f.ganha, { cavernId: dragonEntry.cavernId, col: dragonEntry.col });
+      }
+      if (count === 3 && f.bonus && f.bonus.length > 0) {
+        addLog(`🌟 ${dragonEntry.card.nome} atingiu a 3ª marca e ativou seu bônus de crescimento!`);
+        await executeEffectList(player, f.bonus, { cavernId: dragonEntry.cavernId, col: dragonEntry.col });
+      }
+    }
+
+    /* =========================================================================
+       10. AS 5 AÇÕES DO TURNO: ESCAVAR, ATRAIR, EXPLORAR (3 CAVERNAS) E PASSAR
+       ========================================================================= */
+
+    // AÇÃO 1: ESCAVAR
+    function openExcavateModal(preselectedCardUid = null, isFree = false, forPlayerIdx = null) {
+      return new Promise(resolve => _openExcavate(preselectedCardUid, isFree, forPlayerIdx, resolve));
+    }
+
+    async function _openExcavate(preselectedCardUid, isFree, forPlayerIdx, done) {
+      const player = gameState.players[forPlayerIdx !== null && forPlayerIdx !== undefined ? forPlayerIdx : gameState.activePlayerIdx];
+      const caveCards = player.hand.filter(c => c.cardType === "cave");
+
+      if (caveCards.length === 0) {
+        showToast("Você não tem Cartas de Caverna na mão para escavar.", "warn");
+        done();
+        return;
+      }
+
+      const targets = [];
+      player.caverns.forEach(cav => {
+        const nextCol = cav.cols.find(c => !c.excavated);
+        if (nextCol) {
+          const coinCost = isFree ? 0 : 1;
+          const eggCost = isFree ? 0 : (nextCol.col === 2 ? 1 : nextCol.col === 3 ? 2 : 0);
+          const affordable = player.coins >= coinCost && countPlayerEggs(player) >= eggCost;
+          targets.push({
+            cavernId: cav.id,
+            col: nextCol.col,
+            coinCost,
+            eggCost,
+            affordable,
+            label: `${CAVERNS_META[cav.id].nome} — Coluna ${nextCol.col + 1} (Custo: ${coinCost}💰${eggCost > 0 ? ` + ${eggCost}🥚` : ''})`
+          });
+        }
+      });
+
+      if (targets.length === 0) {
+        showToast("Todas as 12 casas do seu tabuleiro já foram escavadas!", "info");
+        done();
+        return;
+      }
+
+      let chosenCardUid = preselectedCardUid || caveCards[0].uid;
+
+      openModal({
+        title: `⛏️ Ação: Escavar Espaço de Caverna`,
+        owner: player.id,
+        closable: !isFree,
+        bodyHtml: `
+          <div class="space-y-4">
+            <div>
+              <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">1. Escolha a Carta de Caverna da sua mão:</div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                ${caveCards.map(cc => `
+                  <button data-exc-card="${cc.uid}" class="text-left p-2.5 rounded-xl border ${cc.uid === chosenCardUid ? 'border-amber-600 bg-amber-50 ring-2 ring-amber-500' : 'border-stone-300 bg-white'} text-xs cursor-pointer">
+                    <div class="font-bold text-stone-800">🪨 Caverna #${cc.numero}</div>
+                    <div class="text-stone-600 mt-0.5">${formatCardText(cc.texto)}</div>
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+
+            <div>
+              <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">2. Escolha onde escavar (esquerda para direita):</div>
+              <div class="space-y-2">
+                ${targets.map((t, idx) => `
+                  <button data-exc-target="${idx}" ${t.affordable ? '' : 'disabled'}
+                    class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer">
+                    ⛏️ ${t.label} ${t.affordable ? '' : '(Recursos insuficientes)'}
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+        `,
+        footerButtons: [{ text: "Cancelar", className: "px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); done(); } }]
+      });
+
+      document.querySelectorAll("[data-exc-card]").forEach(btn => {
+        btn.onclick = () => _openExcavate(btn.dataset.excCard, isFree, forPlayerIdx, done);
+      });
+
+      document.querySelectorAll("[data-exc-target]").forEach(btn => {
+        btn.onclick = async () => {
+          const t = targets[parseInt(btn.dataset.excTarget, 10)];
+          const cardIdx = player.hand.findIndex(c => c.uid === chosenCardUid);
+          if (cardIdx < 0) return;
+
+          closeModal();
+          const cardToPlay = player.hand[cardIdx];
+          await animateCardPlacement(cardToPlay, t.cavernId, t.col);
+
+          const playedCard = player.hand.splice(cardIdx, 1)[0];
+          player.coins -= t.coinCost;
+          if (t.eggCost > 0) payPlayerEggs(player, t.eggCost);
+
+          const colObj = player.caverns[t.cavernId].cols[t.col];
+          colObj.excavated = true;
+          colObj.caveCard = playedCard;
+
+          gameState.justPlacedSlot = { cavernId: t.cavernId, col: t.col };
+          gameState.lastActionShowcase = {
+            round: gameState.round,
+            playerName: player.name,
+            playerColor: player.color.hex,
+            actionTitle: `⛏️ Escavou em ${CAVERNS_META[t.cavernId].nome} (Col. ${t.col + 1})`,
+            detail: `Jogou a Carta de Caverna #${playedCard.numero}.`,
+            card: playedCard
+          };
+
+          addLog(`${player.name} escavou a Coluna ${t.col + 1} de ${CAVERNS_META[t.cavernId].nome} com Caverna #${playedCard.numero}.`);
+          renderAll();
+          setTimeout(() => { if (gameState) gameState.justPlacedSlot = null; }, 650);
+
+          // 1. Ativa efeito "Quando Jogado" da Carta de Caverna
+          if (playedCard.efeito && playedCard.efeito.length > 0) {
+            await executeEffectList(player, playedCard.efeito, { cavernId: t.cavernId, col: t.col });
+          }
+
+          // 2. Se cobriu a 4ª coluna (col === 3), ativa bônus "quando coberto" (1x: pague 3 itens -> ganhe 1 Moeda)
+          if (t.col === 3) {
+            const totalItems = totalResourcesCount(player) + player.hand.length;
+            if (totalItems >= 3) {
+              const wantCoverBonus = await new Promise(resolve => {
+                openModal({
+                  title: `💰 Bônus da 4ª Coluna Coberta`,
+                  owner: player.id,
+                  closable: false,
+                  bodyHtml: `<p class="text-xs text-stone-700">Você cobriu a 4ª coluna! Deseja pagar <strong>3 itens quaisquer</strong> (recursos e/ou cartas da mão) para ganhar <strong>1 Moeda</strong>?</p>`,
+                  footerButtons: [
+                    { text: "Não", className: "px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } },
+                    { text: "Sim, Pagar 3 itens → +1💰", className: "px-4 py-2 rounded-xl bg-amber-700 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }
+                  ]
+                });
+              });
+
+              if (wantCoverBonus) {
+                let paid = 0;
+                for (const r of ["carne", "ouro", "cristal", "leite"]) {
+                  while (paid < 3 && player.resources[r] > 0) {
+                    player.resources[r]--;
+                    paid++;
+                  }
+                }
+                while (paid < 3 && player.hand.length > 0) {
+                  const disc = player.hand.pop();
+                  if (disc.cardType === "dragon") gameState.dragonDiscard.push(disc);
+                  else gameState.caveDiscard.push(disc);
+                  paid++;
+                }
+                player.coins++;
+                addLog(`${player.name} ativou o bônus da 4ª coluna: pagou 3 itens e ganhou 1 Moeda.`);
+                renderAll();
+              }
+            }
+          }
+
+          if (!isFree) {
+            await finishPlayerTurn();
+          }
+          done();
+        };
+      });
+    }
+
+    // AÇÃO 2: ATRAIR DRAGÃO (COM CARTAS FÍSICAS COMPLETAS NA SELEÇÃO)
+    async function openEnticeModal(preselectedDragonUid = null) {
+      const player = gameState.players[gameState.activePlayerIdx];
+      const dragonsInHand = player.hand.filter(c => c.cardType === "dragon");
+
+      if (dragonsInHand.length === 0) {
+        showToast("Você não tem Cartas de Dragão na mão para atrair.", "warn");
+        return;
+      }
+
+      let selectedUid = preselectedDragonUid || dragonsInHand[0].uid;
+      const selectedDragon = dragonsInHand.find(d => d.uid === selectedUid) || dragonsInHand[0];
+
+      const cost = selectedDragon.custo || {};
+      const totalCoinsNeeded = 1 + (cost.moeda || 0);
+      const totalEggsNeeded = cost.ovo || 0;
+      const canPayCost = player.coins >= totalCoinsNeeded &&
+                         countPlayerEggs(player) >= totalEggsNeeded &&
+                         player.resources.carne >= (cost.carne || 0) &&
+                         player.resources.ouro >= (cost.ouro || 0) &&
+                         player.resources.cristal >= (cost.cristal || 0) &&
+                         player.resources.leite >= (cost.leite || 0);
+
+      const validCavernSlots = [];
+      player.caverns.forEach(cav => {
+        if ((selectedDragon.hab || []).includes(cav.id)) {
+          const emptyExcavated = cav.cols.find(c => c.excavated && !c.dragonSlot);
+          if (emptyExcavated) {
+            validCavernSlots.push({
+              cavernId: cav.id,
+              col: emptyExcavated.col,
+              label: `${CAVERNS_META[cav.id].nome} (Espaço ${emptyExcavated.col + 1})`
+            });
+          }
+        }
+      });
+
+      openModal({
+        title: `🐉 Ação: Atrair Dragão para o Santuário`,
+        bodyHtml: `
+          <div class="space-y-4">
+            <div>
+              <div class="text-xs font-bold uppercase text-stone-500 mb-2">1. Selecione um Dragão da sua mão (clique na carta para inspecionar e escolher):</div>
+              <div id="modal-entice-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto p-1"></div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-stone-100 border border-stone-200 text-xs">
+              <strong>Dragão Selecionado:</strong> <span class="font-bold text-stone-900">${selectedDragon.nome}</span> •
+              <strong>Custo Total:</strong> 1💰 + ${formatCostIconsOnly(selectedDragon.custo)}
+              ${!canPayCost ? '<span class="block text-red-700 font-bold mt-1">⚠️ Recursos ou Moedas insuficientes para atrair este Dragão.</span>' : ''}
+            </div>
+
+            <div>
+              <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">2. Escolha a Caverna compatível:</div>
+              ${validCavernSlots.length === 0
+                ? `<div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-semibold">Nenhum espaço escavado disponível nas cavernas preferidas deste dragão. Escave primeiro!</div>`
+                : `<div class="space-y-2">
+                    ${validCavernSlots.map((s, idx) => `
+                      <button data-ent-slot="${idx}" ${canPayCost ? '' : 'disabled'}
+                        class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer">
+                        🐉 Colocar em ${s.label}
+                      </button>
+                    `).join("")}
+                  </div>`
+              }
+            </div>
+          </div>
+        `,
+        footerButtons: [{ text: "Cancelar", className: "px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer", onClick: closeModal }]
+      });
+
+      const enticeGrid = document.getElementById("modal-entice-cards-grid");
+      dragonsInHand.forEach(d => {
+        const isSel = d.uid === selectedDragon.uid;
+        const cardEl = createCardElement(d, {
+          selectable: true,
+          selected: isSel,
+          onClick: () => openEnticeModal(d.uid)
+        });
+        if (isSel) {
+          cardEl.classList.add("ring-4", "ring-emerald-600");
+          cardEl.insertAdjacentHTML("afterbegin", `<div class="bg-emerald-600 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionado</div>`);
+        }
+        enticeGrid.appendChild(cardEl);
+      });
+
+      document.querySelectorAll("[data-ent-slot]").forEach(btn => {
+        btn.onclick = async () => {
+          const targetSlot = validCavernSlots[parseInt(btn.dataset.entSlot, 10)];
+          const idx = player.hand.findIndex(c => c.uid === selectedDragon.uid);
+          if (idx < 0) return;
+
+          closeModal();
+          const cardToPlay = player.hand[idx];
+          await animateCardPlacement(cardToPlay, targetSlot.cavernId, targetSlot.col);
+
+          const card = player.hand.splice(idx, 1)[0];
+
+          player.coins -= totalCoinsNeeded;
+          if (totalEggsNeeded > 0) payPlayerEggs(player, totalEggsNeeded);
+          for (const r of ["carne", "ouro", "cristal", "leite"]) {
+            if (cost[r]) player.resources[r] -= cost[r];
+          }
+
+          player.caverns[targetSlot.cavernId].cols[targetSlot.col].dragonSlot = {
+            card,
+            eggs: 0,
+            tuckedResources: [],
+            tuckedCards: []
+          };
+
+          gameState.justPlacedSlot = { cavernId: targetSlot.cavernId, col: targetSlot.col };
+          gameState.lastActionShowcase = {
+            round: gameState.round,
+            playerName: player.name,
+            playerColor: player.color.hex,
+            actionTitle: `🐉 Atraiu Dragão em ${CAVERNS_META[targetSlot.cavernId].nome} (Col. ${targetSlot.col + 1})`,
+            detail: `Colocou ${card.nome} (#${card.numero}) no santuário.`,
+            card
+          };
+
+          addLog(`${player.name} atraiu ${card.nome} para ${CAVERNS_META[targetSlot.cavernId].nome} (Coluna ${targetSlot.col + 1}).`);
+          renderAll();
+          setTimeout(() => { if (gameState) gameState.justPlacedSlot = null; }, 650);
+
+          if (card.tipo === "jogado" && card.efeito && card.efeito.length > 0) {
+            await executeEffectList(player, card.efeito, { cavernId: targetSlot.cavernId, col: targetSlot.col });
+          }
+
+          await finishPlayerTurn();
+        };
+      });
+    }
+
+    // AÇÕES 3, 4 E 5: EXPLORAR CAVERNA (COM BÔNUS ESPECÍFICOS DE CADA UMA DAS 3 CAVERNAS!)
+    async function exploreCavern(cavernId) {
+      const player = gameState.players[gameState.activePlayerIdx];
+      const cav = player.caverns[cavernId];
+      const meta = CAVERNS_META[cavernId];
+      const expIdx = cav.explorationsThisRound;
+
+      if (expIdx >= 3) return;
+      const eggCost = expIdx;
+      if (player.coins < 1 || countPlayerEggs(player) < eggCost) {
+        showToast("Moedas ou Ovos insuficientes para explorar esta caverna.", "warn");
+        return;
+      }
+
+      player.coins -= 1;
+      if (eggCost > 0) payPlayerEggs(player, eggCost);
+      cav.explorationsThisRound++;
+
+      gameState.lastActionShowcase = {
+        round: gameState.round,
+        playerName: player.name,
+        playerColor: player.color.hex,
+        actionTitle: `🧭 Explorou ${meta.nome}`,
+        detail: `${cav.explorationsThisRound}ª exploração nesta rodada.`,
+        card: null
+      };
+
+      addLog(`${player.name} começou a explorar ${meta.nome} (${cav.explorationsThisRound}ª vez na rodada).`);
+
+      for (let c = 0; c < 4; c++) {
+        const colObj = cav.cols[c];
+        const stepInfo = meta.pathSteps[c];
+        gameState.adventurerPos = { cavernId, col: c };
+        renderCavernsBoard();
+        scheduleSync();
+        await new Promise(r => setTimeout(r, 320));
+
+        // 1. Ativa o bônus específico da trilha da caverna naquela coluna!
+        if (stepInfo.type === "resource_any") {
+          await promptChooseResource(player, `${meta.nome} (Col. ${c + 1}): Ganhe 1 recurso`);
+        } else if (stepInfo.type === "dragon_card") {
+          await promptGainCard(player, "dragon", "any");
+        } else if (stepInfo.type === "cave_card") {
+          await promptGainCard(player, "cave", "any");
+        } else if (stepInfo.type === "guild") {
+          await advanceDragonGuild(player, 1);
+        } else if (stepInfo.type === "egg") {
+          await layEggsForPlayer(player, 1);
+        }
+
+        // 2. Se houver um Dragão nesta casa, ativa sua habilidade 'Se Ativado' ('ativado')
+        if (colObj.dragonSlot) {
+          const dCard = colObj.dragonSlot.card;
+          if (dCard.tipo === "ativado") {
+            if (dCard.tam === "filhote" && dCard.filhote) {
+              if (dCard.filhote.aceita === "carta") {
+                await promptTuckHandDragon(player, 1, { cavernId, col: c });
+              } else {
+                await promptTuckResource(player, dCard.filhote.aceita, 1, { cavernId, col: c });
+              }
+            } else if (dCard.efeito && dCard.efeito.length > 0) {
+              if (dCard.pague) {
+                await executeEffectList(player, [{ op: "troca", ate: 1, pague: dCard.pague, ganhe: dCard.efeito }], { cavernId, col: c });
+              } else {
+                await executeEffectList(player, dCard.efeito, { cavernId, col: c });
+              }
+            }
+          }
+
+          // Se chegou ao fim da caverna (4º dragão), ativa bônus de fim de caverna!
+          if (c === 3) {
+            await resolveCavernEndBonus(player, cavernId);
+          }
+        } else {
+          // Encontrou espaço vazio (sinal de PARE ⛔): encerra exploração e retorna à base!
+          addLog(`⛔ Aventureiro de ${player.name} alcançou um espaço sem Dragão na Coluna ${c + 1} e retornou à Base.`);
+          break;
+        }
+      }
+
+      gameState.adventurerPos = null;
+      renderAll();
+      await finishPlayerTurn();
+    }
+
+    async function resolveCavernEndBonus(player, cavernId) {
+      addLog(`✨ ${player.name} completou toda a trilha de ${CAVERNS_META[cavernId].nome}!`);
+      if (cavernId === 0) {
+        await promptTuckResource(player, "qualquer", 2);
+      } else if (cavernId === 1) {
+        await promptTuckHandDragon(player, 2);
+      } else if (cavernId === 2) {
+        for (let i = 0; i < 2; i++) {
+          if (player.hand.length === 0) break;
+          const didDiscard = await new Promise(resolve => {
+            openModal({
+              title: `🟣 Fim do Abismo Ametista (${i + 1}/2)`,
+              owner: player.id,
+              closable: false,
+              bodyHtml: `
+                <p class="text-xs text-stone-600 mb-2">Descarte 1 carta da sua mão para botar 1 Ovo:</p>
+                <div class="space-y-1.5">
+                  ${player.hand.map(c => `
+                    <button data-disc-c="${c.uid}" class="w-full text-left p-2 rounded-xl border border-stone-300 bg-white hover:bg-purple-50 text-xs font-bold cursor-pointer">
+                      ${c.cardType === 'dragon' ? `🐉 ${c.nome}` : `🪨 Caverna #${c.numero}`}
+                    </button>
+                  `).join("")}
+                </div>
+              `,
+              footerButtons: [{ text: "Não descartar", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } }]
+            });
+            document.querySelectorAll("[data-disc-c]").forEach(btn => {
+              btn.onclick = () => {
+                const idx = player.hand.findIndex(x => x.uid === btn.dataset.discC);
+                const rem = player.hand.splice(idx, 1)[0];
+                if (rem.cardType === "dragon") gameState.dragonDiscard.push(rem);
+                else gameState.caveDiscard.push(rem);
+                closeModal();
+                resolve(true);
+              };
+            });
+          });
+          if (!didDiscard) break;
+          await layEggsForPlayer(player, 1);
+        }
+      }
+    }
+
+    async function handlePassRound() {
+      const player = gameState.players[gameState.activePlayerIdx];
+      player.passed = true;
+      gameState.pendingTurnConfirmation = true;
+      gameState.lastActionShowcase = {
+        round: gameState.round,
+        playerName: player.name,
+        playerColor: player.color.hex,
+        actionTitle: `🏳️ Passou a Rodada ${gameState.round}`,
+        detail: "Encerrou suas ações nesta rodada.",
+        card: null
+      };
+      addLog(`🏳️ ${player.name} optou por passar a rodada (aguardando confirmação).`);
+      renderAll();
+    }
+
+    async function finishPlayerTurn() {
+      gameState.pendingTurnConfirmation = true;
+      showToast("✅ Ação concluída! Confirme sua jogada ou clique em Desfazer.", "success");
+      renderAll();
+    }
+
+    async function confirmPlayerTurn() {
+      const player = gameState.players[gameState.activePlayerIdx];
+      gameState.pendingTurnConfirmation = false;
+      await enforceEndOfTurnLimits(player);
+      refillDisplay();
+      await advanceToNextPlayer();
+    }
+
+    async function enforceEndOfTurnLimits(player) {
+      if (player.coins > 9) {
+        addLog(`${player.name} descartou ${player.coins - 9} Moeda(s) excedente(s) (limite 9).`);
+        player.coins = 9;
+      }
+      while (totalResourcesCount(player) > 9) {
+        for (const r of ["carne", "ouro", "cristal", "leite"]) {
+          if (player.resources[r] > 0 && totalResourcesCount(player) > 9) {
+            player.resources[r]--;
+          }
+        }
+      }
+      while (player.hand.length > 9) {
+        const dropped = player.hand.pop();
+        if (dropped.cardType === "dragon") gameState.dragonDiscard.push(dropped);
+        else gameState.caveDiscard.push(dropped);
+      }
+    }
+
+    async function advanceToNextPlayer() {
+      if (gameState.players.every(p => p.passed)) {
+        await handleEndOfRound();
+        return;
+      }
+
+      const total = gameState.players.length;
+      let nextIdx = (gameState.activePlayerIdx + 1) % total;
+      while (gameState.players[nextIdx].passed) {
+        nextIdx = (nextIdx + 1) % total;
+      }
+
+      gameState.activePlayerIdx = nextIdx;
+      gameState.viewingPlayerIdx = myIdx;
+      gameState.pendingTurnConfirmation = false;
+      saveTurnSnapshot();
+      renderAll();
+      flushSync();
+    }
+
+    /* =========================================================================
+       11. MANUTENÇÃO DE FIM DE RODADA E PONTUAÇÃO FINAL
+       ========================================================================= */
+    async function handleEndOfRound() {
+      const rIdx = gameState.round - 1;
+      addLog(`🔔 Fim da Rodada ${gameState.round}! Iniciando manutenção...`);
+
+      const total = gameState.players.length;
+      for (let offset = 0; offset < total; offset++) {
+        const p = gameState.players[(gameState.firstPlayerIdx + offset) % total];
+        const roundDragons = getVisibleDragons(p).filter(d => d.card.tipo === "rodada");
+        for (const rd of roundDragons) {
+          addLog(`⏳ Ativando ${rd.card.nome} (1x/Rodada) de ${p.name}.`);
+          if (rd.card.pague) {
+            await executeEffectList(p, [{ op: "troca", ate: 1, pague: rd.card.pague, ganhe: rd.card.efeito }], { cavernId: rd.cavernId, col: rd.col });
+          } else {
+            await executeEffectList(p, rd.card.efeito, { cavernId: rd.cavernId, col: rd.col });
+          }
+        }
+      }
+
+      const obj = gameState.objectives[rIdx];
+      const ptsTable = ROUND_OBJECTIVE_POINTS[rIdx];
+      const standings = gameState.players.map(p => ({ player: p, val: objCount(obj, p) }))
+        .sort((a, b) => b.val - a.val);
+
+      let rankCursor = 0;
+      let i = 0;
+      while (i < standings.length) {
+        const currentVal = standings[i].val;
+        const tiedGroup = standings.filter(s => s.val === currentVal);
+        const awardedPts = currentVal === 0 ? 0 : (ptsTable[rankCursor] || 0);
+
+        tiedGroup.forEach(entry => {
+          entry.player.objectiveScores[rIdx] = awardedPts;
+          addLog(`🎯 Objetivo R${gameState.round} (${obj.titulo}): ${entry.player.name} (${entry.val}) ganhou ${awardedPts} PV.`);
+        });
+
+        rankCursor++;
+        i += tiedGroup.length;
+      }
+
+      if (gameState.round >= 4) {
+        gameState.phase = "over";
+        flushSync();
+        showScreen("gameover-screen");
+        showFinalScoreboard();
+        return;
+      }
+
+      gameState.round++;
+      gameState.dragonDiscard.push(...gameState.displayDragons);
+      gameState.caveDiscard.push(...gameState.displayCaves);
+      gameState.displayDragons = [];
+      gameState.displayCaves = [];
+      refillDisplay();
+
+      gameState.firstPlayerIdx = (gameState.firstPlayerIdx + 1) % total;
+      for (const p of gameState.players) {
+        p.passed = false;
+        p.coins += 6;
+        p.caverns.forEach(c => c.explorationsThisRound = 0);
+        if (countAvailableNestSpace(p) > 0) {
+          await layEggsForPlayer(p, 1);
+        }
+      }
+
+      gameState.activePlayerIdx = gameState.firstPlayerIdx;
+      gameState.viewingPlayerIdx = myIdx;
+      gameState.pendingTurnConfirmation = false;
+      saveTurnSnapshot();
+      addLog(`🌅 Rodada ${gameState.round} começou! Todos receberam +6 Moedas e +1 Ovo. Jogador Inicial: ${gameState.players[gameState.firstPlayerIdx].name}.`);
+      renderAll();
+      flushSync();
+    }
+
+    function computeEndGameDragonPoints(player) {
+      let total = 0;
+      const endDragons = getVisibleDragons(player).filter(d => d.card.tipo === "fim" && d.card.fim);
+      endDragons.forEach(d => {
+        const f = d.card.fim;
+        if (f.contar === "outrosDragoesCaverna") {
+          const others = player.caverns[d.cavernId].cols.filter(c => c.dragonSlot && c.col !== d.col).length;
+          total += others * (f.n || 1);
+        } else if (f.contar === "marcadoresGuilda") {
+          total += player.guildMarkersUsed * (f.n || 1);
+        } else if (f.contar === "dragoesRodada") {
+          const cnt = getVisibleDragons(player).filter(x => x.card.tipo === "rodada").length;
+          total += Math.min(f.max || 99, cnt * (f.n || 1));
+        } else if (f.contar === "medio") {
+          const cnt = getVisibleDragons(player).filter(x => x.card.tam === "medio").length;
+          total += Math.min(f.max || 99, cnt * (f.n || 1));
+        } else if (f.contar === "filhote") {
+          const cnt = getVisibleDragons(player).filter(x => x.card.tam === "filhote").length;
+          total += Math.min(f.max || 99, cnt * (f.n || 1));
+        } else if (f.contar === "cavernasEscavadas") {
+          total += Math.min(f.max || 99, countExcavatedCards(player) * (f.n || 1));
+        } else if (f.condicao === "colunaCheia") {
+          const full = [0, 1, 2].every(r => player.caverns[r].cols[d.col].dragonSlot);
+          if (full) total += (f.n || 0);
+        } else if (f.condicao === "cavernaCheia") {
+          const full = player.caverns[d.cavernId].cols.every(c => c.dragonSlot);
+          if (full) total += (f.n || 0);
+        }
+      });
+      return total;
+    }
+
+    function computeGuildEndPoints(player) {
+      let pts = 0;
+      getGuild().slots.forEach(slot => {
+        if (slot.type === "fim") {
+          const occ = gameState.guildSlotOccupants[slot.id] || [];
+          const myCount = occ.filter(id => id === player.id).length;
+          if (myCount > 0) {
+            pts += myCount * slot.scoreFn(player);
+          }
+        }
+      });
+      return pts;
+    }
+
+    function showFinalScoreboard() {
+      document.getElementById("game-screen").classList.add("hidden");
+      document.getElementById("gameover-screen").classList.remove("hidden");
+
+      const results = gameState.players.map(p => {
+        const guildPts = computeGuildEndPoints(p);
+        const dragonBasePts = getVisibleDragons(p).reduce((acc, d) => acc + (d.card.pv || 0), 0);
+        const endAbilityPts = computeEndGameDragonPoints(p);
+        const eggPts = countPlayerEggs(p);
+        const tuckedResPts = countTuckedResources(p);
+        const tuckedCardsPts = countTuckedCards(p);
+        const objectivesPts = p.objectiveScores.reduce((a, b) => a + b, 0);
+        const coinsPts = p.coins;
+        const remainingItems = totalResourcesCount(p) + p.hand.length;
+        const itemsPts = Math.floor(remainingItems / 4);
+
+        const total = guildPts + dragonBasePts + endAbilityPts + eggPts + tuckedResPts + tuckedCardsPts + objectivesPts + coinsPts + itemsPts;
+
+        return {
+          player: p,
+          guildPts,
+          dragonBasePts,
+          endAbilityPts,
+          eggPts,
+          tuckedResPts,
+          tuckedCardsPts,
+          objectivesPts,
+          coinsPts,
+          itemsPts,
+          visibleDragonsCount: getVisibleDragons(p).length,
+          total
+        };
+      }).sort((a, b) => (b.total - a.total) || (b.visibleDragonsCount - a.visibleDragonsCount));
+
+      const winner = results[0];
+      document.getElementById("winner-announcement").textContent =
+        `🎉 ${winner.player.name} venceu com ${winner.total} Pontos de Vitória (${winner.visibleDragonsCount} Dragões no santuário)!`;
+
+      const rows = [
+        { label: "🛡️ Marcadores na Guilda do Dragão", key: "guildPts" },
+        { label: "🐉 PVs Impressos nos Dragões", key: "dragonBasePts" },
+        { label: "🏆 Habilidades de Fim de Partida", key: "endAbilityPts" },
+        { label: "🥚 Ovos no Tabuleiro (1 PV cada)", key: "eggPts" },
+        { label: "📦 Recursos Estocados (1 PV cada)", key: "tuckedResPts" },
+        { label: "🃏 Cartas Inseridas (1 PV cada)", key: "tuckedCardsPts" },
+        { label: "🎯 Objetivos Públicos (R1–R4)", key: "objectivesPts" },
+        { label: "💰 Moedas Restantes (1 PV cada)", key: "coinsPts" },
+        { label: "🎒 Itens Restantes (1 PV a cada 4)", key: "itemsPts" }
+      ];
+
+      const table = document.getElementById("final-score-table");
+      table.innerHTML = `
+        <thead class="bg-stone-900 text-amber-100">
+          <tr>
+            <th class="p-3 font-display">Categoria de Pontuação</th>
+            ${results.map(r => `<th class="p-3 text-center font-display">${r.player.name}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-200">
+          ${rows.map(row => `
+            <tr>
+              <td class="p-3 font-semibold text-stone-700">${row.label}</td>
+              ${results.map(r => `<td class="p-3 text-center font-bold text-stone-900">${r[row.key]}</td>`).join("")}
+            </tr>
+          `).join("")}
+          <tr class="bg-amber-100/90 font-extrabold text-base">
+            <td class="p-3 font-display text-stone-950">TOTAL DE PONTOS (PV)</td>
+            ${results.map(r => `<td class="p-3 text-center font-display text-amber-950 text-lg">${r.total} PV</td>`).join("")}
+          </tr>
+        </tbody>
+      `;
+    }
+
+    document.getElementById("btn-open-rules").addEventListener("click", () => {
+      openModal({
+        title: "📖 Resumo Rápido de Wyrmspan",
+        bodyHtml: `
+          <div class="space-y-3 text-xs leading-relaxed text-stone-700">
+            <div class="p-3 rounded-xl bg-stone-100">
+              <strong>1. Escavar:</strong> Pague 1 Moeda (+1 Ovo na 3ª coluna, +2 Ovos na 4ª) e jogue 1 Carta de Caverna da mão no espaço vazio mais à esquerda de uma caverna.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-50">
+              <strong>2. Atrair:</strong> Pague 1 Moeda + o custo do Dragão e coloque-o no espaço escavado mais à esquerda de uma caverna compatível com seu habitat. Ativa habilidades <em>Quando Jogado</em>.
+            </div>
+            <div class="p-3 rounded-xl bg-amber-50">
+              <strong>3. Explorar (1 das 3 cavernas):</strong>
+              <ul class="list-disc pl-4 mt-1 space-y-0.5">
+                <li><strong>Caverna Escarlate:</strong> Dá Recursos (Col. 1 e 3), Guilda (Col. 2), Ovo (Col. 4) e estoca até 2 recursos no fim.</li>
+                <li><strong>Gruta Dourada:</strong> Dá Cartas de Dragão (Col. 1 e 3), Guilda (Col. 2), Ovo (Col. 4) e insere até 2 dragões no fim.</li>
+                <li><strong>Abismo Ametista:</strong> Dá Cartas de Caverna (Col. 1 e 3), Guilda (Col. 2), Ovo (Col. 4) e descarta até 2 cartas por ovos no fim.</li>
+              </ul>
+            </div>
+            <div class="p-3 rounded-xl bg-purple-50">
+              <strong>Limites & Troca 2:1:</strong> A qualquer momento, troque 2 recursos quaisquer por 1 à escolha. No fim do turno, o limite máximo é de 9 Moedas, 9 cartas na mão e 9 fichas de recurso.
+            </div>
+          </div>
+        `,
+        footerButtons: [{ text: "Entendi", onClick: closeModal }]
+      });
+    });
+
+    /* =========================================================================
+       12. CAMADA ONLINE (WebSocket + salas)
+       Modelo: o jogador da vez roda o motor de regras no próprio navegador e
+       envia o estado ao servidor; os demais recebem e desenham. Quando uma
+       carta obriga OUTRO jogador a decidir (ex.: "cada oponente ganha..."),
+       o pop-up é espelhado na tela dele e o clique volta para quem roda o motor.
+       ========================================================================= */
+    const BASE_TITLE = document.title;
+    const NET = {
+      ws: null, room: null, seats: [], hostSeat: 0, phase: "lobby", version: 0,
+      name: "", pendingHello: null, retry: 0, reconnectTimer: null,
+      connected: false, prevConn: [], restoreTried: false
+    };
+    let mySeat = null;
+    let myIdx = -1;
+    let engineOwner = false;
+    let syncTimer = null;
+    let needsSync = false;
+    let pendingHandoff = false;
+    let activeMirror = null;   // modal do motor que está sendo exibido a outro jogador
+    let mirrorSeq = 0;
+    let remoteModal = null;    // modal espelhado exibido AQUI (decidido por mim, rodando no motor de outro)
+    let draftSentSel = null;
+    let draftShownIdx = null;
+    let cardsLoaded = false;
+
+    const byId = (id) => document.getElementById(id);
+    const cleanName = (s) => String(s || "").replace(/[<>&"'`\\]/g, "").trim().slice(0, 24);
+
+    /* ---------- sessão (por aba) ---------- */
+    function getToken() {
+      let t = sessionStorage.getItem("wyrm_token");
+      if (!t) {
+        t = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (String(Math.random()).slice(2) + Date.now());
+        sessionStorage.setItem("wyrm_token", t);
+      }
+      return t;
+    }
+    function loadSession() {
+      try { return JSON.parse(sessionStorage.getItem("wyrm_session") || "null"); } catch { return null; }
+    }
+    function saveSession(s) { try { sessionStorage.setItem("wyrm_session", JSON.stringify(s)); } catch {} }
+    function clearSession() {
+      try { sessionStorage.removeItem("wyrm_session"); sessionStorage.removeItem("wyrm_last"); } catch {}
+    }
+    function cacheLast(msg) {
+      try { sessionStorage.setItem("wyrm_last", JSON.stringify({ v: msg.v, phase: msg.phase, state: msg.state })); } catch {}
+    }
+
+    /* ---------- conexão ---------- */
+    function wsOpen() { return NET.ws && NET.ws.readyState === 1; }
+    function netSend(obj) {
+      if (!wsOpen()) return false;
+      NET.ws.send(JSON.stringify(obj));
+      return true;
+    }
+    function netSendTo(seat, msg) { return netSend({ t: "to", seat, msg }); }
+    function seatOfIdx(i) { return gameState.players[i].seat; }
+
+    function connectWS() {
+      clearTimeout(NET.reconnectTimer);
+      if (NET.ws && (NET.ws.readyState === 0 || NET.ws.readyState === 1)) return;
+      const ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws");
+      NET.ws = ws;
+      ws.onopen = () => sendHello();
+      ws.onmessage = (ev) => {
+        let m;
+        try { m = JSON.parse(ev.data); } catch { return; }
+        handleNet(m);
+      };
+      ws.onclose = () => {
+        if (NET.ws !== ws) return;
+        NET.connected = false;
+        setConnState();
+        const s = loadSession();
+        if (s || NET.pendingHello) {
+          NET.reconnectTimer = setTimeout(connectWS, Math.min(8000, 500 * Math.pow(2, NET.retry++)));
+        }
+      };
+      ws.onerror = () => {};
+    }
+
+    function sendHello(extra = {}) {
+      const s = loadSession();
+      const hello = { t: "hello", token: getToken(), name: NET.name || (s && s.name) || "Dracologista" };
+      if (NET.pendingHello) Object.assign(hello, NET.pendingHello);
+      else if (s) { hello.room = s.room; hello.seat = s.seat; }
+      Object.assign(hello, extra);
+      netSend(hello);
+    }
+
+    function startConnect(intent) {
+      const name = cleanName(byId("my-name-input").value);
+      const err = byId("lobby-error");
+      if (!name) { err.textContent = "Digite seu nome primeiro."; return; }
+      if (intent.room && !/^[A-Za-z0-9]{4}$/.test(intent.room)) { err.textContent = "O código da sala tem 4 letras/números."; return; }
+      err.textContent = "";
+      try { localStorage.setItem("wyrm_name", name); } catch {}
+      NET.name = name;
+      NET.restoreTried = false;
+      NET.pendingHello = intent.room ? { room: intent.room.toUpperCase() } : { create: true };
+      if (wsOpen()) sendHello(); else connectWS();
+    }
+
+    function handleNet(m) {
+      switch (m.t) {
+        case "joined": return onJoined(m);
+        case "noroom": return onNoRoom();
+        case "error": return onNetError(m);
+        case "presence": return onPresence(m);
+        case "state": return onRemoteState(m);
+        case "msg": return onPeerMsg(m.from, m.msg);
+        case "reset": return onReset();
+      }
+    }
+
+    function onJoined(m) {
+      NET.room = m.room;
+      mySeat = m.seat;
+      NET.seats = m.seats;
+      NET.connected = true;
+      NET.pendingHello = null;
+      NET.retry = 0;
+      NET.phase = m.phase;
+      saveSession({ room: m.room, seat: m.seat, name: NET.name });
+      byId("lobby-error").textContent = "";
+      NET.prevConn = m.seats.map(s => Boolean(s && s.connected));
+      try { history.replaceState(null, "", "?sala=" + m.room); } catch {}
+
+      if (m.state && (!gameState || m.v > NET.version)) {
+        NET.version = m.v;
+        adoptState(m.state, m.turnStart, false);
+      } else if (!m.state && gameState && m.phase === "lobby") {
+        gameState = null; engineOwner = false; NET.version = 0; turnSnapshot = null;
+        routePhase();
+      } else if (!gameState) {
+        routePhase();
+      }
+
+      if (needsSync && gameState) sendState(pendingHandoff);
+      if (activeMirror) sendMirror();
+      if (gameState && gameState.phase === "draft" && draftSentSel && myIdx >= 0 && !gameState.players[myIdx].draftDone) {
+        submitDraftChoice(myIdx, draftSentSel);
+      }
+      setConnState();
+      renderLobby();
+    }
+
+    function onNoRoom() {
+      const s = loadSession();
+      if (!NET.pendingHello && s && !NET.restoreTried) {
+        // O servidor reiniciou: reconstruímos a sala com o que este navegador guardou.
+        NET.restoreTried = true;
+        let last = null;
+        try { last = JSON.parse(sessionStorage.getItem("wyrm_last") || "null"); } catch {}
+        sendHello({ restore: last ? { v: last.v, phase: last.phase, state: last.state } : { v: 0, phase: "lobby", state: null } });
+        return;
+      }
+      clearSession();
+      NET.pendingHello = null;
+      NET.room = null;
+      byId("lobby-error").textContent = "Sala não encontrada. Confira o código.";
+      renderLobby();
+    }
+
+    function onNetError(m) {
+      byId("lobby-error").textContent = m.message || "Erro de conexão.";
+      if (m.fatal) {
+        clearSession();
+        NET.pendingHello = null;
+        NET.room = null;
+        gameState = null;
+        engineOwner = false;
+        showScreen("setup-screen");
+        renderLobby();
+      }
+    }
+
+    function onPresence(m) {
+      const prev = NET.prevConn;
+      NET.seats = m.seats;
+      NET.prevConn = m.seats.map(s => Boolean(s && s.connected));
+      const justBack = (seat) => NET.prevConn[seat] && !prev[seat];
+
+      // Alguém voltou enquanto eu esperava uma decisão dele: reenvia o pop-up
+      if (activeMirror && gameState && justBack(seatOfIdx(activeMirror.ownerIdx))) sendMirror();
+      // O anfitrião voltou e minha escolha inicial ainda não foi aplicada
+      if (gameState && gameState.phase === "draft" && draftSentSel && myIdx >= 0 &&
+          !gameState.players[myIdx].draftDone && justBack(NET.hostSeat)) {
+        submitDraftChoice(myIdx, draftSentSel);
+      }
+      renderLobby();
+      if (gameState && gameState.phase === "game") renderPlayerTabs();
+    }
+
+    function isSeatOffline(p) {
+      const s = NET.seats[p.seat];
+      return Boolean(s) && s.connected === false;
+    }
+
+    function setConnState() {
+      const pill = byId("conn-pill");
+      const banner = byId("reconnect-banner");
+      const ok = NET.connected && wsOpen();
+      if (pill) {
+        pill.textContent = ok ? "🟢 Online" : "🟠 Reconectando…";
+        pill.className = "px-2 py-0.5 rounded-full text-[10px] font-bold " + (ok ? "bg-emerald-100 text-emerald-900" : "bg-amber-200 text-amber-950");
+      }
+      if (banner) banner.classList.toggle("hidden", ok || !NET.room);
+    }
+
+    /* ---------- estado compartilhado ---------- */
+    function sendState(handoff = false) {
+      if (!gameState) return;
+      clearTimeout(syncTimer);
+      syncTimer = null;
+      NET.version++;
+      const msg = { t: "state", v: NET.version, phase: gameState.phase, handoff: Boolean(handoff), state: gameState };
+      cacheLast(msg);
+      if (netSend(msg)) { needsSync = false; pendingHandoff = false; }
+      else { needsSync = true; pendingHandoff = pendingHandoff || Boolean(handoff); }
+    }
+
+    function doSync(handoff = false) {
+      if (!engineOwner || !gameState) return;
+      sendState(handoff);
+      if (gameState.activePlayerIdx !== myIdx || gameState.phase !== "game") {
+        engineOwner = false;      // passei a vez: daqui em diante só leio
+        renderAll();
+      }
+    }
+    function scheduleSync() {
+      if (!engineOwner) return;
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => doSync(false), 90);
+    }
+    function flushSync() {
+      clearTimeout(syncTimer);
+      doSync(true);
+    }
+
+    function adoptState(st, turnStart, live) {
+      const prevView = gameState ? gameState.viewingPlayerIdx : null;
+      gameState = st;
+      myIdx = st.players.findIndex(p => p.seat === mySeat);
+      gameState.viewingPlayerIdx = (prevView !== null && prevView >= 0 && prevView < st.players.length) ? prevView : Math.max(myIdx, 0);
+      NET.phase = st.phase;
+      routePhase(live ? null : turnStart);
+    }
+
+    function onRemoteState(m) {
+      if (m.v <= NET.version) return;
+      if (engineOwner && m.state && m.state.activePlayerIdx === myIdx && m.phase === "game") return; // eu sou quem escreve
+      NET.version = m.v;
+      cacheLast(m);
+      adoptState(m.state, null, true);
+    }
+
+    function showScreen(id) {
+      ["setup-screen", "draft-screen", "game-screen", "gameover-screen"].forEach(s =>
+        byId(s).classList.toggle("hidden", s !== id));
+    }
+
+    function routePhase(turnStart = null) {
+      const ph = gameState ? gameState.phase : "lobby";
+      if (ph === "draft") {
+        showScreen("draft-screen");
+        renderDraftOnline();
+      } else if (ph === "game") {
+        showScreen("game-screen");
+        const mine = gameState.activePlayerIdx === myIdx;
+        if (mine && !engineOwner) {
+          engineOwner = true;
+          if (turnStart) turnSnapshot = stateSig(turnStart); else saveTurnSnapshot();
+          gameState.viewingPlayerIdx = myIdx;
+          notifyMyTurn();
+        } else if (!mine) {
+          engineOwner = false;
+        }
+        renderAll();
+        setConnState();
+      } else if (ph === "over") {
+        engineOwner = false;
+        showScreen("gameover-screen");
+        showFinalScoreboard();
+      } else {
+        engineOwner = false;
+        showScreen("setup-screen");
+        renderLobby();
+      }
+    }
+
+    function notifyMyTurn() {
+      showToast("🔔 É a sua vez!", "success");
+      if (document.hidden) {
+        document.title = "🔔 Sua vez! — Wyrmspan";
+        try {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          const c = new Ctx();
+          const o = c.createOscillator();
+          const g = c.createGain();
+          o.connect(g); g.connect(c.destination);
+          o.frequency.value = 660; g.gain.value = 0.05;
+          o.start();
+          setTimeout(() => { o.stop(); c.close(); }, 220);
+        } catch {}
+      }
+    }
+
+    function onReset() {
+      gameState = null;
+      engineOwner = false;
+      turnSnapshot = null;
+      NET.version = 0;
+      NET.phase = "lobby";
+      needsSync = false;
+      draftSentSel = null;
+      draftShownIdx = null;
+      activeMirror = null;
+      remoteModal = null;
+      byId("modal-backdrop").classList.add("hidden");
+      hideWaiting();
+      try { sessionStorage.removeItem("wyrm_last"); } catch {}
+      routePhase();
+    }
+
+    function requestNewMatch() { netSend({ t: "reset" }); }
+
+    function leaveRoom() {
+      netSend({ t: "leave" });
+      clearSession();
+      clearTimeout(NET.reconnectTimer);
+      const ws = NET.ws;
+      NET.ws = null;
+      if (ws) { try { ws.close(); } catch {} }
+      NET.room = null; NET.seats = []; NET.connected = false; NET.pendingHello = null;
+      gameState = null; engineOwner = false; mySeat = null; myIdx = -1; NET.version = 0;
+      try { history.replaceState(null, "", location.pathname); } catch {}
+      showScreen("setup-screen");
+      renderLobby();
+    }
+
+    /* ---------- draft inicial (cada um escolhe no seu aparelho) ---------- */
+    function renderDraftOnline() {
+      if (myIdx < 0) return;
+      const me = gameState.players[myIdx];
+      const waiting = byId("draft-waiting");
+      const main = byId("draft-main");
+      const showWait = (txt) => {
+        main.classList.add("hidden");
+        waiting.classList.remove("hidden");
+        byId("draft-waiting-text").textContent = txt;
+      };
+      if (me.draftDone) {
+        const pend = gameState.players.filter(p => !p.draftDone).map(p => p.name);
+        showWait(pend.length ? "Aguardando: " + pend.join(", ") : "Iniciando a partida…");
+        return;
+      }
+      if (draftSentSel) { showWait("Enviando sua escolha…"); return; }
+      waiting.classList.add("hidden");
+      main.classList.remove("hidden");
+      if (draftShownIdx !== myIdx) {
+        draftShownIdx = myIdx;
+        renderDraftForPlayer(myIdx);
+      }
+    }
+
+    function submitDraftChoice(idx, sel) {
+      if (mySeat === NET.hostSeat) applyDraftChoice(idx, sel);
+      else netSendTo(NET.hostSeat, { k: "draftDone", idx, sel });
+      renderDraftOnline();
+    }
+
+    function applyDraftChoice(idx, sel) {   // só o anfitrião executa
+      if (!gameState || gameState.phase !== "draft") return;
+      const player = gameState.players[idx];
+      if (!player || player.draftDone || !player.draftPool || !sel) return;
+      const offered = [...player.draftPool.dragons, ...player.draftPool.caves];
+      const uids = new Set(sel.cards || []);
+      const valid = uids.size === 4 && [...uids].every(u => offered.some(c => c.uid === u)) &&
+        Array.isArray(sel.resources) && sel.resources.length === 3 &&
+        sel.resources.every(r => ["carne", "ouro", "cristal", "leite"].includes(r));
+      if (!valid) return;
+
+      offered.forEach(card => {
+        if (uids.has(card.uid)) player.hand.push(card);
+        else if (card.cardType === "dragon") gameState.dragonDiscard.push(card);
+        else gameState.caveDiscard.push(card);
+      });
+      sel.resources.forEach(r => { player.resources[r]++; });
+      player.draftDone = true;
+      delete player.draftPool;
+
+      if (gameState.players.every(p => p.draftDone)) finishDraft();
+      else { sendState(false); renderDraftOnline(); }
+    }
+
+    function finishDraft() {
+      gameState.phase = "game";
+      gameState.viewingPlayerIdx = myIdx;
+      addLog(`Partida iniciada! Guilda ativa: ${getGuild().nome}. Jogador Inicial: ${gameState.players[gameState.firstPlayerIdx].name}.`);
+      saveTurnSnapshot();
+      draftSentSel = null;
+      sendState(true);
+      routePhase();
+    }
+
+    /* ---------- espelhamento de pop-ups ---------- */
+    function showWaiting(text) {
+      const el = byId("waiting-banner");
+      el.textContent = text;
+      el.classList.remove("hidden");
+    }
+    function hideWaiting() { byId("waiting-banner").classList.add("hidden"); }
+
+    function snapshotModal() {
+      return {
+        title: byId("modal-title").textContent,
+        body: byId("modal-body").innerHTML,
+        footer: [...byId("modal-footer").children].map(b => ({ text: b.textContent, className: b.className })),
+        closable: !byId("modal-close-btn").classList.contains("hidden")
+      };
+    }
+
+    function sendMirror() {
+      if (!activeMirror || !activeMirror.payload || !gameState) return;
+      netSendTo(seatOfIdx(activeMirror.ownerIdx), { k: "mOpen", id: activeMirror.id, ...activeMirror.payload });
+    }
+
+    function endMirror() {
+      if (!activeMirror) return;
+      const m = activeMirror;
+      activeMirror = null;
+      hideWaiting();
+      if (gameState) netSendTo(seatOfIdx(m.ownerIdx), { k: "mClose", id: m.id });
+    }
+
+    function showRemoteModal(from, p) {
+      remoteModal = { id: p.id, from, busy: false };
+      byId("modal-title").textContent = p.title;
+      byId("modal-body").innerHTML = p.body;
+      const footer = byId("modal-footer");
+      footer.innerHTML = "";
+      (p.footer || []).forEach(b => {
+        const btn = document.createElement("button");
+        btn.className = b.className;
+        btn.textContent = b.text;
+        footer.appendChild(btn);
+      });
+      const closeBtn = byId("modal-close-btn");
+      closeBtn.classList.toggle("hidden", !p.closable);
+      closeBtn.onclick = null;
+      byId("modal-backdrop").classList.remove("hidden");
+      if (document.hidden) notifyMyTurn();
+    }
+
+    function hideRemoteModal(id) {
+      if (!remoteModal || (id !== undefined && remoteModal.id !== id)) return;
+      remoteModal = null;
+      byId("modal-backdrop").classList.add("hidden");
+    }
+
+    function onMirrorClick(msg) {
+      if (!activeMirror || activeMirror.id !== msg.id) return;
+      const els = [...byId("modal-box").querySelectorAll("button, .cursor-pointer")];
+      const el = els[msg.idx];
+      if (el && !el.disabled) el.click();
+    }
+
+    function onPeerMsg(from, msg) {
+      if (!msg) return;
+      switch (msg.k) {
+        case "mOpen": return showRemoteModal(from, msg);
+        case "mClose": return hideRemoteModal(msg.id);
+        case "mClick": return onMirrorClick(msg);
+        case "draftDone":
+          if (mySeat === NET.hostSeat && gameState) {
+            const p = gameState.players[msg.idx];
+            if (p && p.seat === from) applyDraftChoice(msg.idx, msg.sel);
+          }
+          return;
+      }
+    }
+
+    /* ---------- sala (lobby) ---------- */
+    function renderLobby() {
+      if (!byId("lobby-connect")) return;
+      byId("lobby-connect").classList.toggle("hidden", Boolean(NET.room));
+      byId("lobby-room").classList.toggle("hidden", !NET.room);
+      if (!NET.room) return;
+
+      const isHost = mySeat === NET.hostSeat;
+      byId("lobby-room-code").textContent = NET.room;
+
+      let colorIdx = 0;
+      byId("lobby-seats").innerHTML = NET.seats.map((s, seat) => {
+        if (!s) return "";
+        const color = PLAYER_COLORS[Math.min(colorIdx++, PLAYER_COLORS.length - 1)];
+        return `
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-stone-200">
+            <span class="w-7 h-7 rounded-full ${color.bg} text-white text-xs font-bold flex items-center justify-center shrink-0">${colorIdx}</span>
+            <span class="flex-1 text-sm font-bold text-stone-800">${s.name}${seat === mySeat ? ' <span class="text-[10px] font-bold text-emerald-700">(você)</span>' : ''}</span>
+            ${seat === NET.hostSeat ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-950">ANFITRIÃO</span>' : ''}
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${s.connected ? 'bg-emerald-100 text-emerald-900' : 'bg-stone-200 text-stone-600'}">${s.connected ? 'online' : 'offline'}</span>
+          </div>`;
+      }).join("");
+
+      const ready = NET.seats.filter(s => s && s.connected).length;
+      const startBtn = byId("btn-start-game");
+      startBtn.classList.toggle("hidden", !isHost);
+      startBtn.disabled = !(isHost && ready >= 2 && cardsLoaded);
+      byId("lobby-wait-text").classList.toggle("hidden", isHost);
+      byId("lobby-need-text").classList.toggle("hidden", !(isHost && ready < 2));
+      byId("guild-select").disabled = !isHost;
+    }
+
+    async function loadCards() {
+      const badge = byId("deck-stats-badge");
+      try {
+        const res = await fetch("/cartas.json?v=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const j = await res.json();
+        if (!Array.isArray(j.dragoes) || !Array.isArray(j.cavernas)) throw new Error("formato inválido");
+        cardDatabase = { dragoes: j.dragoes, cavernas: j.cavernas };
+        cardsLoaded = true;
+        updateDeckStatsBadge();
+      } catch (e) {
+        badge.textContent = "Erro ao ler cartas.json";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-900";
+        console.error("cartas.json:", e);
+      }
+      renderLobby();
+    }
+
+    function initLobby() {
+      const nameInput = byId("my-name-input");
+      try { nameInput.value = localStorage.getItem("wyrm_name") || ""; } catch {}
+      const urlRoom = new URLSearchParams(location.search).get("sala");
+      if (urlRoom) byId("join-code-input").value = urlRoom.toUpperCase().slice(0, 4);
+
+      byId("btn-create-room").onclick = () => startConnect({ create: true });
+      byId("btn-join-room").onclick = () => startConnect({ room: byId("join-code-input").value.trim() });
+      byId("join-code-input").addEventListener("keydown", (e) => { if (e.key === "Enter") byId("btn-join-room").click(); });
+      byId("btn-start-game").onclick = startDraftPhase;
+      byId("btn-leave-room").onclick = () => { if (confirm("Sair da sala?")) leaveRoom(); };
+      byId("btn-copy-link").onclick = async () => {
+        const url = location.origin + "/?sala=" + NET.room;
+        try { await navigator.clipboard.writeText(url); showToast("Link copiado! Envie para o outro jogador.", "success"); }
+        catch { prompt("Copie o link:", url); }
+      };
+
+      // Cliques no pop-up espelhado vão para quem roda o motor de regras
+      byId("modal-box").addEventListener("click", (e) => {
+        if (!remoteModal || remoteModal.busy) return;
+        const sel = "button, .cursor-pointer";
+        const el = e.target.closest(sel);
+        if (!el || el.disabled) return;
+        const idx = [...byId("modal-box").querySelectorAll(sel)].indexOf(el);
+        if (idx < 0) return;
+        remoteModal.busy = true;
+        netSendTo(remoteModal.from, { k: "mClick", id: remoteModal.id, idx });
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          document.title = BASE_TITLE;
+          if ((loadSession() || NET.pendingHello) && !wsOpen()) { NET.retry = 0; connectWS(); }
+        }
+      });
+      window.addEventListener("online", () => { if ((loadSession() || NET.pendingHello) && !wsOpen()) connectWS(); });
+
+      updateDeckStatsBadge();
+      loadCards();
+      renderLobby();
+
+      const s = loadSession();
+      if (s) {
+        NET.name = s.name;
+        byId("lobby-error").textContent = "Reconectando à sala " + s.room + "…";
+        connectWS();
+      }
+    }
+
+    initLobby();
+  </script>
+</body>
+</html>
