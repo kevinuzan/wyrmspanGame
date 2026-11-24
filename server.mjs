@@ -219,6 +219,18 @@ function handleMessage(ws, m) {
       broadcastPresence(room);
       break;
     }
+    case 'close': {
+      if (ctx.seat !== HOST_SEAT) return; // só o anfitrião encerra a sala
+      const msg = JSON.stringify({ t: 'closed' });
+      room.seats.forEach((s) => {
+        if (s && isOpen(s.ws)) {
+          s.ws.send(msg);
+          s.ws.ctx = null;
+        }
+      });
+      rooms.delete(room.code);
+      break;
+    }
     case 'leave': {
       const idx = ctx.seat;
       detach(ws);
@@ -271,14 +283,14 @@ setInterval(() => {
   });
 }, 25000);
 
-// Limpa salas abandonadas há mais de 24h
+// Limpa salas sem ninguém online há mais de 3h (o anfitrião também pode encerrar manualmente)
 setInterval(() => {
-  const limit = Date.now() - 24 * 3600 * 1000;
+  const limit = Date.now() - 3 * 3600 * 1000;
   for (const [code, room] of rooms) {
     const anyOnline = room.seats.some((s) => s && isOpen(s.ws));
     if (!anyOnline && room.touched < limit) rooms.delete(code);
   }
-}, 30 * 60 * 1000);
+}, 10 * 60 * 1000);
 
 server.listen(PORT, () => {
   console.log(`Wyrmspan Online rodando na porta ${PORT}`);

@@ -290,6 +290,7 @@
           </div>
           <div class="flex items-center gap-2 w-full sm:w-auto">
             <button id="btn-leave-room" class="px-4 py-3 rounded-xl border border-stone-300 bg-white hover:bg-stone-100 text-xs font-bold text-stone-700 cursor-pointer">Sair</button>
+            <button id="btn-close-room" class="hidden px-4 py-3 rounded-xl border border-red-300 bg-red-50 hover:bg-red-100 text-xs font-bold text-red-800 cursor-pointer">Encerrar sala</button>
             <button id="btn-start-game" disabled class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-gradient-to-r from-red-800 via-amber-800 to-purple-900 disabled:opacity-40 disabled:cursor-not-allowed text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
               Iniciar Partida →
             </button>
@@ -454,6 +455,9 @@
         <div class="flex flex-wrap items-center gap-2">
           <button id="btn-open-trade-2to1" class="px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-400 text-amber-950 text-xs font-bold transition cursor-pointer" title="A qualquer momento, troque 2 recursos quaisquer por 1 recurso à sua escolha">
             🔄 Trocar 2:1
+          </button>
+          <button id="btn-close-room-hud" class="hidden px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-300 text-red-800 text-xs font-bold transition cursor-pointer" title="Fecha a sala para todos">
+            🚪 Encerrar sala
           </button>
           <button id="btn-open-rules" class="px-3 py-2 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-700 text-xs font-bold transition cursor-pointer">
             📖 Regras
@@ -646,6 +650,9 @@
       <div class="flex justify-center">
         <button onclick="requestNewMatch()" class="px-6 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-display font-bold shadow transition cursor-pointer">
           Nova Partida (voltar à sala)
+        </button>
+        <button id="btn-close-room-over" class="hidden ml-3 px-6 py-3 rounded-xl border border-red-300 bg-red-50 hover:bg-red-100 text-red-800 font-display font-bold shadow transition cursor-pointer">
+          Encerrar sala
         </button>
       </div>
     </div>
@@ -1580,6 +1587,7 @@
       const activePlayer = gameState.players[gameState.activePlayerIdx];
       document.getElementById("hud-round").textContent = `${gameState.round} / 4`;
       document.getElementById("hud-room-code").textContent = NET.room ? `Sala ${NET.room}` : "";
+      updateCloseButtons();
       document.getElementById("hud-active-player-dot").style.backgroundColor = activePlayer.color.hex;
       document.getElementById("hud-active-player-name").textContent = `Turno de ${activePlayer.name}${gameState.activePlayerIdx === myIdx ? " (você)" : ""}`;
 
@@ -3342,6 +3350,7 @@
     }
 
     function showFinalScoreboard() {
+      updateCloseButtons();
       document.getElementById("game-screen").classList.add("hidden");
       document.getElementById("gameover-screen").classList.remove("hidden");
 
@@ -3555,6 +3564,7 @@
         case "state": return onRemoteState(m);
         case "msg": return onPeerMsg(m.from, m.msg);
         case "reset": return onReset();
+        case "closed": return onClosed();
       }
     }
 
@@ -3768,6 +3778,40 @@
       routePhase();
     }
 
+    function updateCloseButtons() {
+      const isHost = Boolean(NET.room) && mySeat === NET.hostSeat;
+      ["btn-close-room", "btn-close-room-hud", "btn-close-room-over"].forEach(id => {
+        const el = byId(id);
+        if (el) el.classList.toggle("hidden", !isHost);
+      });
+    }
+
+    function closeRoom() {
+      if (!confirm("Encerrar a sala para todos? A partida será apagada.")) return;
+      netSend({ t: "close" });
+      resetToConnect("Sala encerrada.");
+    }
+
+    function onClosed() { resetToConnect("A sala foi encerrada pelo anfitrião."); }
+
+    function resetToConnect(msg) {
+      clearSession();
+      clearTimeout(NET.reconnectTimer);
+      const ws = NET.ws;
+      NET.ws = null;
+      if (ws) { try { ws.close(); } catch {} }
+      NET.room = null; NET.seats = []; NET.connected = false; NET.pendingHello = null;
+      gameState = null; engineOwner = false; mySeat = null; myIdx = -1; NET.version = 0;
+      activeMirror = null; remoteModal = null; needsSync = false; draftSentSel = null; draftShownIdx = null;
+      byId("modal-backdrop").classList.add("hidden");
+      hideWaiting();
+      byId("reconnect-banner").classList.add("hidden");
+      try { history.replaceState(null, "", location.pathname); } catch {}
+      showScreen("setup-screen");
+      renderLobby();
+      byId("lobby-error").textContent = msg || "";
+    }
+
     function requestNewMatch() { netSend({ t: "reset" }); }
 
     function leaveRoom() {
@@ -3935,6 +3979,7 @@
 
       const isHost = mySeat === NET.hostSeat;
       byId("lobby-room-code").textContent = NET.room;
+      updateCloseButtons();
 
       let colorIdx = 0;
       byId("lobby-seats").innerHTML = NET.seats.map((s, seat) => {
@@ -3986,6 +4031,7 @@
       byId("btn-join-room").onclick = () => startConnect({ room: byId("join-code-input").value.trim() });
       byId("join-code-input").addEventListener("keydown", (e) => { if (e.key === "Enter") byId("btn-join-room").click(); });
       byId("btn-start-game").onclick = startDraftPhase;
+      ["btn-close-room", "btn-close-room-hud", "btn-close-room-over"].forEach(id => { byId(id).onclick = closeRoom; });
       byId("btn-leave-room").onclick = () => { if (confirm("Sair da sala?")) leaveRoom(); };
       byId("btn-copy-link").onclick = async () => {
         const url = location.origin + "/?sala=" + NET.room;
