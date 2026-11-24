@@ -7,89 +7,7135 @@
       "'copias' = quantas vezes a carta entra no baralho. O número total de cartas aparece na tela inicial do jogo."
   ],
   "dragoes": [
-    {"numero":1,"nome":"Pastador de Barriga Branca","tam":"filhote","hab":[1],"custo":{"ovo":1,"leite":1},"pv":4,"ninhos":0,"tipo":"ativado","traco":"prestativo","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"leite","ganha":[{"op":"caverna","n":1}],"bonus":[{"op":"ovo","n":2}]},"copias":1,"texto":"Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [CaveCard]. Quando o 3º [Milk] for estocado, bote também [Egg][Egg]."},
-    {"numero":2,"nome":"Dragão-Mariposa Afável","tam":"filhote","hab":[0],"custo":{"ovo":1,"leite":3},"pv":5,"ninhos":0,"tipo":"ativado","traco":"brincalhao","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"carta","ganha":[{"op":"ovo","n":1}],"bonus":[{"op":"moeda","n":1}]},"copias":1,"texto":"Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, bote [Egg]. Quando a 3ª [DragonCard] for inserida, ganhe também [Coin]."},
-    {"numero":4,"nome":"Pastador Frugívoro","tam":"filhote","hab":[2],"custo":{"ovo":1,"leite":2},"pv":2,"ninhos":0,"tipo":"ativado","traco":"timido","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"leite","ganha":[{"op":"ganhe","rec":"cristal","n":1}],"bonus":[{"op":"moeda","n":1}]},"copias":1,"texto":"Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Crystal]. Quando o 3º [Milk] for estocado, ganhe também [Coin]."},
-    {"numero":6,"nome":"Dragonete de Bando","tam":"filhote","hab":[0],"custo":{"ovo":1,"leite":3},"pv":0,"ninhos":0,"tipo":"ativado","traco":"prestativo","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"carta","ganha":[{"op":"guilda","n":1}],"bonus":[{"op":"moeda","n":1}]},"copias":1,"texto":"Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [DragonGuild]. Quando a 3ª [DragonCard] for inserida, ganhe também [Coin]."},
-    {"numero":9,"nome":"Papa-Grilos Herbívoro","tam":"filhote","hab":[1,2],"custo":{"ovo":1,"leite":1},"pv":2,"ninhos":0,"tipo":"ativado","traco":"brincalhao","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"leite","ganha":[{"op":"dragao","n":1}],"bonus":[{"op":"ganhe","rec":"cristal","n":2}]},"copias":1,"texto":"Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [DragonCard]. Quando o 3º [Milk] for estocada, ganhe também [Crystal][Crystal]."},
-    {"numero":14,"nome":"Papa-Grilos Carniceiro","tam":"filhote","hab":[1],"custo":{"ovo":1,"leite":2},"pv":2,"ninhos":0,"tipo":"ativado","traco":"agressivo","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"carne","ganha":[{"op":"ganhe","rec":"carne","n":1}],"bonus":[{"op":"moeda","n":1}]},"copias":1,"texto":"Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [Meat]. Quando o 3º [Meat] for estocada, ganhe também [Coin]."},
-    {"numero":15,"nome":"Dragão Lung das Sequoias","tam":"filhote","hab":[2],"custo":{"ovo":1,"leite":1},"pv":3,"ninhos":0,"tipo":"ativado","traco":"timido","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"leite","ganha":[{"op":"ganhe","rec":"leite","n":1}],"bonus":[{"op":"ovo","n":2}]},"copias":1,"texto":"Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Milk]. Quando o 3º [Milk] for estocado, bote também [Egg][Egg]."},
-    {"numero":20,"nome":"Rex Miniatura","tam":"filhote","hab":[2],"custo":{"ovo":1,"leite":1},"pv":3,"ninhos":0,"tipo":"ativado","traco":"brincalhao","pague":null,"efeito":[],"fim":null,"filhote":{"aceita":"carne","ganha":[{"op":"ganhe","rec":"ouro","n":1}],"bonus":[{"op":"dragao","n":2}]},"copias":1,"texto":"Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [Gold]. Quando a 3ª [Meat] for estocada, ganhe também [DragonCard][DragonCard]."},
-    {"numero":36,"nome":"Voador Sentinela","tam":"grande","hab":[1],"custo":{"ouro":2},"pv":5,"ninhos":1,"tipo":"ativado","traco":"prestativo","pague":{"dragao":1},"efeito":[{"op":"ganhe","rec":"qualquer","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Pague [DragonCard] para ganhar [AnyResource]."},
-    {"numero":37,"nome":"Basilisco Subterrâneo","tam":"grande","hab":[2],"custo":{"cristal":2},"pv":4,"ninhos":3,"tipo":"jogado","traco":"timido","pague":null,"efeito":[{"op":"ovo","n":2},{"op":"oponentes","efeito":[{"op":"ovo","n":1}]}],"fim":null,"filhote":null,"copias":1,"texto":"Bote [Egg][Egg]. Cada oponente bota [Egg]."},
-    {"numero":38,"nome":"Dragão Lung Veloz","tam":"medio","hab":[0,2],"custo":{"carne":1,"cristal":3},"pv":2,"ninhos":1,"tipo":"jogado","traco":"brincalhao","pague":null,"efeito":[{"op":"moeda","n":2}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin][Coin]."},
-    {"numero":40,"nome":"Serpente Marinha Anciã","tam":"pequeno","hab":[1],"custo":{"ouro":2,"cristal":1},"pv":3,"ninhos":1,"tipo":"ativado","traco":"prestativo","pague":null,"efeito":[{"op":"guilda","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [DragonGuild]."},
-    {"numero":42,"nome":"Grande Dragão Lung Dourado","tam":"grande","hab":[1],"custo":{"ouro":2,"cristal":1},"pv":2,"ninhos":3,"tipo":"fim","traco":"prestativo","pague":null,"efeito":[],"fim":{"contar":"outrosDragoesCaverna","n":3},"filhote":null,"copias":1,"texto":"Ganhe [VP-3] para cada outro dragão nesta caverna."},
-    {"numero":43,"nome":"Espírito Azul da Floresta","tam":"medio","hab":[2],"custo":{"cristal":2},"pv":2,"ninhos":5,"tipo":"ativado","traco":"timido","pague":null,"efeito":[{"op":"ovo","n":1,"aqui":true}],"fim":null,"filhote":null,"copias":1,"texto":"Bote [Egg] aqui."},
-    {"numero":44,"nome":"Draco Fulvo do Norte","tam":"medio","hab":[1],"custo":{"ouro":1,"cristal":2},"pv":5,"ninhos":1,"tipo":"fim","traco":"timido","pague":null,"efeito":[],"fim":{"contar":"marcadoresGuilda","n":2},"filhote":null,"copias":1,"texto":"Ganhe [VP-2] para cada marcador que você tiver colocado na Guilda dos Dragões."},
-    {"numero":45,"nome":"Wyrm Tranquila","tam":"grande","hab":[2],"custo":{"cristal":2},"pv":4,"ninhos":5,"tipo":"ativado","traco":"timido","pague":{"moeda":1},"efeito":[{"op":"ovo","n":3}],"fim":null,"filhote":null,"copias":1,"texto":"Pague [Coin] para botar [Egg][Egg][Egg]."},
-    {"numero":46,"nome":"Guardião Arco-Íris","tam":"grande","hab":[0,1,2],"custo":{"moeda":1},"pv":5,"ninhos":1,"tipo":"fim","traco":"brincalhao","pague":null,"efeito":[],"fim":{"condicao":"colunaCheia","n":3},"filhote":null,"copias":1,"texto":"Ganhe [VP-3] se a coluna deste dragão estiver cheia."},
-    {"numero":48,"nome":"Dragão Lung Chifrudo Ágil","tam":"medio","hab":[0],"custo":{"carne":2},"pv":3,"ninhos":2,"tipo":"jogado","traco":"agressivo","pague":null,"efeito":[{"op":"moeda","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin]."},
-    {"numero":50,"nome":"Anteldragão Sábio","tam":"pequeno","hab":[1],"custo":{"ouro":1},"pv":3,"ninhos":1,"tipo":"ativado","traco":"prestativo","pague":null,"efeito":[{"op":"dragao","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [DragonCard]."},
-    {"numero":52,"nome":"Dragão Lung Azul Cromático","tam":"pequeno","hab":[2],"custo":{"ouro":2,"cristal":1},"pv":5,"ninhos":1,"tipo":"fim","traco":"timido","pague":null,"efeito":[],"fim":{"contar":"dragoesRodada","n":2,"max":8},"filhote":null,"copias":1,"texto":"Ganhe [VP-2] para cada dragão [OncePerRound] no seu tabuleiro de jogador (máx. [VP-8])."},
-    {"numero":53,"nome":"Wyvern Fulva das Estepes","tam":"medio","hab":[0],"custo":{"carne":1,"cristal":1},"pv":6,"ninhos":3,"tipo":"ativado","traco":"prestativo","pague":null,"efeito":[{"op":"estocar","rec":"qualquer","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Estoque [AnyResource] do seu suprimento aqui."},
-    {"numero":56,"nome":"Voador Acumulador","tam":"medio","hab":[0,1],"custo":{"carne":1,"ouro":1},"pv":2,"ninhos":2,"tipo":"ativado","traco":"agressivo","pague":null,"efeito":[{"op":"ganhe","rec":"ouro","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Gold]."},
-    {"numero":57,"nome":"Dragão-Fada Eterno","tam":"medio","hab":[1],"custo":{"ouro":2,"cristal":1},"pv":5,"ninhos":1,"tipo":"jogado","traco":"prestativo","pague":null,"efeito":[{"op":"guilda","n":2},{"op":"oponentes","efeito":[{"op":"guilda","n":1}]}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [DragonGuild][DragonGuild]. Cada oponente ganha [DragonGuild]."},
-    {"numero":60,"nome":"Cauda-de-Rufo Furtiva","tam":"grande","hab":[0],"custo":{"carne":1,"ouro":1},"pv":4,"ninhos":2,"tipo":"jogado","traco":"timido","pague":null,"efeito":[{"op":"ganhe","rec":"leite","n":2}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Milk][Milk]."},
-    {"numero":62,"nome":"Firevern Descendente","tam":"pequeno","hab":[2],"custo":{"cristal":3},"pv":4,"ninhos":3,"tipo":"jogado","traco":"agressivo","pague":null,"efeito":[{"op":"moeda","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin]."},
-    {"numero":63,"nome":"Draco Chifrudo Guardião","tam":"medio","hab":[1,2],"custo":{"ouro":1,"cristal":1,"moeda":1},"pv":6,"ninhos":4,"tipo":"rodada","traco":"prestativo","pague":null,"efeito":[{"op":"troca","ate":1,"pague":{"dragao":1},"ganhe":[{"op":"inserir","aqui":true,"n":1},{"op":"ovo","n":1,"aqui":true}]}],"fim":null,"filhote":null,"copias":1,"texto":"Insira [DragonCard] da sua mão aqui. Se fizer isso, bote [Egg] aqui."},
-    {"numero":70,"nome":"Wyrm Vermelha Paciente","tam":"pequeno","hab":[0,2],"custo":{"carne":1,"cristal":1},"pv":5,"ninhos":5,"tipo":"rodada","traco":"prestativo","pague":null,"efeito":[{"op":"troca","ate":2,"pague":{"qualquer":1},"ganhe":[{"op":"ovo","n":1}]},{"op":"oponentes","efeito":[{"op":"troca","ate":1,"pague":{"qualquer":1},"ganhe":[{"op":"ovo","n":1}]}]}],"fim":null,"filhote":null,"copias":1,"texto":"Até 2x, pague [AnyResource] para botar [Egg]. Cada oponente pode fazer isso 1x."},
-    {"numero":75,"nome":"Quebra-Rochas Carbonífero","tam":"pequeno","hab":[2],"custo":{"cristal":2,"moeda":1},"pv":5,"ninhos":2,"tipo":"ativado","traco":"timido","pague":null,"efeito":[{"op":"guilda","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [DragonGuild]."},
-    {"numero":83,"nome":"Firevern Espirituoso","tam":"medio","hab":[2],"custo":{"carne":1,"cristal":3},"pv":4,"ninhos":3,"tipo":"jogado","traco":"brincalhao","pague":null,"efeito":[{"op":"moeda","n":1},{"op":"guilda","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin][DragonGuild]."},
-    {"numero":84,"nome":"Wyrm Venenosa Descontente","tam":"pequeno","hab":[1],"custo":{"carne":1,"ouro":1},"pv":6,"ninhos":1,"tipo":"ativado","traco":"agressivo","pague":null,"efeito":[{"op":"inserir","origem":"mao","aqui":true,"n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Insira [DragonCard] da sua mão aqui."},
-    {"numero":85,"nome":"Koiwyrm Abastada","tam":"pequeno","hab":[0],"custo":{"carne":1,"ouro":1},"pv":4,"ninhos":2,"tipo":"jogado","traco":"prestativo","pague":null,"efeito":[{"op":"ganhe","rec":"cristal","n":2},{"op":"oponentes","efeito":[{"op":"ganhe","rec":"cristal","n":1}]}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Crystal][Crystal]. Cada oponente ganha [Crystal]."},
-    {"numero":88,"nome":"Dragão Lung Rápido","tam":"grande","hab":[1],"custo":{"ouro":3},"pv":5,"ninhos":1,"tipo":"jogado","traco":"brincalhao","pague":null,"efeito":[{"op":"moeda","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin]."},
-    {"numero":92,"nome":"Cuspidor Territorial","tam":"grande","hab":[2],"custo":{"cristal":2},"pv":3,"ninhos":2,"tipo":"ativado","traco":"agressivo","pague":null,"efeito":[{"op":"ganhe","rec":"cristal","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Crystal]."},
-    {"numero":98,"nome":"Pequeno Anfíptero","tam":"pequeno","hab":[0,1],"custo":{},"pv":2,"ninhos":1,"tipo":"fim","traco":"timido","pague":null,"efeito":[],"fim":{"condicao":"cavernaCheia","n":3},"filhote":null,"copias":1,"texto":"Ganhe [VP-3] se a caverna deste dragão estiver cheia."},
-    {"numero":99,"nome":"Anfíptero Trinado Ágil","tam":"grande","hab":[0,2],"custo":{"carne":2,"cristal":2},"pv":2,"ninhos":2,"tipo":"jogado","traco":"brincalhao","pague":null,"efeito":[{"op":"moeda","n":1},{"op":"ganhe","rec":"qualquer","n":2}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin][AnyResource][AnyResource]."},
-    {"numero":108,"nome":"Bom Draco","tam":"medio","hab":[1],"custo":{"ouro":2,"cristal":1},"pv":7,"ninhos":1,"tipo":"jogado","traco":"prestativo","pague":{"moeda":1},"efeito":[{"op":"guilda","n":1},{"op":"ganhe","rec":"qualquer","n":1},{"op":"caverna","n":1},{"op":"dragao","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Pague [Coin] para ganhar [DragonGuild][AnyResource][CaveCard][DragonCard]."},
-    {"numero":115,"nome":"Koiwyrm Guardiã","tam":"medio","hab":[0,2],"custo":{"carne":1,"cristal":1},"pv":3,"ninhos":2,"tipo":"jogado","traco":"prestativo","pague":null,"efeito":[{"op":"ganhe","rec":"qualquer","n":1},{"op":"estocar","rec":"qualquer","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [AnyResource][AnyResource]. Fique com 1 e estoque 1 em qualquer dragão."},
-    {"numero":118,"nome":"Hidráptero Espirituoso","tam":"pequeno","hab":[1,2],"custo":{"ouro":2,"cristal":2},"pv":2,"ninhos":1,"tipo":"jogado","traco":"brincalhao","pague":null,"efeito":[{"op":"moeda","n":2}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Coin][Coin]."},
-    {"numero":119,"nome":"Coatl Camaleão","tam":"medio","hab":[0,1,2],"custo":{"carne":1,"ouro":1,"cristal":1,"moeda":1},"pv":6,"ninhos":1,"tipo":"fim","traco":"timido","pague":null,"efeito":[],"fim":{"contar":"medio","n":3,"max":12},"filhote":null,"copias":1,"texto":"Ganhe + [VP-3] para cada dragão *médio* no seu tabuleiro de jogador (máx. [VP-12])."},
-    {"numero":125,"nome":"Draco das Cavernas Escamoso","tam":"grande","hab":[0,2],"custo":{"carne":2,"cristal":1},"pv":4,"ninhos":2,"tipo":"jogado","traco":"agressivo","pague":null,"efeito":[{"op":"guilda","n":1},{"op":"ganhe","rec":"carne","n":1},{"op":"ganhe","rec":"cristal","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [DragonGuild][Meat][Crystal]."},
-    {"numero":130,"nome":"Voador Noctívago","tam":"medio","hab":[0],"custo":{"carne":1},"pv":3,"ninhos":2,"tipo":"ativado","traco":"timido","pague":null,"efeito":[{"op":"ganhe","rec":"carne","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Meat]."},
-    {"numero":135,"nome":"Anfíptero do Sol","tam":"pequeno","hab":[1],"custo":{"ouro":1,"cristal":1},"pv":2,"ninhos":2,"tipo":"jogado","traco":"prestativo","pague":null,"efeito":[{"op":"ganhe","rec":"ouro","n":2},{"op":"oponentes","efeito":[{"op":"ganhe","rec":"ouro","n":1}]}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Gold][Gold]. Cada oponente ganha [Gold]."},
-    {"numero":136,"nome":"Draco Vaga-Lume Curioso","tam":"grande","hab":[0,1,2],"custo":{"moeda":1},"pv":6,"ninhos":2,"tipo":"fim","traco":"brincalhao","pague":null,"efeito":[],"fim":{"contar":"filhote","n":2,"max":8},"filhote":null,"copias":1,"texto":"Ganhe [VP-2] para cada *filhote* no seu tabuleiro de jogador (máx. [VP-8])."},
-    {"numero":144,"nome":"Lindworm Fofoqueira","tam":"pequeno","hab":[0],"custo":{"carne":2},"pv":2,"ninhos":2,"tipo":"jogado","traco":"brincalhao","pague":null,"efeito":[{"op":"ganhe","rec":"carne","n":2},{"op":"oponentes","efeito":[{"op":"ganhe","rec":"carne","n":1}]}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Meat][Meat]. Cada oponente ganha [Meat]."},
-    {"numero":147,"nome":"Grande Dragão Lung Escarlate","tam":"grande","hab":[0],"custo":{"carne":2,"cristal":1},"pv":3,"ninhos":3,"tipo":"fim","traco":"agressivo","pague":null,"efeito":[],"fim":{"contar":"outrosDragoesCaverna","n":3},"filhote":null,"copias":1,"texto":"Ganhe [VP-3] para cada outro dragão nesta caverna."},
-    {"numero":153,"nome":"Draco de Plumas Rosadas","tam":"medio","hab":[0,1],"custo":{"carne":2},"pv":4,"ninhos":2,"tipo":"jogado","traco":"prestativo","pague":null,"efeito":[{"op":"ganhe","rec":"leite","n":2},{"op":"oponentes","efeito":[{"op":"ganhe","rec":"leite","n":1}]}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Milk][Milk]. Cada oponente ganha [Milk]."},
-    {"numero":155,"nome":"Grande Dragão Lung Ametista","tam":"grande","hab":[2],"custo":{"ouro":1,"cristal":2},"pv":3,"ninhos":3,"tipo":"fim","traco":"timido","pague":null,"efeito":[],"fim":{"contar":"outrosDragoesCaverna","n":3},"filhote":null,"copias":1,"texto":"Ganhe [VP-3] para cada outro dragão nesta caverna."},
-    {"numero":162,"nome":"Dragão Lung Esmeralda Ancião","tam":"medio","hab":[2],"custo":{"ouro":1,"cristal":2},"pv":5,"ninhos":1,"tipo":"fim","traco":"timido","pague":null,"efeito":[],"fim":{"contar":"cavernasEscavadas","n":1,"max":8},"filhote":null,"copias":1,"texto":"Ganhe [VP-1] para cada [CaveCard] escavada no seu tabuleiro de jogador (máx. [VP-8])."},
-    {"numero":175,"nome":"Anfíptero do Sol da Floresta","tam":"pequeno","hab":[0],"custo":{"carne":1},"pv":3,"ninhos":2,"tipo":"ativado","traco":"prestativo","pague":null,"efeito":[{"op":"dragao","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [DragonCard]."},
-    {"numero":176,"nome":"Wyvern das Cavernas Escamosas","tam":"pequeno","hab":[1],"custo":{"ouro":1},"pv":2,"ninhos":2,"tipo":"ativado","traco":"agressivo","pague":null,"efeito":[{"op":"ganhe","rec":"ouro","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Ganhe [Gold]."},
-    {"numero":178,"nome":"Draco de Plumas Roxas","tam":"grande","hab":[2],"custo":{"cristal":2},"pv":3,"ninhos":4,"tipo":"ativado","traco":"timido","pague":null,"efeito":[{"op":"ovo","n":1}],"fim":null,"filhote":null,"copias":1,"texto":"Bote [Egg]."}
-  ],
-  "cavernas": [
-    {"numero":1,"nome":null,"efeito":[{"op":"ativarOutro","tipo":"rodada"}],"copias":1,"texto":"Ative a habilidade [OncePerRound-v2] em qualquer dragão no seu tabuleiro de jogador."},
-    {"numero":2,"nome":null,"efeito":[{"op":"ativarOutro","tipo":"jogado"}],"copias":1,"texto":"Ative a habilidade [WhenPlayed] em qualquer dragão no seu tabuleiro de jogador."},
-    {"numero":3,"nome":null,"efeito":[{"op":"estocar","rec":"qualquer","n":2}],"copias":2,"texto":"Estoque [AnyResource][AnyResource] do suprimento geral em qualquer(quaisquer) dragão(ões)."},
-    {"numero":5,"nome":null,"efeito":[{"op":"ganhe","rec":"qualquer","n":1},{"op":"ovo","n":1}],"copias":2,"texto":"Ganhe [AnyResource]. Bote [Egg]."},
-    {"numero":7,"nome":null,"efeito":[{"op":"caverna","n":1},{"op":"ganhe","rec":"qualquer","n":1}],"copias":2,"texto":"Ganhe [CaveCard][AnyResource]."},
-    {"numero":8,"nome":null,"efeito":[{"op":"caverna","n":1},{"op":"guilda","n":1}],"copias":2,"texto":"Ganhe [CaveCard][DragonGuild]."},
-    {"numero":10,"nome":null,"efeito":[{"op":"caverna","n":1},{"op":"ovo","n":2}],"copias":2,"texto":"Ganhe [CaveCard]. Bote [Egg][Egg]."},
-    {"numero":12,"nome":null,"efeito":[{"op":"moeda","n":1}],"copias":3,"texto":"Ganhe [Coin]."},
-    {"numero":15,"nome":null,"efeito":[{"op":"ganhe","rec":"cristal","n":1},{"op":"dragao","n":1}],"copias":2,"texto":"Ganhe [Crystal][DragonCard]."},
-    {"numero":16,"nome":null,"efeito":[{"op":"ganhe","rec":"cristal","n":2}],"copias":2,"texto":"Ganhe [Crystal][Crystal]."},
-    {"numero":17,"nome":null,"efeito":[{"op":"ganhe","rec":"cristal","n":1},{"op":"ganhe","rec":"leite","n":1}],"copias":2,"texto":"Ganhe [Crystal][Milk]."},
-    {"numero":18,"nome":null,"efeito":[{"op":"ganhe","rec":"cristal","n":1},{"op":"ovo","n":1}],"copias":2,"texto":"Ganhe [Crystal]. Bote [Egg]."},
-    {"numero":20,"nome":null,"efeito":[{"op":"dragao","n":2}],"copias":2,"texto":"Ganhe [DragonCard][DragonCard]."},
-    {"numero":22,"nome":null,"efeito":[{"op":"dragao","n":1},{"op":"guilda","n":1}],"copias":3,"texto":"Ganhe [DragonCard][DragonGuild]."},
-    {"numero":25,"nome":null,"efeito":[{"op":"dragao","n":1},{"op":"ovo","n":1}],"copias":2,"texto":"Ganhe [DragonCard]. Bote [Egg]."},
-    {"numero":27,"nome":null,"efeito":[{"op":"guilda","n":2},{"op":"oponentes","efeito":[{"op":"guilda","n":1}]}],"copias":2,"texto":"Ganhe [DragonGuild][DragonGuild]. Cada oponente ganha [DragonGuild]."},
-    {"numero":29,"nome":null,"efeito":[{"op":"guilda","n":1},{"op":"ovo","n":1}],"copias":3,"texto":"Ganhe [DragonGuild]. Bote [Egg]."},
-    {"numero":32,"nome":null,"efeito":[{"op":"ganhe","rec":"ouro","n":1},{"op":"dragao","n":1}],"copias":2,"texto":"Ganhe [Gold][DragonCard]."},
-    {"numero":33,"nome":null,"efeito":[{"op":"ganhe","rec":"ouro","n":1},{"op":"ganhe","rec":"cristal","n":1}],"copias":2,"texto":"Ganhe [Gold][Crystal]."},
-    {"numero":34,"nome":null,"efeito":[{"op":"ganhe","rec":"ouro","n":2}],"copias":2,"texto":"Ganhe [Gold][Gold]."},
-    {"numero":36,"nome":null,"efeito":[{"op":"ganhe","rec":"ouro","n":1},{"op":"ovo","n":1}],"copias":2,"texto":"Ganhe [Gold]. Bote [Egg]."},
-    {"numero":38,"nome":null,"efeito":[{"op":"ganhe","rec":"carne","n":1},{"op":"dragao","n":1}],"copias":2,"texto":"Ganhe [Meat][DragonCard]."},
-    {"numero":42,"nome":null,"efeito":[{"op":"ganhe","rec":"carne","n":1},{"op":"ganhe","rec":"ouro","n":1}],"copias":2,"texto":"Ganhe [Meat][Gold]."},
-    {"numero":44,"nome":null,"efeito":[{"op":"ganhe","rec":"carne","n":2}],"copias":2,"texto":"Ganhe [Meat][Meat]."},
-    {"numero":47,"nome":null,"efeito":[{"op":"ganhe","rec":"carne","n":1},{"op":"ovo","n":1}],"copias":2,"texto":"Ganhe [Meat]. Bote [Egg]."},
-    {"numero":49,"nome":null,"efeito":[{"op":"ganhe","rec":"leite","n":2}],"copias":2,"texto":"Ganhe [Milk][Milk]."},
-    {"numero":50,"nome":null,"efeito":[{"op":"escolha","diferentes":2,"opcoes":[{"rotulo":"dragao","efeito":[{"op":"dragao","n":1}]},{"rotulo":"caverna","efeito":[{"op":"caverna","n":1}]},{"rotulo":"qualquer","efeito":[{"op":"ganhe","rec":"qualquer","n":1}]}]},{"op":"oponentes","quem":"oponente","escolha":{"diferentes":1,"opcoes":[{"rotulo":"dragao","efeito":[{"op":"dragao","n":1}]},{"rotulo":"caverna","efeito":[{"op":"caverna","n":1}]},{"rotulo":"qualquer","efeito":[{"op":"ganhe","rec":"qualquer","n":1}]}]}}],"copias":2,"texto":"Ganhe 2 benefícios diferentes: [DragonCard]/[CaveCard]/[AnyResource]. Cada oponente ganha 1 benefício à escolha dele."},
-    {"numero":55,"nome":null,"efeito":[{"op":"ovo","n":3}],"copias":3,"texto":"Bote [Egg][Egg][Egg]."},
-    {"numero":67,"nome":null,"efeito":[{"op":"inserir","origem":"baralho","n":2}],"copias":2,"texto":"Insira [DragonCard][DragonCard] do baralho atrás de qualquer(quaisquer) dragão(ões)."},
-    {"numero":70,"nome":null,"efeito":[{"op":"troca","ate":3,"pague":{"qualquer":1},"ganhe":[{"op":"ovo","n":2}]},{"op":"oponentes","efeito":[{"op":"troca","ate":1,"pague":{"qualquer":1},"ganhe":[{"op":"ovo","n":2}]}]}],"copias":2,"texto":"Até 3x, pague [AnyResource] para botar [Egg][Egg]. Cada oponente pode fazer isso 1x."},
-    {"numero":74,"nome":null,"efeito":[{"op":"troca","ate":3,"pague":{"ovo":1},"ganhe":[{"op":"ganhe","rec":"qualquer","n":2}]},{"op":"oponentes","efeito":[{"op":"troca","ate":1,"pague":{"ovo":1},"ganhe":[{"op":"ganhe","rec":"qualquer","n":2}]}]}],"copias":2,"texto":"Até 3x, pague [Egg] para ganhar [AnyResource][AnyResource]. Cada oponente pode fazer isso 1x."}
-  ]
+  {
+   "numero": 1,
+   "nome": "Pastador de Barriga Branca",
+   "tam": "filhote",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 4,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "caverna",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ovo",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [CaveCard]. Quando o 3º [Milk] for estocado, bote também [Egg][Egg]."
+  },
+  {
+   "numero": 2,
+   "nome": "Dragão-Mariposa Afável",
+   "tam": "filhote",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 5,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ovo",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, bote [Egg]. Quando a 3ª [DragonCard] for inserida, ganhe também [Coin]."
+  },
+  {
+   "numero": 3,
+   "nome": "Lindworm das Algas",
+   "tam": "filhote",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "qualquer",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "guilda",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [AnyResource]. Quando o 3º [Milk] for estocado, ganhe também [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 4,
+   "nome": "Pastador Frugívoro",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Crystal]. Quando o 3º [Milk] for estocado, ganhe também [Coin]."
+  },
+  {
+   "numero": 5,
+   "nome": "Dragão-Fada Presudo",
+   "tam": "filhote",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 0,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "guilda",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 1
+     },
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 1
+     },
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [DragonGuild]. Quando a 3ª [Meat] for estocada, ganhe também [Gold][Crystal][Meat]."
+  },
+  {
+   "numero": 6,
+   "nome": "Dragonete de Bando",
+   "tam": "filhote",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 0,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "guilda",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [DragonGuild]. Quando a 3ª [DragonCard] for inserida, ganhe também [Coin]."
+  },
+  {
+   "numero": 7,
+   "nome": "Dragão do Bambu Temperado",
+   "tam": "filhote",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 5,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "guilda",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Gold]. Quando o 3º [Milk] for estocado, ganhe também [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 8,
+   "nome": "Dragão-Fada Leal",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 4,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "qualquer",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "dragao",
+      "n": 1
+     },
+     {
+      "op": "guilda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [AnyResource]. Quando a 3ª [DragonCard] for inserida, ganhe também [DragonCard][DragonGuild]."
+  },
+  {
+   "numero": 9,
+   "nome": "Papa-Grilos Herbívoro",
+   "tam": "filhote",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "dragao",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [DragonCard]. Quando o 3º [Milk] for estocado, ganhe também [Crystal][Crystal]."
+  },
+  {
+   "numero": 10,
+   "nome": "Dragão-de-Fogo Melodioso",
+   "tam": "filhote",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "caverna",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "escavar",
+      "origem": "mao"
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [CaveCard]. Quando a 3ª [DragonCard] for inserida, escave também 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 11,
+   "nome": "Draco Papa-Sementes",
+   "tam": "filhote",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ovo",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, bote [Egg]. Quando o 3º [Milk] for estocado, ganhe também [Meat][Meat]."
+  },
+  {
+   "numero": 12,
+   "nome": "Dragonete da Savana",
+   "tam": "filhote",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 5,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "guilda",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Crystal]. Quando o 3º [Milk] for estocado, ganhe também [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 13,
+   "nome": "Dragão-Fada Melífero",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 4,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "leite",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "caverna",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [Milk]. Quando a 3ª [Meat] for estocada, ganhe também [CaveCard][CaveCard]."
+  },
+  {
+   "numero": 14,
+   "nome": "Papa-Grilos Carniceiro",
+   "tam": "filhote",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [Meat]. Quando a 3ª [Meat] for estocada, ganhe também [Coin]."
+  },
+  {
+   "numero": 15,
+   "nome": "Dragão Lung das Sequoias",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "leite",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ovo",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Milk]. Quando o 3º [Milk] for estocado, bote também [Egg][Egg]."
+  },
+  {
+   "numero": 16,
+   "nome": "Dragão-de-Fogo Peregrino",
+   "tam": "filhote",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "caverna",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "escavar",
+      "origem": "mao"
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [CaveCard]. Quando a 3ª [Meat] for estocada, escave também 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 17,
+   "nome": "Lindworm-da-Grama Comum",
+   "tam": "filhote",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 1,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "estoqueAqui",
+    "n": 1
+   },
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [],
+    "bonus": [
+     {
+      "op": "dragao",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Cada [Milk] neste dragão vale [VP-1] no fim da partida. Quando o 3º [Milk] for estocado, ganhe também [DragonCard][DragonCard]."
+  },
+  {
+   "numero": 18,
+   "nome": "Anfíptero Lamuriante",
+   "tam": "filhote",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "inseridasAqui",
+    "n": 1
+   },
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [],
+    "bonus": [
+     {
+      "op": "guilda",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Cada [DragonCard] inserida embaixo deste dragão vale [VP-1] no fim da partida. Quando a 3ª [DragonCard] for inserida, ganhe também [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 19,
+   "nome": "Dragonete Tagarela",
+   "tam": "filhote",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "dragao",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "qualquer",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [DragonCard]. Quando a 3ª [DragonCard] for inserida, ganhe também [AnyResource][AnyResource]."
+  },
+  {
+   "numero": 20,
+   "nome": "Rex Miniatura",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "dragao",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [Gold]. Quando a 3ª [Meat] for estocada, ganhe também [DragonCard][DragonCard]."
+  },
+  {
+   "numero": 21,
+   "nome": "Tamarim-Fada",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ovo",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "escavar",
+      "origem": "mao"
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, bote [Egg]. Quando o 3º [Milk] for estocado, escave também 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 22,
+   "nome": "Dragão de Cheshire",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 4,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "dragao",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [Meat]. Quando a 3ª [DragonCard] for inserida, ganhe também [DragonCard][DragonCard]."
+  },
+  {
+   "numero": 23,
+   "nome": "Dragão de Granito Voraz",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "ovo",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 1
+     },
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, bote [Egg]. Quando a 3ª [Meat] for estocada, ganhe também [Gold][Meat]."
+  },
+  {
+   "numero": 24,
+   "nome": "Dragão Chifrudo Vampírico",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Meat]. Quando o 3º [Milk] for estocado, ganhe também [Coin]."
+  },
+  {
+   "numero": 25,
+   "nome": "Papa-Líquen Pintado",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "guilda",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [DragonGuild]. Quando o 3º [Milk] for estocado, ganhe também [Gold][Gold]."
+  },
+  {
+   "numero": 26,
+   "nome": "Pastador Barganhador",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 1
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "dragao",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [DragonCard]. Quando o 3º [Milk] for estocado, ganhe também [Coin]."
+  },
+  {
+   "numero": 27,
+   "nome": "Cobrete de Gola",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "dragao",
+      "n": 1
+     },
+     {
+      "op": "guilda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [Crystal]. Quando a 3ª [Meat] for estocada, ganhe também [DragonCard][DragonGuild]."
+  },
+  {
+   "numero": 28,
+   "nome": "Cobrete Silenciosa",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "qualquer",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "guilda",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Sempre que estocar [Meat] aqui, ganhe [AnyResource]. Quando a 3ª [Meat] for estocada, ganhe também [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 29,
+   "nome": "Rêmora Chamuscante",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "estoqueAqui",
+    "n": 1
+   },
+   "filhote": {
+    "aceita": "carne",
+    "ganha": [],
+    "bonus": [
+     {
+      "op": "moeda",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Meat] do seu suprimento aqui. Cada [Meat] neste dragão vale [VP-1] no fim da partida. Quando a 3ª [Meat] for estocada, ganhe também [Coin]."
+  },
+  {
+   "numero": 30,
+   "nome": "Dragonete Cacarejante",
+   "tam": "filhote",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 2,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "guilda",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ovo",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [DragonGuild]. Quando a 3ª [DragonCard] for inserida, bote também [Egg][Egg]."
+  },
+  {
+   "numero": 31,
+   "nome": "Dragão-Fada Guia",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 5,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "caverna",
+      "n": 2
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [Crystal]. Quando a 3ª [DragonCard] for inserida, ganhe também [CaveCard][CaveCard]."
+  },
+  {
+   "numero": 32,
+   "nome": "Dragonete Camaleão",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 5,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "leite",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "escavar",
+      "origem": "mao"
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Estoque [Milk] do seu suprimento aqui. Sempre que estocar [Milk] aqui, ganhe [Meat]. Quando o 3º [Milk] for estocado, escave também 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 33,
+   "nome": "Dragão Vermelho de Gola \"Amigável\"",
+   "tam": "filhote",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 6,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ovo",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "ganhe",
+      "rec": "cristal",
+      "n": 1
+     },
+     {
+      "op": "ganhe",
+      "rec": "carne",
+      "n": 1
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, bote [Egg]. Quando a 3ª [DragonCard] for inserida, ganhe também [Crystal][Meat]."
+  },
+  {
+   "numero": 34,
+   "nome": "Serpente Marinha Gentil",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 2
+   },
+   "pv": 3,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "leite",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "escavar",
+      "origem": "mao"
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [Milk]. Quando a 3ª [DragonCard] for inserida, escave também 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 35,
+   "nome": "Draco de Gramado",
+   "tam": "filhote",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ovo": 1,
+    "leite": 3
+   },
+   "pv": 4,
+   "ninhos": 0,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [],
+   "fim": null,
+   "filhote": {
+    "aceita": "carta",
+    "ganha": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 1
+     }
+    ],
+    "bonus": [
+     {
+      "op": "escavar",
+      "origem": "mao"
+     }
+    ]
+   },
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Sempre que inserir [DragonCard] aqui, ganhe [Gold]. Quando a 3ª [DragonCard] for inserida, escave também 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 36,
+   "nome": "Voador Sentinela",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": {
+    "dragao": 1
+   },
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [DragonCard] para ganhar [AnyResource]."
+  },
+  {
+   "numero": 37,
+   "nome": "Basilisco Subterrâneo",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "ovo",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg][Egg]. Cada oponente bota [Egg]."
+  },
+  {
+   "numero": 38,
+   "nome": "Dragão Lung Veloz",
+   "tam": "medio",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 3
+   },
+   "pv": 2,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin][Coin]."
+  },
+  {
+   "numero": 39,
+   "nome": "Grifodragão Cansado",
+   "tam": "grande",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "entreDoisDragoes",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] se este dragão estiver entre dois outros dragões nesta caverna."
+  },
+  {
+   "numero": 40,
+   "nome": "Serpente Marinha Anciã",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild]."
+  },
+  {
+   "numero": 41,
+   "nome": "Dragonete Listrado",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "objetivoMaisBaixo",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada objetivo em que seu marcador estiver na posição mais baixa (inclui empates)."
+  },
+  {
+   "numero": 42,
+   "nome": "Grande Dragão Lung Dourado",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 2,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "outrosDragoesCaverna",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] para cada outro dragão nesta caverna."
+  },
+  {
+   "numero": 43,
+   "nome": "Espírito Azul da Floresta",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 2,
+   "ninhos": 5,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "aqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] aqui."
+  },
+  {
+   "numero": 44,
+   "nome": "Draco Fulvo do Norte",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "marcadoresGuilda",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada marcador que você tiver colocado na Guilda dos Dragões."
+  },
+  {
+   "numero": 45,
+   "nome": "Wyrm Tranquila",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 4,
+   "ninhos": 5,
+   "tipo": "ativado",
+   "pague": {
+    "moeda": 1
+   },
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 3
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Coin] para botar [Egg][Egg][Egg]."
+  },
+  {
+   "numero": 46,
+   "nome": "Guardião Arco-Íris",
+   "tam": "grande",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "colunaCheia",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] se a coluna deste dragão estiver cheia."
+  },
+  {
+   "numero": 47,
+   "nome": "Anfíptero Coruja",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "condicional",
+     "se": "maioriaCaverna1",
+     "entao": [
+      {
+       "op": "dragao",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Se você tiver pelo menos tantos dragões na sua Gruta Dourada quanto seu vizinho à esquerda, ganhe [DragonCard]."
+  },
+  {
+   "numero": 48,
+   "nome": "Dragão Lung Chifrudo Ágil",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin]."
+  },
+  {
+   "numero": 49,
+   "nome": "Dragão Lung Chifrudo Padrão",
+   "tam": "medio",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 6,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "setsPersonalidade",
+    "n": 4
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-4] para cada *conjunto* de traços de dragão no seu tabuleiro de jogador (1 *conjunto* = 1 de cada: AGRESSIVO, BRINCALHÃO, PRESTATIVO, TÍMIDO)."
+  },
+  {
+   "numero": 50,
+   "nome": "Anteldragão Sábio",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonCard]."
+  },
+  {
+   "numero": 51,
+   "nome": "Grifodragão Distante",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "adjacentesTimidos",
+    "n": 1
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada dragão TÍMIDO em um espaço ortogonalmente adjacente."
+  },
+  {
+   "numero": 52,
+   "nome": "Dragão Lung Azul Cromático",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "dragoesRodada",
+    "n": 2,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada dragão [OncePerRound] no seu tabuleiro de jogador (máx. [VP-8])."
+  },
+  {
+   "numero": 53,
+   "nome": "Wyvern Fulva das Estepes",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Estoque [AnyResource] do seu suprimento aqui."
+  },
+  {
+   "numero": 54,
+   "nome": "Grifodragão Colorido",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 4,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "semAgressivosCaverna",
+    "n": 4
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-4] se não houver dragões AGRESSIVOS nesta caverna."
+  },
+  {
+   "numero": 55,
+   "nome": "Serpente Calma do Lago",
+   "tam": "grande",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 2
+   },
+   "pv": 4,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "onde": "caverna"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] em qualquer lugar nesta caverna."
+  },
+  {
+   "numero": 56,
+   "nome": "Voador Acumulador",
+   "tam": "medio",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Gold]."
+  },
+  {
+   "numero": 57,
+   "nome": "Dragão-Fada Eterno",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild][DragonGuild]. Cada oponente ganha [DragonGuild]."
+  },
+  {
+   "numero": 58,
+   "nome": "Wyrm Cáustica",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "revelarInserir",
+     "tamanhos": [
+      "filhote"
+     ],
+     "senao": "mao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Revele [DragonCard] do baralho. Se for um *filhote*, insira-o aqui. Caso contrário, adicione-o à sua mão."
+  },
+  {
+   "numero": 59,
+   "nome": "Wyvern Arrogante",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 2,
+    "ouro": 1
+   },
+   "pv": 5,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "outrosTimidosCaverna",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada outro dragão TÍMIDO nesta caverna."
+  },
+  {
+   "numero": 60,
+   "nome": "Cauda-de-Rufo Furtiva",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk][Milk]."
+  },
+  {
+   "numero": 61,
+   "nome": "Wyrm Primordial",
+   "tam": "grande",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": {
+    "ovoAdjacente": 2
+   },
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Egg][Egg] de qualquer(quaisquer) dragão(ões) ortogonalmente adjacente(s) para ganhar [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 62,
+   "nome": "Firevern Descendente",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 3
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin]."
+  },
+  {
+   "numero": 63,
+   "nome": "Draco Chifrudo Guardião",
+   "tam": "medio",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 6,
+   "ninhos": 4,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "dragao": 1
+     },
+     "ganhe": [
+      {
+       "op": "inserir",
+       "aqui": true,
+       "n": 1
+      },
+      {
+       "op": "ovo",
+       "n": 1,
+       "aqui": true
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui. Se fizer isso, bote [Egg] aqui."
+  },
+  {
+   "numero": 64,
+   "nome": "Dragão das Rochas Escamoso",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 3
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "escavar",
+     "origem": "exibicao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Escave 1 espaço de graça com [CaveCard] da exibição."
+  },
+  {
+   "numero": 65,
+   "nome": "Anteldragão Perspicaz",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": {
+    "caverna": 2
+   },
+   "efeito": [
+    {
+     "op": "jogarDragao",
+     "gratis": true,
+     "origem": "mao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [CaveCard][CaveCard] para jogar outro dragão da sua mão de graça."
+  },
+  {
+   "numero": 66,
+   "nome": "Fantasma Verde",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": {
+    "dragao": 1
+   },
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "onde": "caverna"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [DragonCard] para botar [Egg] em qualquer lugar nesta caverna."
+  },
+  {
+   "numero": 67,
+   "nome": "O Ancião",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "moeda": 1
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": {
+    "ovoCaverna": 1
+   },
+   "efeito": [
+    {
+     "op": "escolha",
+     "diferentes": 2,
+     "opcoes": [
+      {
+       "rotulo": "dragao",
+       "efeito": [
+        {
+         "op": "dragao",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "guilda",
+       "efeito": [
+        {
+         "op": "guilda",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "caverna",
+       "efeito": [
+        {
+         "op": "caverna",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "qualquer",
+       "efeito": [
+        {
+         "op": "ganhe",
+         "rec": "qualquer",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Egg] de qualquer lugar nesta caverna para ganhar 2 benefícios diferentes: [DragonCard]/[DragonGuild]/[CaveCard]/[AnyResource]."
+  },
+  {
+   "numero": 68,
+   "nome": "Dragão-de-Fogo Hostil do Norte",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "revelarInserir",
+     "tamanhos": [
+      "grande"
+     ],
+     "senao": [
+      {
+       "op": "ganhe",
+       "rec": "carne",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Revele [DragonCard] do baralho. Se for *grande*, insira-o aqui. Caso contrário, descarte-o e ganhe [Meat]."
+  },
+  {
+   "numero": 69,
+   "nome": "Grifodragão Clarividente",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "comprarInserirPorTraco",
+     "traco": "timido",
+     "onde": "caverna",
+     "maxInserir": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Compre [DragonCard] do baralho para cada dragão TÍMIDO nesta caverna. Você pode inserir até 2 deles aqui."
+  },
+  {
+   "numero": 70,
+   "nome": "Wyrm Vermelha Paciente",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 5,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 2,
+     "pague": {
+      "qualquer": 1
+     },
+     "ganhe": [
+      {
+       "op": "ovo",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "qualquer": 1
+       },
+       "ganhe": [
+        {
+         "op": "ovo",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Até 2x, pague [AnyResource] para botar [Egg]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 71,
+   "nome": "Voador Multicolorido",
+   "tam": "medio",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 2
+   },
+   "pv": 4,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "dragoesJogado",
+    "n": 2,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada dragão [WhenPlayed] no seu tabuleiro de jogador (máx. [VP-8])."
+  },
+  {
+   "numero": 72,
+   "nome": "Primordiossauro",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 3,
+   "tipo": "rodada",
+   "pague": {
+    "ovoCaverna": 1
+   },
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Egg] de qualquer lugar nesta caverna para ganhar [DragonGuild][DragonGuild]."
+  },
+  {
+   "numero": 73,
+   "nome": "Dragão Palmípede Pantanoso",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "carne": 2,
+    "cristal": 2
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": {
+    "caverna": 1
+   },
+   "efeito": [
+    {
+     "op": "ativarTabuleiro"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [CaveCard] para ativar 1 habilidade [Adventurer] impressa no seu tabuleiro de jogador."
+  },
+  {
+   "numero": 74,
+   "nome": "Draco Marrom Solitário",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "cavernaTodaEscavada",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] se todos os espaços nesta caverna tiverem sido escavados."
+  },
+  {
+   "numero": 75,
+   "nome": "Quebra-Rochas Carbonífero",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2,
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild]."
+  },
+  {
+   "numero": 76,
+   "nome": "Papa-Grilos Perspicaz",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 2
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": {
+    "qualquer": 1
+   },
+   "efeito": [
+    {
+     "op": "ativarOutro",
+     "tipo": "jogado"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [AnyResource] para ativar a habilidade [WhenPlayed] em qualquer dragão no seu tabuleiro de jogador."
+  },
+  {
+   "numero": 77,
+   "nome": "Firevern Intratável",
+   "tam": "grande",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 1,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1,
+     "podeEstocarAqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Meat]. Você pode estocá-la aqui."
+  },
+  {
+   "numero": 78,
+   "nome": "Wyvern Particularmente Arrogante",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 2,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1,
+     "podeEstocarAqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk]. Você pode estocá-lo aqui."
+  },
+  {
+   "numero": 79,
+   "nome": "Grifodragão Azul Comum",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 1,
+   "ninhos": 3,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "condicional",
+     "se": "minDragoesCaverna3",
+     "entao": [
+      {
+       "op": "ovoCadaDragaoCaverna",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Se você tiver pelo menos 3 dragões nesta caverna, bote [Egg] em cada dragão nesta caverna."
+  },
+  {
+   "numero": 80,
+   "nome": "Firevern Falcoeiro",
+   "tam": "medio",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 2,
+    "ouro": 1
+   },
+   "pv": 2,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "dragao": 1
+     },
+     "ganhe": [
+      {
+       "op": "inserir",
+       "aqui": true,
+       "n": 1
+      },
+      {
+       "op": "ganharDoCustoInserido",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui para ganhar [AnyResource] do custo impresso no dragão inserido."
+  },
+  {
+   "numero": 81,
+   "nome": "Grifodragão Estoico",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "moeda": 1
+   },
+   "pv": 7,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "ultimoDragaoCaverna",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] se este for o último dragão (mais à direita) na sua caverna."
+  },
+  {
+   "numero": 82,
+   "nome": "Dragão-Fada Silencioso Asa-de-Carvalho",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1
+   },
+   "pv": 1,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "onde": "coluna"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] em qualquer dragão nesta coluna."
+  },
+  {
+   "numero": 83,
+   "nome": "Firevern Espirituoso",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 3
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    },
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin][DragonGuild]."
+  },
+  {
+   "numero": 84,
+   "nome": "Wyrm Venenosa Descontente",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 6,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "inserir",
+     "origem": "mao",
+     "aqui": true,
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui."
+  },
+  {
+   "numero": 85,
+   "nome": "Koiwyrm Abastada",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "ganhe",
+       "rec": "cristal",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Crystal][Crystal]. Cada oponente ganha [Crystal]."
+  },
+  {
+   "numero": 86,
+   "nome": "Wyvern Cavaleira do Norte",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 2
+   },
+   "pv": 8,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "trocaFim": {
+     "pague": "dragao",
+     "opcoes": [
+      {
+       "qtd": 1,
+       "pv": 1
+      },
+      {
+       "qtd": 2,
+       "pv": 3
+      }
+     ]
+    }
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [DragonCard] para ganhar [VP-1] ou pague [DragonCard][DragonCard] para ganhar [VP-3]."
+  },
+  {
+   "numero": 87,
+   "nome": "Wyvern Cavaleira Equatorial",
+   "tam": "medio",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "trocaFim": {
+     "pague": "caverna",
+     "opcoes": [
+      {
+       "qtd": 1,
+       "pv": 1
+      },
+      {
+       "qtd": 2,
+       "pv": 3
+      }
+     ]
+    }
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [CaveCard] para ganhar [VP-1] ou pague [CaveCard][CaveCard] para ganhar [VP-3]."
+  },
+  {
+   "numero": 88,
+   "nome": "Dragão Lung Rápido",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 3
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin]."
+  },
+  {
+   "numero": 89,
+   "nome": "Dragão Lung Erudito",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": {
+    "qualquer": 1
+   },
+   "efeito": [
+    {
+     "op": "jogarDragao",
+     "gratis": true,
+     "origem": "exibicao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [AnyResource] para jogar um dragão da exibição de graça."
+  },
+  {
+   "numero": 90,
+   "nome": "Anfíptero Protetor",
+   "tam": "grande",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": {
+    "moeda": 1
+   },
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Coin] para ganhar [Gold][Crystal][Meat]."
+  },
+  {
+   "numero": 91,
+   "nome": "Coatl Resplandecente Comum",
+   "tam": "medio",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "tamanhosCavernaFilhotePequenoGrande",
+    "n": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-8] se você tiver um *filhote*, um dragão *pequeno* e um dragão *grande* nesta caverna."
+  },
+  {
+   "numero": 92,
+   "nome": "Cuspidor Territorial",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Crystal]."
+  },
+  {
+   "numero": 93,
+   "nome": "Coatl de Crista Miniatura",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "quatroDragoesCaverna1",
+    "n": 5
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-5] se você tiver 4 dragões na sua Gruta Dourada."
+  },
+  {
+   "numero": 94,
+   "nome": "Grifodragão do Norte",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "moeda": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": {
+    "escolha": [
+     "dragao",
+     "caverna"
+    ],
+    "n": 1
+   },
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [DragonCard] ou [CaveCard] para ganhar [DragonGuild]."
+  },
+  {
+   "numero": 95,
+   "nome": "Serpente de Dedos Palmados Pacifista",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 3,
+   "ninhos": 4,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovoCadaDragaoColuna",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] em cada dragão nesta coluna."
+  },
+  {
+   "numero": 96,
+   "nome": "Dragão Chifrudo Exigente",
+   "tam": "pequeno",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1,
+     "podeEstocarAqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk]. Você pode estocá-lo aqui."
+  },
+  {
+   "numero": 97,
+   "nome": "Espírito Salpicado da Clareira",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "dragoesAtivado",
+    "n": 1
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada dragão [Adventurer] no seu tabuleiro de jogador (incluindo *filhotes*)."
+  },
+  {
+   "numero": 98,
+   "nome": "Pequeno Anfíptero",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {},
+   "pv": 2,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "cavernaCheia",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] se a caverna deste dragão estiver cheia."
+  },
+  {
+   "numero": 99,
+   "nome": "Anfíptero Trinado Ágil",
+   "tam": "grande",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 2,
+    "cristal": 2
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin][AnyResource][AnyResource]."
+  },
+  {
+   "numero": 100,
+   "nome": "Wyrm Venenosa Chifruda",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "revelarInserir",
+     "tamanhos": [
+      "pequeno"
+     ],
+     "senao": [
+      {
+       "op": "ganhe",
+       "rec": "leite",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Revele [DragonCard] do baralho. Se for *pequeno*, insira-o aqui. Caso contrário, descarte-o e ganhe [Milk]."
+  },
+  {
+   "numero": 101,
+   "nome": "Anfíptero Magnífico",
+   "tam": "grande",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "dragoesFim",
+    "n": 2,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada dragão [EndGame] no seu tabuleiro de jogador (máx. [VP-8])."
+  },
+  {
+   "numero": 102,
+   "nome": "Anfíptero de Bolso",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "moeda": 1
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "outroBrincalhaoCaverna",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] se houver pelo menos 1 outro dragão BRINCALHÃO nesta caverna."
+  },
+  {
+   "numero": 103,
+   "nome": "Anfíptero Avarento",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "maioriaCaverna1",
+    "ganhe": [
+     {
+      "op": "ganhe",
+      "rec": "ouro",
+      "n": 1
+     }
+    ]
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Se você tiver pelo menos tantos dragões na sua Gruta Dourada quanto seu vizinho à esquerda, ganhe [Gold]."
+  },
+  {
+   "numero": 104,
+   "nome": "Draco Planador da Taiga",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 0,
+   "ninhos": 2,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 2,
+     "pague": {
+      "dragao": 1
+     },
+     "ganhe": [
+      {
+       "op": "inserir",
+       "aqui": true,
+       "n": 1
+      },
+      {
+       "op": "ganhe",
+       "rec": "qualquer",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Até 2x, insira [DragonCard] da sua mão aqui. Cada vez que fizer isso, ganhe [AnyResource]."
+  },
+  {
+   "numero": 105,
+   "nome": "Australopithecus Drakus",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "caverna": 1
+     },
+     "ganhe": [
+      {
+       "op": "ovo",
+       "n": 1,
+       "aqui": true
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Até 3x, pague [CaveCard] da sua mão para botar [Egg] aqui."
+  },
+  {
+   "numero": 106,
+   "nome": "Garra-Afiada Menor",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "moeda": 1
+   },
+   "pv": 7,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "outrosAgressivosCaverna",
+    "n": -2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Perca [VP-2] para cada outro dragão AGRESSIVO nesta caverna."
+  },
+  {
+   "numero": 107,
+   "nome": "Draco Chifrudo de Puck",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 1,
+   "ninhos": 3,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "condicional",
+     "se": "minDragoesCaverna3",
+     "entao": [
+      {
+       "op": "ovoCadaDragaoCaverna",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Se você tiver pelo menos 3 dragões nesta caverna, bote [Egg] em cada dragão nesta caverna."
+  },
+  {
+   "numero": 108,
+   "nome": "Bom Draco",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 7,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": {
+    "moeda": 1
+   },
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    },
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Coin] para ganhar [DragonGuild][AnyResource][CaveCard][DragonCard]."
+  },
+  {
+   "numero": 109,
+   "nome": "Firevern Belicoso",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "rodada",
+   "pague": {
+    "qualquer": 1
+   },
+   "efeito": [
+    {
+     "op": "comprarManterDescartarInserir",
+     "comprar": 3,
+     "manter": 1,
+     "descartar": 1,
+     "inserirAqui": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [AnyResource] para comprar [DragonCard][DragonCard][DragonCard] do baralho. Fique com 1, descarte 1 e insira 1 aqui."
+  },
+  {
+   "numero": 110,
+   "nome": "Draco Espreitador",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1
+   },
+   "pv": 4,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "revelarInserir",
+     "tamanhos": [
+      "medio",
+      "grande"
+     ],
+     "senao": "mao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Revele [DragonCard] do baralho. Se for *médio* ou *grande*, insira-o aqui. Caso contrário, adicione-o à sua mão."
+  },
+  {
+   "numero": 111,
+   "nome": "Wyrm Vermelha Penuriosa",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 1,
+   "ninhos": 2,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganharPorTracoEstocar",
+     "traco": "agressivo",
+     "onde": "caverna",
+     "maxEstocarAqui": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [AnyResource] para cada dragão AGRESSIVO nesta caverna. Você pode estocar até 2 deles aqui."
+  },
+  {
+   "numero": 112,
+   "nome": "Anfíptero Variegado",
+   "tam": "medio",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "dragoesAdjacentes",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada dragão em um espaço ortogonalmente adjacente."
+  },
+  {
+   "numero": 113,
+   "nome": "Quebra-Rochas Xistoso",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2,
+    "moeda": 1
+   },
+   "pv": 8,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "escavar",
+     "origem": "mao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Escave 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 114,
+   "nome": "Anfíptero Avarento",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "condicional",
+     "se": "maioriaCaverna2",
+     "entao": [
+      {
+       "op": "ganhe",
+       "rec": "cristal",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Se você tiver pelo menos tantos dragões no seu Abismo de Ametista quanto seu vizinho à esquerda, ganhe [Crystal]."
+  },
+  {
+   "numero": 115,
+   "nome": "Koiwyrm Guardiã",
+   "tam": "medio",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    },
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 1,
+     "origem": "suprimentoGeral"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [AnyResource][AnyResource]. Fique com 1 e estoque 1 em qualquer dragão."
+  },
+  {
+   "numero": 116,
+   "nome": "Hidra Dourada Divisora",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "inserir",
+     "origem": "baralho",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Compre [DragonCard][DragonCard] do baralho. Fique com 1 e insira 1 embaixo de qualquer dragão."
+  },
+  {
+   "numero": 117,
+   "nome": "Basilisco Antediluviano",
+   "tam": "grande",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 2,
+   "ninhos": 1,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "inserirPorMarcadorGuilda",
+     "aqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Insira [DragonCard] do baralho aqui para cada marcador que você tiver colocado na Guilda dos Dragões."
+  },
+  {
+   "numero": 118,
+   "nome": "Hidráptero Espirituoso",
+   "tam": "pequeno",
+   "hab": [
+    1,
+    2
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 2
+   },
+   "pv": 2,
+   "ninhos": 1,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Coin][Coin]."
+  },
+  {
+   "numero": 119,
+   "nome": "Coatl Camaleão",
+   "tam": "medio",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 6,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "medio",
+    "n": 3,
+    "max": 12
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe + [VP-3] para cada dragão *médio* no seu tabuleiro de jogador (máx. [VP-12])."
+  },
+  {
+   "numero": 120,
+   "nome": "Guardião Conhecedor",
+   "tam": "medio",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 4,
+   "ninhos": 1,
+   "tipo": "rodada",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "qualquer": 1
+     },
+     "ganhe": [
+      {
+       "op": "estocar",
+       "rec": "qualquer",
+       "n": 1,
+       "aqui": true
+      },
+      {
+       "op": "dragao",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Estoque [AnyResource] do seu suprimento aqui. Se fizer isso, compre [DragonCard] do baralho."
+  },
+  {
+   "numero": 121,
+   "nome": "Voador Noturno de Seda",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "revelarInserir",
+     "tamanhos": [
+      "medio"
+     ],
+     "senao": [
+      {
+       "op": "ganhe",
+       "rec": "ouro",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Revele [DragonCard] do baralho. Se for *médio*, insira-o aqui. Caso contrário, descarte-o e ganhe [Gold]."
+  },
+  {
+   "numero": 122,
+   "nome": "Draco da Floresta Pluvial",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 3
+   },
+   "pv": 5,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": {
+    "dragao": 1
+   },
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [DragonCard] para ganhar [AnyResource]."
+  },
+  {
+   "numero": 123,
+   "nome": "Firevern Voraz",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 3
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": {
+    "carne": 1
+   },
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "carne",
+     "n": 1,
+     "aqui": true
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Meat] do seu suprimento para estocá-la aqui e ganhar [DragonCard]."
+  },
+  {
+   "numero": 124,
+   "nome": "Dragão-Mariposa Tímido",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "moeda": 1
+   },
+   "pv": 8,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "condicao": "unicoCaverna",
+    "n": 4
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-4] se este for o único dragão nesta caverna."
+  },
+  {
+   "numero": 125,
+   "nome": "Draco das Cavernas Escamoso",
+   "tam": "grande",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 2,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild][Meat][Crystal]."
+  },
+  {
+   "numero": 126,
+   "nome": "Dragonete-das-Neves Pigmeu",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "condicional",
+     "se": "maioriaCaverna0",
+     "entao": [
+      {
+       "op": "ganhe",
+       "rec": "carne",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Se você tiver pelo menos tantos dragões na sua Caverna Carmesim quanto seu vizinho à esquerda, ganhe [Meat]."
+  },
+  {
+   "numero": 127,
+   "nome": "Dragão Lung Esmeralda Comum",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 4,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "cavernas",
+    "n": 1,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada [CaveCard] na sua mão no fim da partida (máx. [VP-8])."
+  },
+  {
+   "numero": 128,
+   "nome": "Serpente Marinha de Dentes-de-Serra",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 2
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": {
+    "qualquer": 2
+   },
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [AnyResource][AnyResource] para ganhar [Coin]."
+  },
+  {
+   "numero": 129,
+   "nome": "Dragão-de-Fogo do Bosque",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 5,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": {
+    "qualquer": 1
+   },
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [AnyResource] para botar [Egg][Egg]."
+  },
+  {
+   "numero": 130,
+   "nome": "Voador Noctívago",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Meat]."
+  },
+  {
+   "numero": 131,
+   "nome": "Dragão Lung Sorridente",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "escolha",
+       "diferentes": 1,
+       "opcoes": [
+        {
+         "rotulo": "caverna",
+         "efeito": [
+          {
+           "op": "caverna",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "rotulo": "dragao",
+         "efeito": [
+          {
+           "op": "dragao",
+           "n": 1
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [CaveCard][DragonCard]. Cada oponente ganha [CaveCard] ou [DragonCard]."
+  },
+  {
+   "numero": 132,
+   "nome": "Hidráptero Cavaleiro",
+   "tam": "medio",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2
+   },
+   "pv": 7,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "trocaFim": {
+     "pague": "moeda",
+     "opcoes": [
+      {
+       "qtd": 1,
+       "pv": 3
+      }
+     ]
+    }
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Coin] para ganhar [VP-3]."
+  },
+  {
+   "numero": 133,
+   "nome": "Draco da Tundra",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Estoque [AnyResource] do seu suprimento aqui."
+  },
+  {
+   "numero": 134,
+   "nome": "Dragão Lung do Vale Negro",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 7,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "grande",
+    "n": 3,
+    "max": 12
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe + [VP-3] para cada dragão *grande* no seu tabuleiro de jogador (máx. [VP-12])."
+  },
+  {
+   "numero": 135,
+   "nome": "Anfíptero do Sol",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "ganhe",
+       "rec": "ouro",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Gold][Gold]. Cada oponente ganha [Gold]."
+  },
+  {
+   "numero": 136,
+   "nome": "Draco Vaga-Lume Curioso",
+   "tam": "grande",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "moeda": 1
+   },
+   "pv": 6,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "filhote",
+    "n": 2,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada *filhote* no seu tabuleiro de jogador (máx. [VP-8])."
+  },
+  {
+   "numero": 137,
+   "nome": "Cauda-de-Rufo Voraz",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "aqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] aqui."
+  },
+  {
+   "numero": 138,
+   "nome": "Anfíptero do Pântano",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2,
+    "moeda": 1
+   },
+   "pv": 2,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": {
+    "qualquer": 2
+   },
+   "efeito": [
+    {
+     "op": "escavar",
+     "origem": "mao"
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [AnyResource][AnyResource] para escavar 1 espaço de graça com [CaveCard] da sua mão."
+  },
+  {
+   "numero": 139,
+   "nome": "Anfíptero Estrelado",
+   "tam": "pequeno",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "colunaPrestativos",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada dragão PRESTATIVO nesta coluna (incluindo este dragão)."
+  },
+  {
+   "numero": 140,
+   "nome": "Dragão Lung Esmeralda Jovem",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 6,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "dragoes",
+    "n": 1,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada [DragonCard] na sua mão no fim da partida (máx. [VP-8])."
+  },
+  {
+   "numero": 141,
+   "nome": "Anfíptero Brilhante",
+   "tam": "medio",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "outrosBrincalhoesCaverna",
+    "n": 2
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-2] para cada outro dragão BRINCALHÃO nesta caverna."
+  },
+  {
+   "numero": 142,
+   "nome": "Anfíptero Crepuscular",
+   "tam": "medio",
+   "hab": [
+    0,
+    1,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1,
+    "cristal": 1,
+    "moeda": 1
+   },
+   "pv": 7,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "pequeno",
+    "n": 3,
+    "max": 12
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe + [VP-3] para cada dragão *pequeno* no seu tabuleiro de jogador (máx. [VP-12])."
+  },
+  {
+   "numero": 143,
+   "nome": "Dragão Lung Esmeralda Filhote",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 4,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "ovosTabuleiro",
+    "n": 1,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada [Egg] no seu tabuleiro de jogador no fim da partida (máx. [VP-8])."
+  },
+  {
+   "numero": 144,
+   "nome": "Lindworm Fofoqueira",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "ganhe",
+       "rec": "carne",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Meat][Meat]. Cada oponente ganha [Meat]."
+  },
+  {
+   "numero": 145,
+   "nome": "Dragão-de-Fogo do Bosque da Primavera",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg]."
+  },
+  {
+   "numero": 146,
+   "nome": "Cobrete de Crista",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 2
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": {
+    "dragao": 1
+   },
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [DragonCard] para ganhar [AnyResource]."
+  },
+  {
+   "numero": 147,
+   "nome": "Grande Dragão Lung Escarlate",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "outrosDragoesCaverna",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] para cada outro dragão nesta caverna."
+  },
+  {
+   "numero": 148,
+   "nome": "Draco das Florestas de Carvalho",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "rodada",
+   "pague": {
+    "carne": 1
+   },
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Meat] para botar [Egg][Egg]."
+  },
+  {
+   "numero": 149,
+   "nome": "Dragão-Mariposa Estampado",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "inserir",
+     "origem": "mao",
+     "aqui": true,
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui."
+  },
+  {
+   "numero": 150,
+   "nome": "Wyvern de Plumas Roxas",
+   "tam": "grande",
+   "hab": [
+    0,
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk]."
+  },
+  {
+   "numero": 151,
+   "nome": "Dragão Lung Esmeralda",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "recursosMao",
+    "n": 1,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada recurso na sua mão no fim da partida (máx. [VP-8])."
+  },
+  {
+   "numero": 152,
+   "nome": "Dragão-de-Fogo das Rochas",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg]."
+  },
+  {
+   "numero": 153,
+   "nome": "Draco de Plumas Rosadas",
+   "tam": "medio",
+   "hab": [
+    0,
+    1
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "ganhe",
+       "rec": "leite",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk][Milk]. Cada oponente ganha [Milk]."
+  },
+  {
+   "numero": 154,
+   "nome": "Draco da Floresta Pluvial",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "aqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] aqui."
+  },
+  {
+   "numero": 155,
+   "nome": "Grande Dragão Lung Ametista",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "outrosDragoesCaverna",
+    "n": 3
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-3] para cada outro dragão nesta caverna."
+  },
+  {
+   "numero": 156,
+   "nome": "Serpente Brilhante da Caverna",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild][Gold][Crystal]."
+  },
+  {
+   "numero": 157,
+   "nome": "Dragão-de-Fogo de Escamas Afiadas",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2,
+    "ouro": 1
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "jogado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild][Meat][Gold]."
+  },
+  {
+   "numero": 158,
+   "nome": "Dragão-de-Fogo de Asas Vermelhas",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2,
+    "moeda": 1
+   },
+   "pv": 5,
+   "ninhos": 4,
+   "tipo": "rodada",
+   "pague": {
+    "cristal": 1
+   },
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Crystal] para botar [Egg][Egg]."
+  },
+  {
+   "numero": 159,
+   "nome": "Draco da Floresta Nublada",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "rodada",
+   "pague": {
+    "ouro": 1
+   },
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 2
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Gold] para botar [Egg][Egg]."
+  },
+  {
+   "numero": 160,
+   "nome": "Dragão-de-Fogo de Barriga Dourada",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 4,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg]."
+  },
+  {
+   "numero": 161,
+   "nome": "Anfíptero Caçador",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 1,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "revelarInserir",
+     "tamanhos": [
+      "filhote",
+      "pequeno"
+     ],
+     "senao": [
+      {
+       "op": "ganhe",
+       "rec": "carne",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Revele [DragonCard] do baralho. Se for um *filhote* ou *pequeno*, insira-o aqui. Caso contrário, descarte-o e ganhe [Meat]."
+  },
+  {
+   "numero": 162,
+   "nome": "Dragão Lung Esmeralda Ancião",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 5,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "contar": "cavernasEscavadas",
+    "n": 1,
+    "max": 8
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [VP-1] para cada [CaveCard] escavada no seu tabuleiro de jogador (máx. [VP-8])."
+  },
+  {
+   "numero": 163,
+   "nome": "Firevern Voraz da Floresta",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "inserir",
+     "origem": "mao",
+     "aqui": true,
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Insira [DragonCard] da sua mão aqui."
+  },
+  {
+   "numero": 164,
+   "nome": "Hidráptero Cavaleiro da Floresta",
+   "tam": "medio",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 7,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "trocaFim": {
+     "pague": "moeda",
+     "opcoes": [
+      {
+       "qtd": 1,
+       "pv": 3
+      }
+     ]
+    }
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Coin] para ganhar [VP-3]."
+  },
+  {
+   "numero": 165,
+   "nome": "Draco das Cavernas Escamoso",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 1
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Crystal]."
+  },
+  {
+   "numero": 166,
+   "nome": "Dragão-Fada da Aurora",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "aqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] aqui."
+  },
+  {
+   "numero": 167,
+   "nome": "Anfíptero Esguio",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Meat]."
+  },
+  {
+   "numero": 168,
+   "nome": "Dragonete Pigmeu de Cauda-Curta",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonCard]."
+  },
+  {
+   "numero": 169,
+   "nome": "Hidráptero Cavaleiro Escarlate",
+   "tam": "medio",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 7,
+   "ninhos": 1,
+   "tipo": "fim",
+   "pague": null,
+   "efeito": [],
+   "fim": {
+    "trocaFim": {
+     "pague": "moeda",
+     "opcoes": [
+      {
+       "qtd": 1,
+       "pv": 3
+      }
+     ]
+    }
+   },
+   "filhote": null,
+   "copias": 1,
+   "texto": "Pague [Coin] para ganhar [VP-3]."
+  },
+  {
+   "numero": 170,
+   "nome": "Wyvern de Crista",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Gold]."
+  },
+  {
+   "numero": 171,
+   "nome": "Voador Azul",
+   "tam": "pequeno",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Estoque [AnyResource] do seu suprimento aqui."
+  },
+  {
+   "numero": 172,
+   "nome": "Cobrete de Asas Esmeralda",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk]."
+  },
+  {
+   "numero": 173,
+   "nome": "Wyvern de Cauda-Afiada",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2,
+    "ouro": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk]."
+  },
+  {
+   "numero": 174,
+   "nome": "Wyvern de Plumas Amarelas",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 2,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Milk]."
+  },
+  {
+   "numero": 175,
+   "nome": "Anfíptero do Sol da Floresta",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [DragonCard]."
+  },
+  {
+   "numero": 176,
+   "nome": "Wyvern das Cavernas Escamosas",
+   "tam": "pequeno",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1
+   },
+   "pv": 2,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Gold]."
+  },
+  {
+   "numero": 177,
+   "nome": "Wyrm da Savana",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Gold]."
+  },
+  {
+   "numero": 178,
+   "nome": "Draco de Plumas Roxas",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "cristal": 2
+   },
+   "pv": 3,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg]."
+  },
+  {
+   "numero": 179,
+   "nome": "Dragão-Mariposa de Escamas Douradas",
+   "tam": "grande",
+   "hab": [
+    1
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 3,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1,
+     "aqui": true
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg] aqui."
+  },
+  {
+   "numero": 180,
+   "nome": "Cauda-de-Rufo da Caverna",
+   "tam": "grande",
+   "hab": [
+    2
+   ],
+   "custo": {
+    "ouro": 1,
+    "cristal": 1
+   },
+   "pv": 5,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Crystal]."
+  },
+  {
+   "numero": 181,
+   "nome": "Draco das Cavernas",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 3,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Ganhe [Meat]."
+  },
+  {
+   "numero": 182,
+   "nome": "Wyvern de Cauda-de-Leque",
+   "tam": "grande",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 2
+   },
+   "pv": 3,
+   "ninhos": 4,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Bote [Egg]."
+  },
+  {
+   "numero": 183,
+   "nome": "Voador de Plumas Roxas",
+   "tam": "pequeno",
+   "hab": [
+    0
+   ],
+   "custo": {
+    "carne": 1,
+    "cristal": 1
+   },
+   "pv": 4,
+   "ninhos": 2,
+   "tipo": "ativado",
+   "pague": null,
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "fim": null,
+   "filhote": null,
+   "copias": 1,
+   "texto": "Estoque [AnyResource] do seu suprimento aqui."
+  }
+ ],
+ "cavernas": [
+  {
+   "numero": 1,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ativarOutro",
+     "tipo": "rodada"
+    }
+   ],
+   "copias": 1,
+   "texto": "Ative a habilidade [OncePerRound-v2] em qualquer dragão no seu tabuleiro de jogador."
+  },
+  {
+   "numero": 2,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ativarOutro",
+     "tipo": "jogado"
+    }
+   ],
+   "copias": 1,
+   "texto": "Ative a habilidade [WhenPlayed] em qualquer dragão no seu tabuleiro de jogador."
+  },
+  {
+   "numero": 3,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Estoque [AnyResource][AnyResource] do suprimento geral em qualquer(quaisquer) dragão(ões)."
+  },
+  {
+   "numero": 4,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "estocar",
+     "rec": "qualquer",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Estoque [AnyResource][AnyResource] do suprimento geral em qualquer(quaisquer) dragão(ões)."
+  },
+  {
+   "numero": 5,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [AnyResource]. Bote [Egg]."
+  },
+  {
+   "numero": 6,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [AnyResource]. Bote [Egg]."
+  },
+  {
+   "numero": 7,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [CaveCard][AnyResource]."
+  },
+  {
+   "numero": 8,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [CaveCard][DragonGuild]."
+  },
+  {
+   "numero": 9,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "qualquer",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [CaveCard][AnyResource]."
+  },
+  {
+   "numero": 10,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [CaveCard]. Bote [Egg][Egg]."
+  },
+  {
+   "numero": 11,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "caverna",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [CaveCard]. Bote [Egg][Egg]."
+  },
+  {
+   "numero": 12,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Coin]."
+  },
+  {
+   "numero": 13,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Coin]."
+  },
+  {
+   "numero": 14,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "moeda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Coin]."
+  },
+  {
+   "numero": 15,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Crystal][DragonCard]."
+  },
+  {
+   "numero": 16,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Crystal][Crystal]."
+  },
+  {
+   "numero": 17,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Crystal][Milk]."
+  },
+  {
+   "numero": 18,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Crystal]. Bote [Egg]."
+  },
+  {
+   "numero": 19,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Crystal]. Bote [Egg]."
+  },
+  {
+   "numero": 20,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard][DragonCard]."
+  },
+  {
+   "numero": 21,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard][DragonCard]."
+  },
+  {
+   "numero": 22,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard][DragonGuild]."
+  },
+  {
+   "numero": 23,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard][DragonGuild]."
+  },
+  {
+   "numero": 24,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "guilda",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard][DragonGuild]."
+  },
+  {
+   "numero": 25,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard]. Bote [Egg]."
+  },
+  {
+   "numero": 26,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "dragao",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonCard]. Bote [Egg]."
+  },
+  {
+   "numero": 27,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild][DragonGuild]. Cada oponente ganha [DragonGuild]."
+  },
+  {
+   "numero": 28,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 2
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild][DragonGuild]. Cada oponente ganha [DragonGuild]."
+  },
+  {
+   "numero": 29,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild]. Bote [Egg]."
+  },
+  {
+   "numero": 30,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild]. Bote [Egg]."
+  },
+  {
+   "numero": 31,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "guilda",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [DragonGuild]. Bote [Egg]."
+  },
+  {
+   "numero": 32,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Gold][DragonCard]."
+  },
+  {
+   "numero": 33,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Gold][Crystal]."
+  },
+  {
+   "numero": 34,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Gold][Gold]."
+  },
+  {
+   "numero": 35,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Gold][Milk]."
+  },
+  {
+   "numero": 36,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Gold]. Bote [Egg]."
+  },
+  {
+   "numero": 37,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Gold]. Bote [Egg]."
+  },
+  {
+   "numero": 38,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][DragonCard]."
+  },
+  {
+   "numero": 39,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "dragao",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][DragonCard]."
+  },
+  {
+   "numero": 40,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Crystal]."
+  },
+  {
+   "numero": 41,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "cristal",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Crystal]."
+  },
+  {
+   "numero": 42,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Gold]."
+  },
+  {
+   "numero": 43,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "ouro",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Gold]."
+  },
+  {
+   "numero": 44,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Meat]."
+  },
+  {
+   "numero": 45,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Meat]."
+  },
+  {
+   "numero": 46,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat][Milk]."
+  },
+  {
+   "numero": 47,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat]. Bote [Egg]."
+  },
+  {
+   "numero": 48,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "carne",
+     "n": 1
+    },
+    {
+     "op": "ovo",
+     "n": 1
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Meat]. Bote [Egg]."
+  },
+  {
+   "numero": 49,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ganhe",
+     "rec": "leite",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe [Milk][Milk]."
+  },
+  {
+   "numero": 50,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "escolha",
+     "diferentes": 2,
+     "opcoes": [
+      {
+       "rotulo": "dragao",
+       "efeito": [
+        {
+         "op": "dragao",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "caverna",
+       "efeito": [
+        {
+         "op": "caverna",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "qualquer",
+       "efeito": [
+        {
+         "op": "ganhe",
+         "rec": "qualquer",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "quem": "oponente",
+     "escolha": {
+      "diferentes": 1,
+      "opcoes": [
+       {
+        "rotulo": "dragao",
+        "efeito": [
+         {
+          "op": "dragao",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "rotulo": "caverna",
+        "efeito": [
+         {
+          "op": "caverna",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "rotulo": "qualquer",
+        "efeito": [
+         {
+          "op": "ganhe",
+          "rec": "qualquer",
+          "n": 1
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe 2 benefícios diferentes: [DragonCard]/[CaveCard]/[AnyResource]. Cada oponente ganha 1 benefício à escolha dele."
+  },
+  {
+   "numero": 51,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "escolha",
+     "diferentes": 2,
+     "opcoes": [
+      {
+       "rotulo": "dragao",
+       "efeito": [
+        {
+         "op": "dragao",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "caverna",
+       "efeito": [
+        {
+         "op": "caverna",
+         "n": 1
+        }
+       ]
+      },
+      {
+       "rotulo": "qualquer",
+       "efeito": [
+        {
+         "op": "ganhe",
+         "rec": "qualquer",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "quem": "oponente",
+     "escolha": {
+      "diferentes": 1,
+      "opcoes": [
+       {
+        "rotulo": "dragao",
+        "efeito": [
+         {
+          "op": "dragao",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "rotulo": "caverna",
+        "efeito": [
+         {
+          "op": "caverna",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "rotulo": "qualquer",
+        "efeito": [
+         {
+          "op": "ganhe",
+          "rec": "qualquer",
+          "n": 1
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "copias": 1,
+   "texto": "Ganhe 2 benefícios diferentes: [DragonCard]/[CaveCard]/[AnyResource]. Cada oponente ganha 1 benefício à escolha dele."
+  },
+  {
+   "numero": 52,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "jogarDragao",
+     "desconto": {
+      "escolha": [
+       "ovo",
+       "qualquer"
+      ],
+      "n": 1
+     }
+    }
+   ],
+   "copias": 1,
+   "texto": "Jogue imediatamente [DragonCard] com desconto de 1 [Egg] ou [AnyResource]."
+  },
+  {
+   "numero": 53,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "jogarDragao",
+     "desconto": {
+      "escolha": [
+       "ovo",
+       "qualquer"
+      ],
+      "n": 1
+     }
+    }
+   ],
+   "copias": 1,
+   "texto": "Jogue imediatamente [DragonCard] com desconto de 1 [Egg] ou [AnyResource]."
+  },
+  {
+   "numero": 54,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "jogarDragao",
+     "desconto": {
+      "escolha": [
+       "ovo",
+       "qualquer"
+      ],
+      "n": 1
+     }
+    }
+   ],
+   "copias": 1,
+   "texto": "Jogue imediatamente [DragonCard] com desconto de 1 [Egg] ou [AnyResource]."
+  },
+  {
+   "numero": 55,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 3
+    }
+   ],
+   "copias": 1,
+   "texto": "Bote [Egg][Egg][Egg]."
+  },
+  {
+   "numero": 56,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 3
+    }
+   ],
+   "copias": 1,
+   "texto": "Bote [Egg][Egg][Egg]."
+  },
+  {
+   "numero": 57,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "ovo",
+     "n": 3
+    }
+   ],
+   "copias": 1,
+   "texto": "Bote [Egg][Egg][Egg]."
+  },
+  {
+   "numero": 58,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "qualquer": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "baralho"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [AnyResource][AnyResource], depois compre [CaveCard] do baralho e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 59,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "qualquer": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "exibicao"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [AnyResource][AnyResource], depois ganhe [CaveCard] da exibição e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 60,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "caverna": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "baralho"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [CaveCard][CaveCard], depois compre [CaveCard] do baralho e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 61,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "caverna": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "exibicao"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [CaveCard][CaveCard], depois ganhe [CaveCard] da exibição e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 62,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "dragao": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "baralho"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [DragonCard][DragonCard], depois compre [CaveCard] do baralho e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 63,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "dragao": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "exibicao"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [DragonCard][DragonCard], depois ganhe [CaveCard] da exibição e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 64,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "ovo": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "baralho"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [Egg][Egg], depois compre [CaveCard] do baralho e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 65,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 1,
+     "pague": {
+      "ovo": 2
+     },
+     "ganhe": [
+      {
+       "op": "escavar",
+       "origem": "exibicao"
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Pague [Egg][Egg], depois ganhe [CaveCard] da exibição e jogue-a imediatamente de graça."
+  },
+  {
+   "numero": 66,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "trocarPosicao"
+    }
+   ],
+   "copias": 1,
+   "texto": "Troque a posição de quaisquer 2 dragões no seu tabuleiro de jogador. Ignore as preferências normais de caverna."
+  },
+  {
+   "numero": 67,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "inserir",
+     "origem": "baralho",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Insira [DragonCard][DragonCard] do baralho atrás de qualquer(quaisquer) dragão(ões)."
+  },
+  {
+   "numero": 68,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "inserir",
+     "origem": "baralho",
+     "n": 2
+    }
+   ],
+   "copias": 1,
+   "texto": "Insira [DragonCard][DragonCard] do baralho atrás de qualquer(quaisquer) dragão(ões)."
+  },
+  {
+   "numero": 69,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "qualquer": 1
+     },
+     "ganhe": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "qualquer": 1
+       },
+       "ganhe": [
+        {
+         "op": "guilda",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [AnyResource] para ganhar [DragonGuild]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 70,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "qualquer": 1
+     },
+     "ganhe": [
+      {
+       "op": "ovo",
+       "n": 2
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "qualquer": 1
+       },
+       "ganhe": [
+        {
+         "op": "ovo",
+         "n": 2
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [AnyResource] para botar [Egg][Egg]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 71,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "caverna": 1
+     },
+     "ganhe": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "caverna": 1
+       },
+       "ganhe": [
+        {
+         "op": "guilda",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [CaveCard] para ganhar [DragonGuild]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 72,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "dragao": 1
+     },
+     "ganhe": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "dragao": 1
+       },
+       "ganhe": [
+        {
+         "op": "guilda",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [DragonCard] para ganhar [DragonGuild]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 73,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "dragao": 1
+     },
+     "ganhe": [
+      {
+       "op": "ovo",
+       "n": 2
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "dragao": 1
+       },
+       "ganhe": [
+        {
+         "op": "ovo",
+         "n": 2
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [DragonCard] para botar [Egg][Egg]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 74,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "ovo": 1
+     },
+     "ganhe": [
+      {
+       "op": "ganhe",
+       "rec": "qualquer",
+       "n": 2
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "ovo": 1
+       },
+       "ganhe": [
+        {
+         "op": "ganhe",
+         "rec": "qualquer",
+         "n": 2
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [Egg] para ganhar [AnyResource][AnyResource]. Cada oponente pode fazer isso 1x."
+  },
+  {
+   "numero": 75,
+   "nome": null,
+   "efeito": [
+    {
+     "op": "troca",
+     "ate": 3,
+     "pague": {
+      "ovo": 1
+     },
+     "ganhe": [
+      {
+       "op": "guilda",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "op": "oponentes",
+     "efeito": [
+      {
+       "op": "troca",
+       "ate": 1,
+       "pague": {
+        "ovo": 1
+       },
+       "ganhe": [
+        {
+         "op": "guilda",
+         "n": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "copias": 1,
+   "texto": "Até 3x, pague [Egg] para ganhar [DragonGuild]. Cada oponente pode fazer isso 1x."
+  }
+ ]
 }
