@@ -7,24 +7,28 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --parchment-bg: #f3ead8;
-      --ink-dark: #261d15;
-      --crimson-cavern: #9e2a2b;
-      --golden-grotto: #c88a1e;
-      --amethyst-abyss: #6a3d8a;
+      --parchment-base: #efe3cb;
+      --parchment-light: #fbf6eb;
+      --parchment-dark: #dfd0b2;
+      --ink-brown: #2a1e17;
+      --leather-dark: #3b281e;
+      --crimson-cavern: #982b2b;
+      --golden-grotto: #c2841d;
+      --amethyst-abyss: #653b85;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--parchment-bg);
+      background-color: var(--parchment-base);
       background-image:
-        radial-gradient(circle at 10% 10%, rgba(158, 42, 43, 0.09) 0%, transparent 42%),
-        radial-gradient(circle at 90% 20%, rgba(200, 138, 30, 0.10) 0%, transparent 45%),
-        radial-gradient(circle at 50% 90%, rgba(106, 61, 138, 0.09) 0%, transparent 50%);
-      color: var(--ink-dark);
+        radial-gradient(ellipse at 15% 12%, rgba(152, 43, 43, 0.12) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 18%, rgba(194, 132, 29, 0.13) 0%, transparent 48%),
+        radial-gradient(ellipse at 50% 92%, rgba(101, 59, 133, 0.12) 0%, transparent 52%),
+        repeating-linear-gradient(45deg, rgba(139, 108, 66, 0.03) 0px, rgba(139, 108, 66, 0.03) 2px, transparent 2px, transparent 8px);
+      color: var(--ink-brown);
       min-height: 100vh;
     }
 
@@ -32,58 +36,105 @@
       font-family: 'Cinzel', serif;
     }
 
-    .parchment-panel {
-      background: linear-gradient(180deg, #fffdf8 0%, #f6eddc 100%);
-      border: 1px solid #d2be9e;
-      box-shadow: 0 4px 18px rgba(38, 29, 21, 0.08);
+    .font-serif-book {
+      font-family: 'Cormorant Garamond', serif;
     }
 
-    /* Estilo Físico das Cavernas em Aquarela */
+    /* Painéis estilo livro/pergaminho físico de Wyrmspan */
+    .parchment-panel {
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.65), transparent 60%),
+        linear-gradient(180deg, #fcf8ef 0%, #f1e4cb 100%);
+      border: 2px solid #bfa780;
+      box-shadow:
+        0 6px 22px rgba(42, 30, 23, 0.12),
+        inset 0 0 0 1px rgba(255, 253, 248, 0.75);
+    }
+
+    /* Tabuleiro Individual Físico */
+    .player-mat-frame {
+      background:
+        radial-gradient(ellipse at 0% 50%, rgba(120, 96, 72, 0.16) 0%, transparent 35%),
+        linear-gradient(180deg, #faf3e4 0%, #eadbc0 100%);
+      border: 3px solid #7c603e;
+      box-shadow:
+        0 12px 32px rgba(34, 22, 14, 0.22),
+        inset 0 0 28px rgba(138, 107, 68, 0.22);
+    }
+
+    /* Aquarela das 3 Cavernas Físicas */
     .cavern-row-0 {
-      background: linear-gradient(90deg, rgba(158, 42, 43, 0.24) 0%, rgba(220, 145, 140, 0.12) 45%, rgba(255, 250, 245, 0.75) 100%);
-      border-color: rgba(158, 42, 43, 0.55);
+      background:
+        radial-gradient(circle at 8% 30%, rgba(152, 43, 43, 0.34) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(185, 74, 68, 0.20) 0%, transparent 50%),
+        linear-gradient(90deg, rgba(152, 43, 43, 0.26) 0%, rgba(226, 162, 152, 0.16) 45%, rgba(252, 246, 242, 0.85) 100%);
+      border: 2px solid rgba(152, 43, 43, 0.65);
+      box-shadow: inset 0 2px 10px rgba(152, 43, 43, 0.12);
     }
     .cavern-row-1 {
-      background: linear-gradient(90deg, rgba(200, 138, 30, 0.25) 0%, rgba(235, 185, 95, 0.12) 45%, rgba(255, 252, 245, 0.75) 100%);
-      border-color: rgba(200, 138, 30, 0.6);
+      background:
+        radial-gradient(circle at 8% 30%, rgba(194, 132, 29, 0.34) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(224, 174, 72, 0.22) 0%, transparent 50%),
+        linear-gradient(90deg, rgba(194, 132, 29, 0.27) 0%, rgba(238, 196, 112, 0.16) 45%, rgba(253, 249, 238, 0.85) 100%);
+      border: 2px solid rgba(194, 132, 29, 0.70);
+      box-shadow: inset 0 2px 10px rgba(194, 132, 29, 0.12);
     }
     .cavern-row-2 {
-      background: linear-gradient(90deg, rgba(106, 61, 138, 0.24) 0%, rgba(175, 135, 205, 0.12) 45%, rgba(252, 248, 255, 0.75) 100%);
-      border-color: rgba(106, 61, 138, 0.55);
+      background:
+        radial-gradient(circle at 8% 30%, rgba(101, 59, 133, 0.34) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(150, 102, 186, 0.22) 0%, transparent 50%),
+        linear-gradient(90deg, rgba(101, 59, 133, 0.26) 0%, rgba(186, 146, 214, 0.16) 45%, rgba(250, 245, 254, 0.85) 100%);
+      border: 2px solid rgba(101, 59, 133, 0.65);
+      box-shadow: inset 0 2px 10px rgba(101, 59, 133, 0.12);
     }
 
-    /* Carta Física de Dragão */
+    /* Carta Física de Dragão (Visual idêntico ao baralho original) */
     .physical-dragon-card {
-      background: linear-gradient(180deg, #fcf8ee 0%, #f4ecda 100%);
-      border: 2px solid #b8a382;
-      box-shadow: 0 3px 10px rgba(38, 29, 21, 0.12), inset 0 0 18px rgba(184, 163, 130, 0.18);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      background:
+        radial-gradient(circle at 50% 35%, #fffef9 0%, #f5ebd6 65%, #e8d8b9 100%);
+      border: 2px solid #9c8159;
+      box-shadow:
+        0 4px 12px rgba(38, 26, 18, 0.18),
+        inset 0 0 0 1.5px rgba(255, 252, 244, 0.85),
+        inset 0 0 16px rgba(164, 134, 88, 0.22);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, border-color 0.2s ease;
       position: relative;
       overflow: hidden;
     }
     .physical-dragon-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 22px rgba(38, 29, 21, 0.18);
-      border-color: #8c6d3f;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(38, 26, 18, 0.24);
+      border-color: #6e522c;
     }
 
-    /* Carta Física de Caverna (Quadrada) */
+    /* Carta Física de Caverna (Quadrada, rocha escura com gruta iluminada) */
     .physical-cave-card {
-      background: linear-gradient(180deg, #2d2520 0%, #1c1714 100%);
-      border: 2px solid #786552;
-      box-shadow: 0 3px 10px rgba(28, 23, 20, 0.18);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      background: linear-gradient(180deg, #2a211c 0%, #17120f 100%);
+      border: 2px solid #6b5642;
+      box-shadow:
+        0 4px 12px rgba(23, 18, 15, 0.26),
+        inset 0 0 0 1px rgba(214, 188, 148, 0.25);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
       position: relative;
       overflow: hidden;
     }
     .physical-cave-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(28, 23, 20, 0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 22px rgba(23, 18, 15, 0.34);
+    }
+
+    /* Espaço de Caverna Não Escavado (Rocha texturizada) */
+    .unexcavated-rock-slot {
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.45), transparent 55%),
+        linear-gradient(180deg, rgba(226, 214, 194, 0.82) 0%, rgba(198, 181, 156, 0.88) 100%);
+      border: 1.5px dashed #7a654b;
+      box-shadow: inset 0 2px 8px rgba(58, 44, 30, 0.14);
     }
 
     /* Faixa diagonal do traço de personalidade */
     .trait-ribbon {
-      clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+      clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%);
     }
 
     /* Animação do Aventureiro explorando */
@@ -92,10 +143,10 @@
     }
     @keyframes bouncePulse {
       from { transform: translateY(0) scale(1); }
-      to { transform: translateY(-4px) scale(1.1); }
+      to { transform: translateY(-4px) scale(1.12); }
     }
 
-    /* Leque de cartas na mão do jogador (sobrepostas, sobem ao passar o mouse) */
+    /* Leque de cartas na mão do jogador */
     .hand-fan-container {
       display: flex;
       align-items: flex-end;
@@ -120,7 +171,6 @@
       box-shadow: 0 22px 38px rgba(28, 23, 20, 0.36);
     }
 
-    /* Animações de deslizamento e colocação suave das cartas no tabuleiro */
     .card-slotted-anim {
       animation: cardSlottedDrop 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -163,7 +213,6 @@
       }
     }
 
-    /* Mão Suspensa no canto inferior esquerdo */
     .hand-panel-floating {
       position: fixed;
       bottom: 14px;
@@ -199,20 +248,21 @@
 <body class="antialiased selection:bg-amber-200 selection:text-amber-950">
 
   <!-- ========================================================= -->
-  <!-- TELA 1: CONFIGURAÇÃO DA PARTIDA (SETUP)                   -->
+  <!-- TELA 1: CONFIGURAÇÃO DA PARTIDA (SETUP / LOBBY ONLINE)    -->
   <!-- ========================================================= -->
   <div id="setup-screen" class="max-w-5xl mx-auto px-4 py-8">
     <header class="text-center mb-8">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-900/10 border border-amber-800/25 text-amber-950 text-xs font-bold tracking-wider uppercase mb-3">
-        <span>🐉 Edição Física Digitalizada</span>
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-950/10 border border-amber-900/30 text-amber-950 text-xs font-bold tracking-wider uppercase mb-3">
+        <span id="header-crest-icon"></span>
+        <span>Edição Ilustrada</span>
         <span>•</span>
-        <span>Online (2–5 Jogadores)</span>
+        <span>Multiplayer Online (2–5 Jogadores)</span>
       </div>
-      <h1 class="font-display text-4xl sm:text-5xl font-black text-stone-900 tracking-tight">
+      <h1 class="font-display text-4xl sm:text-6xl font-black text-stone-900 tracking-wider drop-shadow-xs">
         WYRMSPAN
       </h1>
-      <p class="text-stone-700 mt-2 max-w-2xl mx-auto text-sm sm:text-base">
-        Escave cavernas ocultas, atraia dragões de todos os tamanhos e explore seu santuário ao longo de 4 rodadas para conquistar a Guilda do Dragão.
+      <p class="font-serif-book italic text-stone-700 mt-1.5 max-w-2xl mx-auto text-lg sm:text-xl">
+        Escave cavernas ocultas, atraia dragões majestosos e explore seu santuário ao longo de quatro rodadas para conquistar a Guilda do Dragão.
       </p>
     </header>
 
@@ -220,25 +270,25 @@
     <div id="lobby-connect" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="lg:col-span-7 parchment-panel rounded-2xl p-6 space-y-5">
         <div>
-          <h2 class="font-display text-xl font-bold text-stone-800 mb-2">1. Seu nome</h2>
+          <h2 class="font-display text-xl font-bold text-stone-900 mb-2">1. Nome do Dracologista</h2>
           <input id="my-name-input" type="text" maxlength="24" placeholder="Como você quer aparecer na mesa?"
-            class="w-full rounded-xl border border-stone-300 bg-white px-3 py-2.5 text-sm font-semibold text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-600" />
+            class="w-full rounded-xl border-2 border-stone-300 bg-white/90 px-3.5 py-2.5 text-sm font-semibold text-stone-900 focus:outline-none focus:border-amber-700" />
         </div>
 
         <div>
-          <h2 class="font-display text-xl font-bold text-stone-800 mb-2">2. Sala</h2>
+          <h2 class="font-display text-xl font-bold text-stone-900 mb-2">2. Sala de Jogo</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3">
-              <h3 class="font-display font-bold text-stone-800">Criar sala</h3>
-              <p class="text-xs text-stone-600">Você vira o anfitrião e recebe um código para enviar ao outro jogador.</p>
-              <button id="btn-create-room" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-800 via-amber-800 to-purple-900 text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
-                Criar sala →
+            <div class="p-4 rounded-xl bg-white/85 border border-stone-300 space-y-3">
+              <h3 class="font-display font-bold text-stone-900">Criar Nova Sala</h3>
+              <p class="text-xs text-stone-600">Você será o anfitrião e receberá um código de 4 letras para convidar os outros jogadores.</p>
+              <button id="btn-create-room" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8f2424] via-[#9e6718] to-[#562e75] text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
+                Criar Sala →
               </button>
             </div>
-            <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3">
-              <h3 class="font-display font-bold text-stone-800">Entrar numa sala</h3>
+            <div class="p-4 rounded-xl bg-white/85 border border-stone-300 space-y-3">
+              <h3 class="font-display font-bold text-stone-900">Entrar numa Sala</h3>
               <input id="join-code-input" type="text" maxlength="4" placeholder="CÓDIGO" autocapitalize="characters"
-                class="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-center font-display text-lg font-extrabold tracking-[0.4em] uppercase text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-600" />
+                class="w-full rounded-xl border-2 border-stone-300 bg-white px-3 py-2 text-center font-display text-lg font-extrabold tracking-[0.4em] uppercase text-stone-900 focus:outline-none focus:border-amber-700" />
               <button id="btn-join-room" class="w-full px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-display font-bold tracking-wide shadow-md active:scale-[0.99] transition cursor-pointer">
                 Entrar →
               </button>
@@ -250,20 +300,20 @@
 
       <div class="lg:col-span-5 space-y-6">
         <div class="parchment-panel rounded-2xl p-6">
-          <h2 class="font-display text-lg font-bold text-stone-800 mb-3">Como funciona</h2>
+          <h2 class="font-display text-lg font-bold text-stone-900 mb-3">Como Funciona</h2>
           <ol class="list-decimal pl-5 space-y-1.5 text-xs text-stone-700 leading-relaxed">
-            <li>Um de vocês cria a sala e manda o código (ou o link) para o outro.</li>
-            <li>Cada um escolhe suas 4 cartas e 3 recursos iniciais no próprio aparelho.</li>
-            <li>Na sua vez, você joga normalmente. Quando uma carta fizer o oponente decidir algo, o pop-up aparece na tela dele.</li>
-            <li>Se a conexão cair ou você recarregar a página, a partida continua de onde parou.</li>
+            <li>Crie uma sala e envie o código ou link direto aos demais dracologistas.</li>
+            <li>Cada jogador escolhe suas 4 cartas e 3 recursos iniciais no próprio dispositivo.</li>
+            <li>Na sua vez, escave cavernas, atraia dragões ou envie seu aventureiro para explorar.</li>
+            <li>A partida salva automaticamente no servidor e reconecta sem perdas caso a página recarregue.</li>
           </ol>
         </div>
         <div class="parchment-panel rounded-2xl p-6">
           <div class="flex items-center justify-between mb-1">
-            <h2 class="font-display text-lg font-bold text-stone-800">Baralho</h2>
-            <span id="deck-stats-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900">Carregando...</span>
+            <h2 class="font-display text-lg font-bold text-stone-900">Baralho Oficial</h2>
+            <span id="deck-stats-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-950 border border-emerald-300">Carregando...</span>
           </div>
-          <p class="text-xs text-stone-600">As cartas vêm do arquivo <code class="font-mono">cartas.json</code> do servidor.</p>
+          <p class="text-xs text-stone-600">Cartas sincronizadas diretamente de <code class="font-mono">cartas.json</code>.</p>
         </div>
       </div>
     </div>
@@ -273,36 +323,36 @@
       <div class="lg:col-span-7 parchment-panel rounded-2xl p-6">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
-            <div class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Código da sala</div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Código da Sala</div>
             <div id="lobby-room-code" class="font-display text-4xl font-black tracking-[0.3em] text-stone-900">----</div>
           </div>
-          <button id="btn-copy-link" class="px-4 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-400 text-amber-950 text-xs font-bold transition cursor-pointer">
-            🔗 Copiar link de convite
+          <button id="btn-copy-link" class="px-4 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-500 text-amber-950 text-xs font-bold transition cursor-pointer">
+            Copiar Link de Convite
           </button>
         </div>
 
-        <h2 class="font-display text-lg font-bold text-stone-800 mb-2">Dracologistas na sala</h2>
+        <h2 class="font-display text-lg font-bold text-stone-900 mb-2">Dracologistas na Mesa</h2>
         <div id="lobby-seats" class="space-y-2 mb-5"></div>
 
-        <div class="border-t border-stone-200 pt-4 flex flex-wrap items-center justify-between gap-3">
-          <div class="text-xs text-stone-600 max-w-sm">
-            <span class="font-bold text-stone-800">Preparação Oficial:</span> cada jogador começa com 6 Moedas, 1 Ovo, 4 cartas (entre 3 Dragões e 3 Cavernas sorteados) e 3 recursos à escolha.
+        <div class="border-t border-stone-300 pt-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-stone-700 max-w-sm">
+            <span class="font-bold text-stone-900">Preparação Oficial:</span> 6 Moedas, 1 Ovo, 4 cartas (escolhidas entre 3 Dragões e 3 Cavernas) e 3 recursos à escolha.
           </div>
           <div class="flex items-center gap-2 w-full sm:w-auto">
             <button id="btn-leave-room" class="px-4 py-3 rounded-xl border border-stone-300 bg-white hover:bg-stone-100 text-xs font-bold text-stone-700 cursor-pointer">Sair</button>
-            <button id="btn-close-room" class="hidden px-4 py-3 rounded-xl border border-red-300 bg-red-50 hover:bg-red-100 text-xs font-bold text-red-800 cursor-pointer">Encerrar sala</button>
-            <button id="btn-start-game" disabled class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-gradient-to-r from-red-800 via-amber-800 to-purple-900 disabled:opacity-40 disabled:cursor-not-allowed text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
+            <button id="btn-close-room" class="hidden px-4 py-3 rounded-xl border border-red-300 bg-red-50 hover:bg-red-100 text-xs font-bold text-red-800 cursor-pointer">Encerrar Sala</button>
+            <button id="btn-start-game" disabled class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-gradient-to-r from-[#8f2424] via-[#9e6718] to-[#562e75] disabled:opacity-40 disabled:cursor-not-allowed text-white font-display font-bold tracking-wide shadow-md hover:opacity-95 active:scale-[0.99] transition cursor-pointer">
               Iniciar Partida →
             </button>
           </div>
         </div>
-        <p id="lobby-wait-text" class="hidden mt-3 text-xs font-semibold text-amber-900">⏳ Aguardando o anfitrião iniciar a partida…</p>
+        <p id="lobby-wait-text" class="hidden mt-3 text-xs font-semibold text-amber-900">Aguardando o anfitrião iniciar a partida…</p>
         <p id="lobby-need-text" class="hidden mt-3 text-xs font-semibold text-amber-900">Aguardando pelo menos mais 1 jogador entrar na sala.</p>
       </div>
 
       <div class="lg:col-span-5 space-y-6">
         <div class="parchment-panel rounded-2xl p-6">
-          <h2 class="font-display text-lg font-bold text-stone-800 mb-3">Guilda & Objetivos <span class="text-[10px] font-bold text-stone-500 normal-case">(escolhida pelo anfitrião)</span></h2>
+          <h2 class="font-display text-lg font-bold text-stone-900 mb-3">Guilda & Objetivos <span class="text-[10px] font-bold text-stone-500 normal-case">(anfitrião)</span></h2>
           <div class="space-y-3">
             <div>
               <label class="block text-xs font-bold text-stone-600 uppercase mb-1">Ficha da Guilda do Dragão</label>
@@ -313,13 +363,10 @@
                 <option value="floresta_tropical">Guilda da Floresta Tropical</option>
               </select>
             </div>
-            <div class="p-3 rounded-xl bg-amber-50/90 border border-amber-300/80 text-xs text-stone-700 leading-relaxed">
-              <strong>Regras Fiéis ao Tabuleiro Físico:</strong>
-              <ul class="list-disc pl-4 mt-1 space-y-0.5">
-                <li><strong>Caverna Escarlate:</strong> Trilha concede 🌈 Recursos e estoca 2 recursos no final.</li>
-                <li><strong>Gruta Dourada:</strong> Trilha concede 🐉 Cartas de Dragão e insere 2 dragões no final.</li>
-                <li><strong>Abismo Ametista:</strong> Trilha concede 🪨 Cartas de Caverna e descarta até 2 cartas por 🥚 Ovos no final.</li>
-              </ul>
+            <div class="p-3 rounded-xl bg-amber-50/90 border border-amber-300/80 text-xs text-stone-800 leading-relaxed space-y-1">
+              <div><strong>Caverna Escarlate:</strong> Concede Recursos na trilha e estoca até 2 recursos no fim.</div>
+              <div><strong>Gruta Dourada:</strong> Concede Cartas de Dragão na trilha e insere até 2 dragões no fim.</div>
+              <div><strong>Abismo Ametista:</strong> Concede Cartas de Caverna na trilha e descarta até 2 cartas por Ovos no fim.</div>
             </div>
           </div>
         </div>
@@ -332,27 +379,27 @@
   <!-- ========================================================= -->
   <div id="draft-screen" class="hidden max-w-6xl mx-auto px-4 py-6">
     <div id="draft-waiting" class="hidden parchment-panel rounded-2xl p-10 text-center">
-      <div class="text-4xl mb-3">🥚</div>
-      <h2 class="font-display text-2xl font-bold text-stone-900 mb-1">Escolha enviada!</h2>
+      <div id="draft-wait-egg" class="flex justify-center mb-3"></div>
+      <h2 class="font-display text-2xl font-bold text-stone-900 mb-1">Escolha Inicial Enviada!</h2>
       <p id="draft-waiting-text" class="text-sm font-semibold text-amber-900"></p>
     </div>
     <div id="draft-main" class="parchment-panel rounded-2xl p-6">
-      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-stone-200 pb-4 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-stone-300 pb-4 mb-6">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Preparação Inicial</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-900">Preparação do Santuário</span>
           <h2 id="draft-player-title" class="font-display text-2xl sm:text-3xl font-bold text-stone-900">
             Vez de Jogador 1
           </h2>
-          <p class="text-xs sm:text-sm text-stone-600 mt-0.5">
+          <p class="text-xs sm:text-sm text-stone-700 mt-0.5">
             Selecione exatamente <strong>4 cartas</strong> no total (entre os 3 Dragões e 3 Cavernas sorteados) e <strong>3 recursos iniciais</strong>.
           </p>
         </div>
         <div class="flex items-center gap-3">
-          <div class="px-4 py-2 rounded-xl bg-stone-100 border border-stone-200 text-center">
+          <div class="px-4 py-2 rounded-xl bg-white/90 border border-stone-300 text-center">
             <div class="text-[11px] uppercase font-bold text-stone-500">Cartas</div>
             <div id="draft-cards-counter" class="text-lg font-extrabold text-stone-900">0 / 4</div>
           </div>
-          <div class="px-4 py-2 rounded-xl bg-stone-100 border border-stone-200 text-center">
+          <div class="px-4 py-2 rounded-xl bg-white/90 border border-stone-300 text-center">
             <div class="text-[11px] uppercase font-bold text-stone-500">Recursos</div>
             <div id="draft-res-counter" class="text-lg font-extrabold text-stone-900">0 / 3</div>
           </div>
@@ -360,10 +407,10 @@
       </div>
 
       <!-- Escolha de Recursos Iniciais -->
-      <div class="mb-6 p-4 rounded-2xl bg-amber-50/80 border border-amber-300">
+      <div class="mb-6 p-4 rounded-2xl bg-amber-50/90 border border-amber-400/70">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <span class="text-sm font-bold text-stone-800">Escolha 3 Recursos Iniciais (qualquer combinação):</span>
-          <button id="btn-clear-draft-res" class="text-xs font-bold text-amber-900 underline cursor-pointer">Limpar recursos</button>
+          <span class="text-sm font-bold text-stone-900">Escolha 3 Recursos Iniciais (qualquer combinação):</span>
+          <button id="btn-clear-draft-res" class="text-xs font-bold text-amber-950 underline cursor-pointer">Limpar recursos</button>
         </div>
         <div id="draft-resource-buttons" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
       </div>
@@ -371,21 +418,21 @@
       <!-- Cartas Sorteadas (3 Dragões + 3 Cavernas) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
         <div class="lg:col-span-6">
-          <h3 class="font-display text-base font-bold text-stone-800 mb-3">🐉 Seus 3 Dragões Sorteados (Clique para selecionar)</h3>
+          <h3 class="font-display text-base font-bold text-stone-900 mb-3">Seus 3 Dragões Sorteados</h3>
           <div id="draft-dragons-list" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
         </div>
         <div class="lg:col-span-4">
-          <h3 class="font-display text-base font-bold text-stone-800 mb-3">🪨 Suas 3 Cavernas Sorteadas</h3>
+          <h3 class="font-display text-base font-bold text-stone-900 mb-3">Suas 3 Cavernas Sorteadas</h3>
           <div id="draft-caves-list" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
         </div>
         <div class="lg:col-span-2">
-          <h3 class="font-display text-base font-bold text-stone-800 mb-3">✅ Selecionadas</h3>
-          <div id="draft-selected-preview" class="space-y-2 p-3 rounded-xl bg-white border border-stone-300 min-h-[180px]"></div>
+          <h3 class="font-display text-base font-bold text-stone-900 mb-3">Selecionadas</h3>
+          <div id="draft-selected-preview" class="space-y-2 p-3 rounded-xl bg-white/90 border border-stone-300 min-h-[180px]"></div>
         </div>
       </div>
 
-      <div class="flex justify-end border-t border-stone-200 pt-4">
-        <button id="btn-confirm-draft" disabled class="px-6 py-3 rounded-xl bg-emerald-700 disabled:bg-stone-300 disabled:text-stone-500 text-white font-display font-bold shadow transition cursor-pointer disabled:cursor-not-allowed">
+      <div class="flex justify-end border-t border-stone-300 pt-4">
+        <button id="btn-confirm-draft" disabled class="px-6 py-3 rounded-xl bg-emerald-800 disabled:bg-stone-300 disabled:text-stone-500 text-white font-display font-bold shadow transition cursor-pointer disabled:cursor-not-allowed">
           Confirmar Escolha Inicial →
         </button>
       </div>
@@ -393,11 +440,11 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- TELA 3: JOGO PRINCIPAL                                    -->
+  <!-- TELA 3: JOGO PRINCIPAL (TABULEIRO FÍSICO WYRMSPAN)        -->
   <!-- ========================================================= -->
-  <div id="game-screen" class="hidden max-w-[1520px] mx-auto px-3 sm:px-5 py-4 space-y-4">
+  <div id="game-screen" class="hidden max-w-[1540px] mx-auto px-3 sm:px-5 py-4 space-y-4">
     <!-- POP-UP FLUTUANTE FIXO NO TOPO: DESFAZER / CONFIRMAR JOGADA -->
-    <div id="floating-turn-banner" class="hidden fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[94vw] max-w-xl rounded-2xl bg-stone-950/95 text-amber-50 border-2 border-amber-400 shadow-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
+    <div id="floating-turn-banner" class="hidden fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[94vw] max-w-xl rounded-2xl bg-[#241913]/95 text-amber-50 border-2 border-amber-500 shadow-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
       <div class="flex items-center gap-2.5">
         <span class="w-3 h-3 rounded-full bg-amber-400 animate-ping"></span>
         <div>
@@ -410,126 +457,128 @@
         </div>
       </div>
       <div class="flex items-center gap-2 ml-auto">
-        <button id="btn-floating-undo" class="hidden px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-extrabold shadow transition cursor-pointer">
-          ↩️ Desfazer
+        <button id="btn-floating-undo" class="hidden px-3.5 py-2 rounded-xl bg-amber-700 hover:bg-amber-600 text-white text-xs font-extrabold shadow transition cursor-pointer">
+          ↩ Desfazer
         </button>
-        <button id="btn-floating-confirm" class="hidden px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow transition cursor-pointer">
-          ✅ Confirmar Jogada
+        <button id="btn-floating-confirm" class="hidden px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-extrabold shadow transition cursor-pointer">
+          ✓ Confirmar Jogada
         </button>
       </div>
     </div>
 
-    <div id="waiting-banner" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-full bg-stone-950/90 text-amber-100 border border-amber-400 text-xs font-bold shadow-xl"></div>
+    <div id="waiting-banner" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-full bg-[#241913]/95 text-amber-100 border border-amber-500 text-xs font-bold shadow-xl"></div>
 
-    <!-- Barra Superior: Rodada, Objetivos Públicos, Jogadores e Controles -->
+    <!-- Barra Superior: Marcador de Rodada, Trilhas de Objetivos, Jogadores e Controles -->
     <header class="parchment-panel rounded-2xl p-3 sm:p-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <!-- Info da Rodada -->
         <div class="flex items-center gap-3">
-          <div class="px-3.5 py-2 rounded-xl bg-stone-900 text-amber-100 text-center shadow-xs">
-            <div class="text-[10px] uppercase tracking-widest text-amber-300/80 font-bold">Rodada</div>
+          <div class="px-3.5 py-2 rounded-xl bg-[#2c1f18] border border-amber-600/60 text-amber-100 text-center shadow-xs">
+            <div class="text-[10px] uppercase tracking-widest text-amber-300/90 font-bold">Rodada</div>
             <div id="hud-round" class="font-display text-xl font-black leading-none mt-0.5">1 / 4</div>
           </div>
           <div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
               <span id="hud-active-player-dot" class="w-3.5 h-3.5 rounded-full inline-block border border-white shadow-xs"></span>
               <h1 id="hud-active-player-name" class="font-display text-lg sm:text-xl font-bold text-stone-900">
                 Turno de Jogador 1
               </h1>
-              <span id="hud-first-player-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 text-[10px] font-bold uppercase">
+              <span id="hud-first-player-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-200 border border-amber-500 text-amber-950 text-[10px] font-bold uppercase">
                 ★ Jogador Inicial
               </span>
-              <span id="conn-pill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900">🟢 Online</span>
-              <span id="hud-room-code" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-200 text-stone-700"></span>
+              <span id="conn-pill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-950">Online</span>
+              <span id="hud-room-code" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-200 text-stone-800"></span>
             </div>
-            <p class="text-xs text-stone-600">
-              Realize <strong>1 ação</strong> (Escavar, Atrair ou Explorar uma das 3 cavernas) ou <strong>Passe a rodada</strong>.
+            <p class="text-xs text-stone-700 mt-0.5">
+              Execute <strong>1 ação</strong> (Escavar, Atrair ou Explorar uma das 3 cavernas) ou <strong>Passe a rodada</strong>.
             </p>
           </div>
         </div>
 
-        <!-- Trilha de Objetivos das 4 Rodadas -->
+        <!-- Fichas de Objetivos das 4 Rodadas -->
         <div id="hud-objectives" class="flex flex-wrap items-center gap-2"></div>
 
         <!-- Botões Rápidos (Regras, Conversão 2:1, Passar) -->
         <div class="flex flex-wrap items-center gap-2">
-          <button id="btn-open-trade-2to1" class="px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-400 text-amber-950 text-xs font-bold transition cursor-pointer" title="A qualquer momento, troque 2 recursos quaisquer por 1 recurso à sua escolha">
-            🔄 Trocar 2:1
+          <button id="btn-open-trade-2to1" class="px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-500 text-amber-950 text-xs font-bold transition cursor-pointer" title="A qualquer momento, troque 2 recursos quaisquer por 1 recurso à sua escolha">
+            Trocar 2:1
           </button>
           <button id="btn-close-room-hud" class="hidden px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-300 text-red-800 text-xs font-bold transition cursor-pointer" title="Fecha a sala para todos">
-            🚪 Encerrar sala
+            Encerrar Sala
           </button>
-          <button id="btn-open-rules" class="px-3 py-2 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-700 text-xs font-bold transition cursor-pointer">
-            📖 Regras
+          <button id="btn-open-rules" class="px-3 py-2 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 text-xs font-bold transition cursor-pointer">
+            Regras
           </button>
-          <button id="btn-pass-round" class="px-4 py-2 rounded-xl bg-red-800 hover:bg-red-700 text-white text-xs font-bold shadow-sm transition cursor-pointer">
+          <button id="btn-pass-round" class="px-4 py-2 rounded-xl bg-[#8f2424] hover:bg-[#751c1c] text-white text-xs font-bold shadow-sm transition cursor-pointer">
             Passar Rodada
           </button>
         </div>
       </div>
 
       <!-- Abas de Jogadores -->
-      <div class="mt-3 pt-3 border-t border-stone-200/80 flex flex-wrap items-center justify-between gap-2">
+      <div class="mt-3 pt-3 border-t border-stone-300/80 flex flex-wrap items-center justify-between gap-2">
         <div id="player-tabs" class="flex flex-wrap items-center gap-2"></div>
-        <div id="viewing-opponent-banner" class="hidden text-xs font-bold text-amber-950 bg-amber-200/80 px-3 py-1 rounded-full border border-amber-400">
-          👁️ Inspecionando Tabuleiro de Oponente
+        <div id="viewing-opponent-banner" class="hidden text-xs font-bold text-amber-950 bg-amber-200/90 px-3 py-1 rounded-full border border-amber-500">
+          Inspecionando Santuário de Oponente
         </div>
       </div>
     </header>
 
     <!-- Grid Principal: Tabuleiro Individual (Esquerda) + Mercado, Guilda e Log (Direita) -->
     <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
-      <!-- COLUNA ESQUERDA (8 cols): Tabuleiro Individual + Mão do Jogador -->
+      <!-- COLUNA ESQUERDA (8 cols): Tabuleiro Individual Físico + Mão do Jogador -->
       <div id="left-play-column" class="xl:col-span-8 flex flex-col gap-4">
         <!-- Tabuleiro Individual Estilo Físico -->
-        <div id="individual-board-panel" class="parchment-panel rounded-2xl p-3 sm:p-4 order-1">
-          <!-- Barra de Recursos e Ações de Escavar / Atrair -->
-          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-stone-200">
+        <div id="individual-board-panel" class="player-mat-frame rounded-2xl p-3 sm:p-4 order-1">
+          <!-- Barra de Suprimento do Jogador e Ações Principais -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b-2 border-[#bfa780]">
             <div id="player-resources-bar" class="flex flex-wrap items-center gap-2"></div>
 
             <div id="action-buttons-bar" class="flex flex-wrap items-center gap-2">
-              <button id="btn-action-excavate" class="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
-                <span>⛏️ Escavar</span>
-                <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">1💰+</span>
+              <button id="btn-action-excavate" class="px-3.5 py-2 rounded-xl bg-[#2c1f18] hover:bg-[#3e2c22] border border-amber-700/60 text-amber-50 text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                <span id="btn-excavate-icon"></span>
+                <span>Escavar</span>
+                <span class="text-[10px] bg-white/15 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">1<span class="inline-coin-xs"></span>+</span>
               </button>
-              <button id="btn-action-entice" class="px-3.5 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
-                <span>🐉 Atrair</span>
-                <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">1💰+Custo</span>
+              <button id="btn-action-entice" class="px-3.5 py-2 rounded-xl bg-emerald-900 hover:bg-emerald-800 border border-emerald-600/60 text-emerald-50 text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                <span id="btn-entice-icon"></span>
+                <span>Atrair</span>
+                <span class="text-[10px] bg-white/15 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">1<span class="inline-coin-xs"></span>+Custo</span>
               </button>
             </div>
           </div>
 
-          <!-- Corpo do Tabuleiro Individual (Coluna de Regras & Ninhos à Esquerda + 3 Cavernas) -->
+          <!-- Corpo do Tabuleiro Individual (Coluna Naturalista de Regras & Ninhos à Esquerda + 3 Cavernas) -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
             <!-- Painel Esquerdo do Tabuleiro Físico -->
-            <div class="lg:col-span-2 rounded-xl bg-gradient-to-b from-rose-950/10 via-amber-900/10 to-purple-950/10 border border-stone-300 p-2.5 flex flex-col justify-between text-xs">
-              <div class="space-y-2.5">
-                <div class="p-2 rounded-lg bg-white/80 border border-stone-200">
-                  <div class="font-display font-bold text-[11px] text-stone-900 uppercase">Escavar</div>
-                  <div class="text-[10px] text-stone-600 leading-tight mt-0.5">1💰 + custo coluna. Jogue 🪨 mais à esquerda.</div>
+            <div class="lg:col-span-2 rounded-xl bg-gradient-to-b from-[#ede0c9] via-[#e5d4b6] to-[#dcc7a4] border-2 border-[#9e835c] p-2.5 flex flex-col justify-between text-xs shadow-inner">
+              <div class="space-y-2">
+                <div class="p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
+                  <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Escavar</div>
+                  <div class="text-[10px] text-stone-700 leading-tight mt-0.5">Pague 1 Moeda + custo da coluna. Jogue uma Carta de Caverna mais à esquerda.</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white/80 border border-stone-200">
-                  <div class="font-display font-bold text-[11px] text-stone-900 uppercase">Atrair</div>
-                  <div class="text-[10px] text-stone-600 leading-tight mt-0.5">1💰 + custo 🐉 no espaço escavado mais à esquerda.</div>
+                <div class="p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
+                  <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Atrair</div>
+                  <div class="text-[10px] text-stone-700 leading-tight mt-0.5">Pague 1 Moeda + custo do Dragão no espaço escavado mais à esquerda.</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white/80 border border-stone-200">
-                  <div class="font-display font-bold text-[11px] text-stone-900 uppercase">Explorar</div>
-                  <div class="text-[10px] text-stone-600 leading-tight mt-0.5">Mova 🧭 da esq. p/ dir. até alcançar um ⛔.</div>
+                <div class="p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
+                  <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Explorar</div>
+                  <div class="text-[10px] text-stone-700 leading-tight mt-0.5">Mova seu Aventureiro da esq. p/ dir. até encontrar uma placa de PARE.</div>
                 </div>
               </div>
 
               <!-- Base do Aventureiro e 2 Ninhos Iniciais -->
               <div class="mt-3 space-y-2">
-                <div class="p-2 rounded-xl bg-white border border-stone-300 flex items-center gap-2 shadow-2xs">
-                  <span id="adventurer-token" class="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold shadow">🧭</span>
+                <div class="p-2 rounded-xl bg-[#fcf8ef] border-2 border-[#9e835c] flex items-center gap-2 shadow-xs">
+                  <span id="adventurer-token" class="w-7 h-7 rounded-full flex items-center justify-center text-white shadow border border-white shrink-0"></span>
                   <div>
-                    <div class="text-[10px] font-bold uppercase text-stone-500">Base</div>
-                    <div class="text-[11px] font-bold text-stone-800 leading-none">Aventureiro</div>
+                    <div class="text-[9px] font-extrabold uppercase tracking-wider text-stone-500">Ponto de Partida</div>
+                    <div class="font-display text-[11px] font-extrabold text-stone-900 leading-none">Aventureiro</div>
                   </div>
                 </div>
 
-                <div class="p-2 rounded-xl bg-white border border-stone-300 text-center shadow-2xs">
-                  <div class="text-[10px] font-bold uppercase text-stone-500 mb-1">Armazene 2 Ovos:</div>
+                <div class="p-2 rounded-xl bg-[#fcf8ef] border-2 border-[#9e835c] text-center shadow-xs">
+                  <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-stone-700 mb-1.5">Ninhos Iniciais (2)</div>
                   <div id="base-nests-container" class="flex items-center justify-center gap-2"></div>
                 </div>
               </div>
@@ -540,40 +589,40 @@
           </div>
         </div>
 
-        <!-- Mão do Jogador (Com Leque Interativo e 3 Posições: Abaixo, Acima ou Suspensa) -->
+        <!-- Mão do Jogador (Com Leque Interativo e 3 Posições) -->
         <div id="player-hand-panel" class="parchment-panel rounded-2xl p-3 sm:p-4 order-2 transition-all">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
             <div class="flex items-center gap-2">
-              <h2 class="font-display text-base font-bold text-stone-900">🃏 Mão do Jogador</h2>
-              <span id="hand-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-stone-200 text-stone-800">0 / 9</span>
+              <h2 class="font-display text-base font-bold text-stone-900">Mão do Dracologista</h2>
+              <span id="hand-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-stone-200 text-stone-900">0 / 9</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="text-[11px] text-stone-500 hidden sm:inline mr-1">Posição da mão:</span>
+              <span class="text-[11px] text-stone-600 hidden sm:inline mr-1">Posição da mão:</span>
               <button id="btn-hand-pos-bottom" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900" title="Exibir mão abaixo do tabuleiro">
-                ⬇️ Abaixo
+                Abaixo
               </button>
               <button id="btn-hand-pos-top" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Exibir mão acima do tabuleiro">
-                ⬆️ Acima
+                Acima
               </button>
               <button id="btn-hand-pos-floating" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Deixar mão suspensa no canto inferior esquerdo">
-                ↙️ Suspensa
+                Suspensa
               </button>
             </div>
           </div>
-          <div class="text-[11px] text-stone-500 mb-1">Passe o mouse sobre uma carta para erguê-la e ler; clique para jogar.</div>
+          <div class="text-[11px] text-stone-600 mb-1">Passe o cursor sobre uma carta para erguê-la e ler; clique para jogar no santuário.</div>
           <div id="player-hand-container" class="hand-fan-container"></div>
         </div>
       </div>
 
       <!-- COLUNA DIREITA (4 cols): Exibição de Cartas, Guilda do Dragão e Log -->
       <div class="xl:col-span-4 space-y-4">
-        <!-- Vitrine Pública da Última Jogada (Visível para todos na mesa) -->
-        <div id="public-last-play-panel" class="parchment-panel rounded-2xl p-4 border-2 border-amber-500/50 bg-gradient-to-b from-amber-50/90 to-[#f6eddc]">
+        <!-- Vitrine Pública da Última Jogada -->
+        <div id="public-last-play-panel" class="parchment-panel rounded-2xl p-4 border-2 border-amber-600/60">
           <div class="flex items-center justify-between mb-2">
-            <h2 class="font-display text-sm font-extrabold text-amber-950 uppercase tracking-wider flex items-center gap-1.5">
-              <span>📣 Última Jogada na Mesa</span>
+            <h2 class="font-display text-sm font-extrabold text-amber-950 uppercase tracking-wider">
+              Última Jogada na Mesa
             </h2>
-            <span class="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-950 text-[10px] font-bold uppercase">Público</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-200/90 border border-amber-400 text-amber-950 text-[10px] font-bold uppercase">Público</span>
           </div>
           <div id="public-last-play-content" class="text-xs text-stone-600">
             Aguardando a primeira ação da partida...
@@ -583,46 +632,47 @@
         <!-- Exibição Central de Cartas -->
         <div class="parchment-panel rounded-2xl p-4">
           <div class="flex items-center justify-between mb-2">
-            <h2 class="font-display text-base font-bold text-stone-900">🏛️ Exibição de Cartas</h2>
-            <div class="flex items-center gap-2 text-[11px] font-bold text-stone-600">
-              <span id="deck-dragons-count">🐉 Baralho: 0</span>
+            <h2 class="font-display text-base font-bold text-stone-900">Exibição de Cartas</h2>
+            <div class="flex items-center gap-2.5 text-[11px] font-bold text-stone-700">
+              <span id="deck-dragons-count" class="inline-flex items-center gap-1"></span>
               <span>•</span>
-              <span id="deck-caves-count">🪨 Baralho: 0</span>
+              <span id="deck-caves-count" class="inline-flex items-center gap-1"></span>
             </div>
           </div>
 
           <div class="space-y-3">
             <div>
-              <div class="text-[11px] font-bold uppercase text-stone-500 mb-1.5">Dragões Disponíveis na Exibição</div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">Dragões Disponíveis</div>
               <div id="display-dragons" class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-2.5"></div>
             </div>
             <div>
-              <div class="text-[11px] font-bold uppercase text-stone-500 mb-1.5">Cartas de Caverna Disponíveis</div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">Cartas de Caverna Disponíveis</div>
               <div id="display-caves" class="grid grid-cols-3 gap-2"></div>
             </div>
           </div>
         </div>
 
-        <!-- Tabuleiro da Guilda do Dragão -->
+        <!-- Tabuleiro da Guilda do Dragão (Anel Circular Físico) -->
         <div class="parchment-panel rounded-2xl p-4">
           <div class="flex items-center justify-between mb-1">
-            <h2 id="guild-title" class="font-display text-base font-bold text-stone-900">🛡️ Guilda do Dragão</h2>
-            <span class="text-[11px] text-stone-500 font-semibold">Trilha de 12 passos</span>
+            <h2 id="guild-title" class="font-display text-base font-bold text-stone-900">Guilda do Dragão</h2>
+            <span class="text-[11px] text-stone-600 font-semibold">Trilha Circular (12)</span>
           </div>
-          <p id="guild-subtitle" class="text-xs text-stone-600 mb-3"></p>
+          <p id="guild-subtitle" class="text-xs text-stone-700 mb-3"></p>
 
-          <div id="guild-track-grid" class="grid grid-cols-4 gap-1.5 mb-3"></div>
+          <!-- Trilha Circular de 12 Casas ao redor do Emblema -->
+          <div id="guild-track-ring" class="grid grid-cols-4 gap-1.5 mb-3"></div>
 
-          <div class="rounded-xl bg-amber-950/5 border border-amber-900/20 p-2.5">
-            <div class="text-[11px] font-bold uppercase text-amber-950 mb-1.5">Ficha Central (ao parar nos marcos marrons):</div>
+          <div class="rounded-xl bg-[#2c1f18]/5 border border-[#9e835c]/50 p-2.5">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-[#3b281e] mb-1.5">Medalhão Central (ao parar nos marcos marrons):</div>
             <div id="guild-center-slots" class="space-y-1.5"></div>
           </div>
         </div>
 
         <!-- Registro de Eventos (Log) -->
         <div class="parchment-panel rounded-2xl p-4">
-          <h2 class="font-display text-sm font-bold text-stone-800 uppercase tracking-wider mb-2">📜 Crônicas da Partida</h2>
-          <div id="game-log" class="h-44 overflow-y-auto space-y-1.5 text-xs text-stone-700 pr-1"></div>
+          <h2 class="font-display text-sm font-bold text-stone-900 uppercase tracking-wider mb-2">Crônicas do Santuário</h2>
+          <div id="game-log" class="h-44 overflow-y-auto space-y-1.5 text-xs text-stone-800 pr-1"></div>
         </div>
       </div>
     </div>
@@ -634,25 +684,25 @@
   <div id="gameover-screen" class="hidden max-w-5xl mx-auto px-4 py-8">
     <div class="parchment-panel rounded-2xl p-6 sm:p-8">
       <div class="text-center mb-6">
-        <div class="inline-block px-4 py-1 rounded-full bg-amber-200 text-amber-950 text-xs font-bold uppercase tracking-wider mb-2">
+        <div class="inline-block px-4 py-1 rounded-full bg-amber-200 border border-amber-500 text-amber-950 text-xs font-bold uppercase tracking-wider mb-2">
           Fim das 4 Rodadas
         </div>
         <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-stone-900">
-          🏆 Pontuação Final do Santuário
+          Pontuação Final do Santuário
         </h1>
         <p id="winner-announcement" class="text-base sm:text-lg font-semibold text-amber-900 mt-2"></p>
       </div>
 
-      <div class="overflow-x-auto rounded-xl border border-stone-300 bg-white mb-6">
+      <div class="overflow-x-auto rounded-xl border-2 border-[#bfa780] bg-white mb-6">
         <table id="final-score-table" class="w-full text-sm text-left border-collapse"></table>
       </div>
 
       <div class="flex justify-center">
         <button onclick="requestNewMatch()" class="px-6 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-display font-bold shadow transition cursor-pointer">
-          Nova Partida (voltar à sala)
+          Nova Partida (Voltar à Sala)
         </button>
         <button id="btn-close-room-over" class="hidden ml-3 px-6 py-3 rounded-xl border border-red-300 bg-red-50 hover:bg-red-100 text-red-800 font-display font-bold shadow transition cursor-pointer">
-          Encerrar sala
+          Encerrar Sala
         </button>
       </div>
     </div>
@@ -662,13 +712,13 @@
   <!-- MODAL GENÉRICO PARA INTERAÇÕES, ESCOLHAS E REGRAS         -->
   <!-- ========================================================= -->
   <div id="modal-backdrop" class="hidden fixed inset-0 z-50 bg-stone-950/65 backdrop-blur-xs flex items-center justify-center p-4">
-    <div id="modal-box" class="parchment-panel rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border-2 border-amber-900/40">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-stone-200">
+    <div id="modal-box" class="parchment-panel rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border-2 border-[#7c603e]">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-stone-300">
         <h3 id="modal-title" class="font-display text-lg font-bold text-stone-900">Título</h3>
-        <button id="modal-close-btn" class="w-8 h-8 rounded-full hover:bg-stone-200/80 flex items-center justify-center text-stone-600 font-bold cursor-pointer">✕</button>
+        <button id="modal-close-btn" class="w-8 h-8 rounded-full hover:bg-stone-200/80 flex items-center justify-center text-stone-700 font-bold cursor-pointer">✕</button>
       </div>
       <div id="modal-body" class="p-5 overflow-y-auto space-y-4 text-sm text-stone-800"></div>
-      <div id="modal-footer" class="px-5 py-3 border-t border-stone-200 flex justify-end gap-2 bg-stone-50/80 rounded-b-2xl"></div>
+      <div id="modal-footer" class="px-5 py-3 border-t border-stone-300 flex justify-end gap-2 bg-[#f4e8d1] rounded-b-2xl"></div>
     </div>
   </div>
 
@@ -681,7 +731,106 @@
 
   <script>
     /* =========================================================================
-       1. CONSTANTES, METADADOS DO TABULEIRO FÍSICO E BANCO DE DADOS JSON
+       1. SIMBOLOGIA OFICIAL EM SVG (WYRMSPAN PHYSICAL ICONOGRAPHY)
+       ========================================================================= */
+    const WYRMSPAN_ICONS = {
+      carne: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Carne">
+          <path d="M5 14.5C3.5 11.5 5.5 6.5 10.5 5C15.5 3.5 20.5 6 20.5 10.5C20.5 15 16.5 18.5 12 18.5C9.5 18.5 6.5 17.5 5 14.5Z" fill="#b8292f" stroke="#5e1114" stroke-width="1.6"/>
+          <path d="M8 12.5C7.5 10.5 9 8 12 7.2C14.8 6.5 17.5 8 17.5 10.5C17.5 13 15 15 12.2 15C10.2 15 8.5 14 8 12.5Z" fill="#e05358"/>
+          <circle cx="13.5" cy="11" r="2.2" fill="#fbf3e4" stroke="#7a5d3e" stroke-width="1"/>
+        </svg>`,
+      ouro: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Ouro">
+          <polygon points="7,4 16,3 21,9 19,17 11,21 4,17 3,10" fill="#eab308" stroke="#713f12" stroke-width="1.6"/>
+          <polygon points="8,6 15,5 18,10 12,13 6,10" fill="#fde047" opacity="0.85"/>
+          <polygon points="12,13 18,10 17,16 11,19" fill="#ca8a04"/>
+        </svg>`,
+      cristal: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Cristal">
+          <polygon points="12,2 19,8 17,20 12,22 7,20 5,8" fill="#8b5cf6" stroke="#3b0764" stroke-width="1.6"/>
+          <polygon points="12,2 16,8 12,14 8,8" fill="#c4b5fd"/>
+          <polygon points="16,8 19,8 17,20 12,14" fill="#6d28d9"/>
+        </svg>`,
+      leite: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Leite">
+          <path d="M8 3H16V5.5L18 8.5V19C18 20.1 17.1 21 16 21H8C6.9 21 6 20.1 6 19V8.5L8 5.5V3Z" fill="#f8fafc" stroke="#1e3a5f" stroke-width="1.6"/>
+          <rect x="7.5" y="2.2" width="9" height="2" rx="1" fill="#38bdf8" stroke="#1e3a5f" stroke-width="1.1"/>
+          <path d="M6.8 12.5H17.2V18.8C17.2 19.5 16.6 20 16 20H8C7.4 20 6.8 19.5 6.8 18.8V12.5Z" fill="#bae6fd"/>
+        </svg>`,
+      qualquer: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Recurso Qualquer">
+          <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="#fffbeb" stroke="#451a03" stroke-width="1.6"/>
+          <path d="M12 2L21 7L12 12L3 7Z" fill="#dc2626"/>
+          <path d="M21 7L21 17L12 22L12 12Z" fill="#eab308"/>
+          <path d="M3 7L12 12L12 22L3 17Z" fill="#7c3aed"/>
+        </svg>`,
+      moeda: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Moeda">
+          <circle cx="12" cy="12" r="9.5" fill="#d4af37" stroke="#5c3a12" stroke-width="1.7"/>
+          <circle cx="12" cy="12" r="6.8" fill="none" stroke="#fef08a" stroke-width="1.1" stroke-dasharray="2 1.5"/>
+          <path d="M9.5 14.5C9.5 11.5 11 9.5 13.5 9.5C15 9.5 15.5 10.8 14.2 11.8C13 12.6 13.5 14.5 15 15" fill="none" stroke="#5c3a12" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>`,
+      ovo: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Ovo">
+          <path d="M12 2.5C16.5 2.5 19.2 9.2 19.2 14.2C19.2 18.6 16 21.5 12 21.5C8 21.5 4.8 18.6 4.8 14.2C4.8 9.2 7.5 2.5 12 2.5Z" fill="#fdf6e3" stroke="#7c5e3c" stroke-width="1.6"/>
+          <circle cx="9.8" cy="11.5" r="1.2" fill="#c2a378"/>
+          <circle cx="14.5" cy="14.5" r="1.4" fill="#c2a378"/>
+          <circle cx="11" cy="17.2" r="0.9" fill="#c2a378"/>
+        </svg>`,
+      dragao: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Carta de Dragão">
+          <rect x="4" y="2.5" width="16" height="19" rx="2.5" fill="#f6ebd6" stroke="#4a3520" stroke-width="1.7"/>
+          <path d="M8 15C8 11 10.5 8 13.5 8C15.5 8 16.5 9.5 15 11C13.5 12.2 14.5 14.5 16.5 15.5" fill="none" stroke="#982b2b" stroke-width="2" stroke-linecap="round"/>
+          <path d="M11 8L9.5 5.5M13.5 8L14.5 5.5" stroke="#982b2b" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>`,
+      caverna: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Carta de Caverna">
+          <rect x="3" y="3" width="18" height="18" rx="2.5" fill="#29201b" stroke="#7c603e" stroke-width="1.7"/>
+          <path d="M6 20V13C6 9.5 9 7.5 12 7.5C15 7.5 18 9.5 18 13V20H15.5V13.5C15.5 11.2 14 10 12 10C10 10 8.5 11.2 8.5 13.5V20H6Z" fill="#d6b98c"/>
+        </svg>`,
+      guilda: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Guilda do Dragão">
+          <path d="M12 2.5L20 6V12.2C20 17.1 16.6 20.6 12 22C7.4 20.6 4 17.1 4 12.2V6L12 2.5Z" fill="#8f2424" stroke="#3b1810" stroke-width="1.6"/>
+          <path d="M12 5.5L17 7.8V12C17 15.4 14.8 17.9 12 19C9.2 17.9 7 15.4 7 12V7.8L12 5.5Z" fill="#f59e0b"/>
+        </svg>`,
+      pare: (cls = "w-5 h-5") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Pare">
+          <polygon points="8,2 16,2 22,8 22,16 16,22 8,22 2,16 2,8" fill="#b91c1c" stroke="#fef2f2" stroke-width="1.6"/>
+          <rect x="6.5" y="10.8" width="11" height="2.6" rx="1" fill="#ffffff"/>
+        </svg>`,
+      aventureiro: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Aventureiro">
+          <circle cx="12" cy="7.5" r="3.5" fill="currentColor"/>
+          <path d="M6.5 20C6.5 16 9 13.5 12 13.5C15 13.5 17.5 16 17.5 20Z" fill="currentColor"/>
+          <path d="M7.5 6.8H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+      jogado: (cls = "w-3.5 h-3.5") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Quando Jogado">
+          <path d="M12 3V15M12 15L7 10M12 15L17 10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M5 19H19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>`,
+      rodada: (cls = "w-3.5 h-3.5") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Uma vez por rodada">
+          <path d="M6 3H18M6 21H18M8 3L12 10L16 3M8 21L12 14L16 21" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>`,
+      fim: (cls = "w-3.5 h-3.5") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Fim de Partida">
+          <polygon points="12,2.5 14.9,8.5 21.5,9.4 16.7,14 17.9,20.5 12,17.4 6.1,20.5 7.3,14 2.5,9.4 9.1,8.5" fill="currentColor"/>
+        </svg>`,
+      estocar: (cls = "w-4 h-4") => `
+        <svg viewBox="0 0 24 24" class="${cls} inline-block shrink-0" aria-label="Estocar">
+          <path d="M4 9L12 4L20 9V18L12 22L4 18V9Z" fill="#d97706" stroke="#451a03" stroke-width="1.6"/>
+          <path d="M4 9L12 14L20 9" fill="none" stroke="#fef3c7" stroke-width="1.5"/>
+        </svg>`
+    };
+
+    function getIconHtml(name, cls = "w-4 h-4") {
+      return WYRMSPAN_ICONS[name] ? WYRMSPAN_ICONS[name](cls) : "";
+    }
+
+    /* =========================================================================
+       2. CONSTANTES E METADADOS DO TABULEIRO FÍSICO
        ========================================================================= */
     const PLAYER_COLORS = [
       { name: "Carmesim", hex: "#9e2a2b", bg: "bg-red-800" },
@@ -691,74 +840,73 @@
       { name: "Safira", hex: "#1d4ed8", bg: "bg-blue-700" }
     ];
 
-    // Metadados exatos de cada uma das 3 cavernas conforme a arte do tabuleiro físico
     const CAVERNS_META = [
       {
         id: 0,
         nome: "Caverna Escarlate",
-        cor: "#9e2a2b",
-        lineBg: "#d98284",
+        cor: "#982b2b",
+        lineBg: "#c96d6d",
         badge: "bg-red-100 text-red-950 border-red-400",
         pathSteps: [
-          { icon: "🌈", label: "Ganhe 1 Recurso", type: "resource_any" },
-          { icon: "🛡️", label: "Ganhe 1 Guilda", type: "guild" },
-          { icon: "🌈", label: "Ganhe 1 Recurso", type: "resource_any" },
-          { icon: "🥚", label: "Bote 1 Ovo", type: "egg" }
+          { iconName: "qualquer", label: "Ganhe 1 Recurso", type: "resource_any" },
+          { iconName: "guilda", label: "Ganhe 1 Guilda", type: "guild" },
+          { iconName: "qualquer", label: "Ganhe 1 Recurso", type: "resource_any" },
+          { iconName: "ovo", label: "Bote 1 Ovo", type: "egg" }
         ],
-        fimIcon: "📦",
+        fimIconName: "estocar",
         fimDesc: "Estoque até 2 recursos do seu suprimento em quaisquer Dragões."
       },
       {
         id: 1,
         nome: "Gruta Dourada",
-        cor: "#c88a1e",
-        lineBg: "#e3b964",
+        cor: "#c2841d",
+        lineBg: "#dba74c",
         badge: "bg-amber-100 text-amber-950 border-amber-400",
         pathSteps: [
-          { icon: "🐉", label: "Ganhe 1 Dragão", type: "dragon_card" },
-          { icon: "🛡️", label: "Ganhe 1 Guilda", type: "guild" },
-          { icon: "🐉", label: "Ganhe 1 Dragão", type: "dragon_card" },
-          { icon: "🥚", label: "Bote 1 Ovo", type: "egg" }
+          { iconName: "dragao", label: "Ganhe 1 Dragão", type: "dragon_card" },
+          { iconName: "guilda", label: "Ganhe 1 Guilda", type: "guild" },
+          { iconName: "dragao", label: "Ganhe 1 Dragão", type: "dragon_card" },
+          { iconName: "ovo", label: "Bote 1 Ovo", type: "egg" }
         ],
-        fimIcon: "🃏",
+        fimIconName: "dragao",
         fimDesc: "Insira até 2 Dragões da sua mão em quaisquer Dragões."
       },
       {
         id: 2,
         nome: "Abismo Ametista",
-        cor: "#6a3d8a",
-        lineBg: "#b38cd1",
+        cor: "#653b85",
+        lineBg: "#a179bf",
         badge: "bg-purple-100 text-purple-950 border-purple-400",
         pathSteps: [
-          { icon: "🪨", label: "Ganhe 1 Caverna", type: "cave_card" },
-          { icon: "🛡️", label: "Ganhe 1 Guilda", type: "guild" },
-          { icon: "🪨", label: "Ganhe 1 Caverna", type: "cave_card" },
-          { icon: "🥚", label: "Bote 1 Ovo", type: "egg" }
+          { iconName: "caverna", label: "Ganhe 1 Caverna", type: "cave_card" },
+          { iconName: "guilda", label: "Ganhe 1 Guilda", type: "guild" },
+          { iconName: "caverna", label: "Ganhe 1 Caverna", type: "cave_card" },
+          { iconName: "ovo", label: "Bote 1 Ovo", type: "egg" }
         ],
-        fimIcon: "🗑️",
+        fimIconName: "ovo",
         fimDesc: "Descarte até 2 cartas da sua mão. Bote 1 Ovo por carta descartada."
       }
     ];
 
     const RESOURCE_META = {
-      carne:   { label: "Carne",   icon: "🥩", color: "bg-rose-100 text-rose-950 border-rose-300" },
-      ouro:    { label: "Ouro",    icon: "🪙", color: "bg-amber-100 text-amber-950 border-amber-300" },
-      cristal: { label: "Cristal", icon: "💎", color: "bg-purple-100 text-purple-950 border-purple-300" },
-      leite:   { label: "Leite",   icon: "🥛", color: "bg-sky-100 text-sky-950 border-sky-300" }
+      carne:   { label: "Carne",   iconName: "carne",   color: "bg-rose-100 text-rose-950 border-rose-300" },
+      ouro:    { label: "Ouro",    iconName: "ouro",    color: "bg-amber-100 text-amber-950 border-amber-300" },
+      cristal: { label: "Cristal", iconName: "cristal", color: "bg-purple-100 text-purple-950 border-purple-300" },
+      leite:   { label: "Leite",   iconName: "leite",   color: "bg-sky-100 text-sky-950 border-sky-300" }
     };
 
     const ABILITY_TYPE_META = {
-      jogado:  { label: "Quando Jogado", icon: "📥", badgeBg: "bg-emerald-800 text-white" },
-      ativado: { label: "Se Ativado",    icon: "🧭", badgeBg: "bg-stone-900 text-amber-200" },
-      rodada:  { label: "1x / Rodada",   icon: "⏳", badgeBg: "bg-indigo-900 text-white" },
-      fim:     { label: "Fim de Partida",icon: "🏆", badgeBg: "bg-purple-900 text-white" }
+      jogado:  { label: "Quando Jogado", iconName: "jogado",      badgeBg: "bg-emerald-900 text-emerald-100" },
+      ativado: { label: "Se Ativado",    iconName: "aventureiro", badgeBg: "bg-[#2c1f18] text-amber-200" },
+      rodada:  { label: "1x / Rodada",   iconName: "rodada",      badgeBg: "bg-indigo-950 text-indigo-100" },
+      fim:     { label: "Fim de Partida",iconName: "fim",         badgeBg: "bg-purple-950 text-purple-100" }
     };
 
     const TRAIT_COLORS = {
-      agressivo:  "bg-orange-600 text-white",
-      timido:     "bg-sky-600 text-white",
-      brincalhao: "bg-pink-600 text-white",
-      prestativo: "bg-emerald-600 text-white"
+      agressivo:  "bg-[#b83b2b] text-white",
+      timido:     "bg-[#2c6e8a] text-white",
+      brincalhao: "bg-[#b84a7c] text-white",
+      prestativo: "bg-[#2b7a4b] text-white"
     };
 
     const SIZE_LABELS = {
@@ -768,22 +916,20 @@
       grande: "GRANDE"
     };
 
-    // As cartas (dragões e cavernas) ficam em public/cartas.json — edite lá.
-
-    // Trilha da Guilda do Dragão (12 passos em sentido horário)
+    // Trilha Circular da Guilda do Dragão (12 passos em sentido horário)
     const GUILD_TRACK_STEPS = [
-      { idx: 0, label: "INÍCIO", icon: "🛡️", isBrown: true, reward: null },
-      { idx: 1, label: "Ovo", icon: "🥚", isBrown: false, reward: { op: "ovo", n: 1 } },
-      { idx: 2, label: "Carne", icon: "🥩", isBrown: false, reward: { op: "ganhe", rec: "carne", n: 1 } },
-      { idx: 3, label: "Dragão", icon: "🐉", isBrown: false, reward: { op: "dragao", n: 1 } },
-      { idx: 4, label: "Caverna", icon: "🪨", isBrown: false, reward: { op: "caverna", n: 1 } },
-      { idx: 5, label: "Cristal", icon: "💎", isBrown: false, reward: { op: "ganhe", rec: "cristal", n: 1 } },
-      { idx: 6, label: "MARCO SUL", icon: "🛡️", isBrown: true, reward: null },
-      { idx: 7, label: "Ovo", icon: "🥚", isBrown: false, reward: { op: "ovo", n: 1 } },
-      { idx: 8, label: "Ouro", icon: "🪙", isBrown: false, reward: { op: "ganhe", rec: "ouro", n: 1 } },
-      { idx: 9, label: "Dragão", icon: "🐉", isBrown: false, reward: { op: "dragao", n: 1 } },
-      { idx: 10, label: "Moeda", icon: "💰", isBrown: false, reward: { op: "moeda", n: 1 } },
-      { idx: 11, label: "Leite", icon: "🥛", isBrown: false, reward: { op: "ganhe", rec: "leite", n: 1 } }
+      { idx: 0, label: "INÍCIO", iconName: "guilda", isBrown: true, reward: null },
+      { idx: 1, label: "Ovo", iconName: "ovo", isBrown: false, reward: { op: "ovo", n: 1 } },
+      { idx: 2, label: "Carne", iconName: "carne", isBrown: false, reward: { op: "ganhe", rec: "carne", n: 1 } },
+      { idx: 3, label: "Dragão", iconName: "dragao", isBrown: false, reward: { op: "dragao", n: 1 } },
+      { idx: 4, label: "Caverna", iconName: "caverna", isBrown: false, reward: { op: "caverna", n: 1 } },
+      { idx: 5, label: "Cristal", iconName: "cristal", isBrown: false, reward: { op: "ganhe", rec: "cristal", n: 1 } },
+      { idx: 6, label: "MARCO SUL", iconName: "guilda", isBrown: true, reward: null },
+      { idx: 7, label: "Ovo", iconName: "ovo", isBrown: false, reward: { op: "ovo", n: 1 } },
+      { idx: 8, label: "Ouro", iconName: "ouro", isBrown: false, reward: { op: "ganhe", rec: "ouro", n: 1 } },
+      { idx: 9, label: "Dragão", iconName: "dragao", isBrown: false, reward: { op: "dragao", n: 1 } },
+      { idx: 10, label: "Moeda", iconName: "moeda", isBrown: false, reward: { op: "moeda", n: 1 } },
+      { idx: 11, label: "Leite", iconName: "leite", isBrown: false, reward: { op: "ganhe", rec: "leite", n: 1 } }
     ];
 
     const GUILD_SHEETS = {
@@ -855,18 +1001,18 @@
     ];
 
     /* =========================================================================
-       2. ILUSTRAÇÕES VETORIAIS (SVG) PARA CARTAS FÍSICAS DE DRAGÃO E CAVERNA
+       3. ILUSTRAÇÕES EM AQUARELA NATURALISTA (SVG) PARA CARTAS FÍSICAS
        ========================================================================= */
     function getDragonIllustrationSVG(card) {
       const hue = ((card.numero * 47) % 360);
-      const primaryColor = `hsl(${hue}, 42%, 34%)`;
-      const accentColor = `hsl(${(hue + 35) % 360}, 55%, 52%)`;
-      const auraColor = `hsl(${hue}, 45%, 88%)`;
+      const primaryColor = `hsl(${hue}, 44%, 32%)`;
+      const accentColor = `hsl(${(hue + 35) % 360}, 58%, 48%)`;
+      const auraColor = `hsl(${hue}, 48%, 87%)`;
 
       if (card.tam === "filhote") {
         return `
           <svg viewBox="0 0 120 74" class="w-full h-16">
-            <circle cx="60" cy="40" r="28" fill="${auraColor}" opacity="0.75"/>
+            <circle cx="60" cy="40" r="28" fill="${auraColor}" opacity="0.8"/>
             <path d="M44 54 C40 36, 52 22, 64 24 C74 26, 78 38, 72 52 Z" fill="${primaryColor}"/>
             <circle cx="62" cy="24" r="11" fill="${primaryColor}"/>
             <path d="M55 15 L51 8 L59 14 Z M67 15 L72 8 L64 14 Z" fill="${accentColor}"/>
@@ -881,8 +1027,8 @@
       if (card.tam === "grande") {
         return `
           <svg viewBox="0 0 120 74" class="w-full h-16">
-            <ellipse cx="60" cy="42" rx="36" ry="24" fill="${auraColor}" opacity="0.7"/>
-            <path d="M22 44 C12 20, 38 10, 54 28 C72 8, 102 18, 96 42 C82 34, 68 36, 58 44 C46 36, 34 36, 22 44 Z" fill="${accentColor}" opacity="0.85"/>
+            <ellipse cx="60" cy="42" rx="36" ry="24" fill="${auraColor}" opacity="0.75"/>
+            <path d="M22 44 C12 20, 38 10, 54 28 C72 8, 102 18, 96 42 C82 34, 68 36, 58 44 C46 36, 34 36, 22 44 Z" fill="${accentColor}" opacity="0.88"/>
             <path d="M52 56 C48 38, 54 20, 62 14 C68 22, 70 40, 64 58 Q78 64 90 54" stroke="${primaryColor}" stroke-width="6" fill="none" stroke-linecap="round"/>
             <path d="M58 14 L53 6 L61 11 L66 5 L64 14 Z" fill="${primaryColor}"/>
             <circle cx="61" cy="16" r="1.6" fill="#fef08a"/>
@@ -893,19 +1039,18 @@
       if (card.tam === "medio") {
         return `
           <svg viewBox="0 0 120 74" class="w-full h-16">
-            <circle cx="62" cy="38" r="26" fill="${auraColor}" opacity="0.75"/>
-            <path d="M32 48 Q46 20 62 34 Q78 16 92 42 Q74 38 60 46 Q46 38 32 48 Z" fill="${accentColor}" opacity="0.8"/>
+            <circle cx="62" cy="38" r="26" fill="${auraColor}" opacity="0.8"/>
+            <path d="M32 48 Q46 20 62 34 Q78 16 92 42 Q74 38 60 46 Q46 38 32 48 Z" fill="${accentColor}" opacity="0.82"/>
             <path d="M36 56 C48 48, 52 24, 64 20 C72 18, 76 26, 68 32 C62 36, 68 52, 84 56" stroke="${primaryColor}" stroke-width="5.5" fill="none" stroke-linecap="round"/>
             <circle cx="67" cy="22" r="1.6" fill="#fff"/>
           </svg>
         `;
       }
 
-      // Pequeno
       return `
         <svg viewBox="0 0 120 74" class="w-full h-16">
-          <circle cx="60" cy="38" r="24" fill="${auraColor}" opacity="0.75"/>
-          <path d="M38 38 C26 24, 46 18, 58 32 C70 18, 90 24, 78 38 Z" fill="${accentColor}" opacity="0.85"/>
+          <circle cx="60" cy="38" r="24" fill="${auraColor}" opacity="0.8"/>
+          <path d="M38 38 C26 24, 46 18, 58 32 C70 18, 90 24, 78 38 Z" fill="${accentColor}" opacity="0.86"/>
           <path d="M52 52 C50 38, 56 26, 62 24 C68 26, 70 38, 66 52 Q76 58 84 50" stroke="${primaryColor}" stroke-width="5" fill="none" stroke-linecap="round"/>
           <circle cx="62" cy="26" r="1.5" fill="#fff"/>
         </svg>
@@ -914,29 +1059,44 @@
 
     function getCaveIllustrationSVG(card) {
       const variants = [
-        { bg: "#5c2628", arch: "#9e2a2b", glow: "#f4a261" },
-        { bg: "#5c4318", arch: "#c88a1e", glow: "#fde047" },
-        { bg: "#3b2352", arch: "#6a3d8a", glow: "#d8b4fe" }
+        { bg: "#612527", arch: "#982b2b", glow: "#f4a261" },
+        { bg: "#5c4116", arch: "#c2841d", glow: "#fde047" },
+        { bg: "#3b2254", arch: "#653b85", glow: "#d8b4fe" }
       ];
       const v = variants[card.numero % variants.length];
       return `
         <svg viewBox="0 0 120 56" class="w-full h-12 rounded-t-lg">
           <rect width="120" height="56" fill="${v.bg}"/>
-          <circle cx="60" cy="40" r="26" fill="${v.glow}" opacity="0.28"/>
-          <path d="M0 56 L0 12 Q35 2 60 14 Q88 2 120 14 L120 56 L92 56 Q86 24 60 24 Q34 24 28 56 Z" fill="#1f1916"/>
+          <circle cx="60" cy="40" r="26" fill="${v.glow}" opacity="0.32"/>
+          <path d="M0 56 L0 12 Q35 2 60 14 Q88 2 120 14 L120 56 L92 56 Q86 24 60 24 Q34 24 28 56 Z" fill="#1a1411"/>
           <path d="M38 14 L42 26 L46 15 M72 14 L76 25 L80 15" fill="#3a2f2a"/>
         </svg>
       `;
     }
 
     /* =========================================================================
-       3. ESTADO GLOBAL DO JOGO
+       4. ESTADO GLOBAL DO JOGO E CONTROLES DE INTERFACE
        ========================================================================= */
     let cardDatabase = { dragoes: [], cavernas: [] };
-
     let gameState = null;
     let turnSnapshot = null;
-    let handLayoutMode = "bottom"; // 'bottom' | 'top' | 'floating'
+    let handLayoutMode = "bottom";
+
+    function initStaticIcons() {
+      const crest = document.getElementById("header-crest-icon");
+      if (crest) crest.innerHTML = getIconHtml("guilda", "w-4 h-4");
+      const draftEgg = document.getElementById("draft-wait-egg");
+      if (draftEgg) draftEgg.innerHTML = getIconHtml("ovo", "w-12 h-12");
+      const excIcon = document.getElementById("btn-excavate-icon");
+      if (excIcon) excIcon.innerHTML = getIconHtml("caverna", "w-4 h-4");
+      const entIcon = document.getElementById("btn-entice-icon");
+      if (entIcon) entIcon.innerHTML = getIconHtml("dragao", "w-4 h-4");
+      const advToken = document.getElementById("adventurer-token");
+      if (advToken) advToken.innerHTML = getIconHtml("aventureiro", "w-4 h-4 text-white");
+      document.querySelectorAll(".inline-coin-xs").forEach(el => {
+        el.innerHTML = getIconHtml("moeda", "w-3 h-3");
+      });
+    }
 
     function stateSig(s) {
       const { viewingPlayerIdx, justPlacedSlot, adventurerPos, ...rest } = s;
@@ -955,7 +1115,7 @@
       gameState.viewingPlayerIdx = keepView;
       gameState.justPlacedSlot = null;
       gameState.adventurerPos = null;
-      showToast("↩️ Jogada desfeita! Estado do início do turno restaurado.", "info");
+      showToast("Jogada desfeita! Estado do início do turno restaurado.", "info");
       renderAll();
     }
 
@@ -989,7 +1149,7 @@
     }
 
     /* =========================================================================
-       4. UTILITÁRIOS GERAIS E FORMATAÇÃO
+       5. UTILITÁRIOS DE FORMATAÇÃO COM SÍMBOLOS OFICIAIS
        ========================================================================= */
     function shuffle(array) {
       const arr = [...array];
@@ -1003,32 +1163,31 @@
     function formatCardText(text) {
       if (!text) return "";
       return text
-        .replace(/\[Milk\]/g, `<span class="inline-block text-xs mx-0.5" title="Leite">🥛</span>`)
-        .replace(/\[Meat\]/g, `<span class="inline-block text-xs mx-0.5" title="Carne">🥩</span>`)
-        .replace(/\[Gold\]/g, `<span class="inline-block text-xs mx-0.5" title="Ouro">🪙</span>`)
-        .replace(/\[Crystal\]/g, `<span class="inline-block text-xs mx-0.5" title="Cristal">💎</span>`)
-        .replace(/\[AnyResource\]/g, `<span class="inline-block text-xs mx-0.5" title="Recurso Qualquer">🌈</span>`)
-        .replace(/\[Coin\]/g, `<span class="inline-block text-xs mx-0.5" title="Moeda">💰</span>`)
-        .replace(/\[Egg\]/g, `<span class="inline-block text-xs mx-0.5" title="Ovo">🥚</span>`)
-        .replace(/\[DragonCard\]/g, `<span class="inline-block text-xs mx-0.5" title="Carta de Dragão">🐉</span>`)
-        .replace(/\[CaveCard\]/g, `<span class="inline-block text-xs mx-0.5" title="Carta de Caverna">🪨</span>`)
-        .replace(/\[DragonGuild\]/g, `<span class="inline-block text-xs mx-0.5" title="Avanço na Guilda">🛡️</span>`)
-        .replace(/\[WhenPlayed\]/g, `<span class="inline-block text-xs mx-0.5" title="Quando Jogado">📥</span>`)
-        .replace(/\[Adventurer\]/g, `<span class="inline-block text-xs mx-0.5" title="Se Ativado">🧭</span>`)
-        .replace(/\[OncePerRound(?:-v2)?\]/g, `<span class="inline-block text-xs mx-0.5" title="Uma vez por rodada">⏳</span>`)
-        .replace(/\[EndGame\]/g, `<span class="inline-block text-xs mx-0.5" title="Fim de Partida">🏆</span>`)
-        .replace(/\[VP-(\d+)\]/g, `<span class="inline-flex items-center px-1 rounded bg-amber-200/80 text-stone-950 font-extrabold text-[10px] mx-0.5" title="$1 Pontos de Vitória">⭐$1</span>`);
+        .replace(/\[Milk\]/g, `<span class="inline-flex align-middle mx-0.5" title="Leite">${getIconHtml("leite", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[Meat\]/g, `<span class="inline-flex align-middle mx-0.5" title="Carne">${getIconHtml("carne", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[Gold\]/g, `<span class="inline-flex align-middle mx-0.5" title="Ouro">${getIconHtml("ouro", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[Crystal\]/g, `<span class="inline-flex align-middle mx-0.5" title="Cristal">${getIconHtml("cristal", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[AnyResource\]/g, `<span class="inline-flex align-middle mx-0.5" title="Recurso Qualquer">${getIconHtml("qualquer", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[Coin\]/g, `<span class="inline-flex align-middle mx-0.5" title="Moeda">${getIconHtml("moeda", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[Egg\]/g, `<span class="inline-flex align-middle mx-0.5" title="Ovo">${getIconHtml("ovo", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[DragonCard\]/g, `<span class="inline-flex align-middle mx-0.5" title="Carta de Dragão">${getIconHtml("dragao", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[CaveCard\]/g, `<span class="inline-flex align-middle mx-0.5" title="Carta de Caverna">${getIconHtml("caverna", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[DragonGuild\]/g, `<span class="inline-flex align-middle mx-0.5" title="Avanço na Guilda">${getIconHtml("guilda", "w-3.5 h-3.5")}</span>`)
+        .replace(/\[WhenPlayed\]/g, `<span class="inline-flex items-center px-1 py-0.2 rounded bg-emerald-900 text-white mx-0.5" title="Quando Jogado">${getIconHtml("jogado", "w-3 h-3")}</span>`)
+        .replace(/\[Adventurer\]/g, `<span class="inline-flex items-center px-1 py-0.2 rounded bg-stone-800 text-amber-200 mx-0.5" title="Se Ativado">${getIconHtml("aventureiro", "w-3 h-3")}</span>`)
+        .replace(/\[OncePerRound(?:-v2)?\]/g, `<span class="inline-flex items-center px-1 py-0.2 rounded bg-indigo-950 text-white mx-0.5" title="Uma vez por rodada">${getIconHtml("rodada", "w-3 h-3")}</span>`)
+        .replace(/\[EndGame\]/g, `<span class="inline-flex items-center px-1 py-0.2 rounded bg-purple-950 text-amber-200 mx-0.5" title="Fim de Partida">${getIconHtml("fim", "w-3 h-3")}</span>`)
+        .replace(/\[VP-(\d+)\]/g, `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-amber-200 border border-amber-600 text-stone-950 font-display font-black text-[9.5px] mx-0.5" title="$1 Pontos de Vitória">$1</span>`);
     }
 
     function formatCostIconsOnly(custo) {
       if (!custo || Object.keys(custo).length === 0) {
-        return `<span class="text-[10px] font-bold text-amber-200/80 uppercase tracking-wider">Sem Custo</span>`;
+        return `<span class="text-[9.5px] font-bold text-amber-200/85 uppercase tracking-wider">Sem Custo</span>`;
       }
-      const map = { ovo: "🥚", moeda: "💰", carne: "🥩", ouro: "🪙", cristal: "💎", leite: "🥛" };
       let html = "";
       for (const [k, v] of Object.entries(custo)) {
         for (let i = 0; i < v; i++) {
-          html += `<span class="inline-flex items-center justify-center text-xs drop-shadow-xs">${map[k] || k}</span>`;
+          html += `<span class="inline-flex items-center justify-center drop-shadow-xs">${getIconHtml(k, "w-3.5 h-3.5")}</span>`;
         }
       }
       return html;
@@ -1038,10 +1197,10 @@
       const container = document.getElementById("toast-container");
       const el = document.createElement("div");
       const colors = {
-        info: "bg-stone-900 text-amber-50 border-amber-500/40",
-        success: "bg-emerald-900 text-emerald-50 border-emerald-400/40",
-        warn: "bg-amber-900 text-amber-50 border-amber-300/40",
-        error: "bg-red-900 text-red-50 border-red-400/40"
+        info: "bg-[#2c1f18] text-amber-50 border-amber-500/50",
+        success: "bg-emerald-950 text-emerald-50 border-emerald-400/50",
+        warn: "bg-amber-950 text-amber-50 border-amber-300/50",
+        error: "bg-red-950 text-red-50 border-red-400/50"
       };
       el.className = `px-4 py-2.5 rounded-xl border shadow-lg text-xs font-semibold transition-all duration-300 ${colors[type] || colors.info}`;
       el.textContent = msg;
@@ -1060,9 +1219,6 @@
       renderLog();
     }
 
-    /* =========================================================================
-       5. CONFIGURAÇÃO INICIAL (SETUP SCREEN)
-       ========================================================================= */
     function updateDeckStatsBadge() {
       const totalDragons = cardDatabase.dragoes.reduce((acc, c) => acc + (c.copias || 1), 0);
       const totalCaves = cardDatabase.cavernas.reduce((acc, c) => acc + (c.copias || 1), 0);
@@ -1205,7 +1361,7 @@
             ? `<div class="text-xs text-stone-400 text-center py-6">Nenhuma carta selecionada ainda</div>`
             : selectedObjs.map(c => `
                 <div class="p-2 rounded-lg border ${c.cardType === 'dragon' ? 'bg-emerald-50 border-emerald-300' : 'bg-amber-50 border-amber-300'} text-xs">
-                  <div class="font-bold text-stone-900 truncate">${c.cardType === 'dragon' ? `🐉 ${c.nome}` : `🪨 Caverna #${c.numero}`}</div>
+                  <div class="font-bold text-stone-900 truncate flex items-center gap-1">${getIconHtml(c.cardType === 'dragon' ? 'dragao' : 'caverna', 'w-3.5 h-3.5')} <span>${c.cardType === 'dragon' ? c.nome : `Caverna #${c.numero}`}</span></div>
                   <div class="text-[10px] text-stone-600 mt-0.5">${c.cardType === 'dragon' ? formatCostIconsOnly(c.custo) : 'Carta de Caverna'}</div>
                 </div>
               `).join("");
@@ -1219,7 +1375,7 @@
           const count = currentDraftSelectedResources.filter(r => r === key).length;
           const btn = document.createElement("button");
           btn.className = `p-3 rounded-xl border ${meta.color} flex items-center justify-between font-bold text-sm shadow-xs hover:brightness-95 transition cursor-pointer`;
-          btn.innerHTML = `<span>${meta.icon} ${meta.label}</span><span class="px-2 py-0.5 rounded-full bg-white/85 text-xs">${count}</span>`;
+          btn.innerHTML = `<span class="inline-flex items-center gap-1.5">${getIconHtml(meta.iconName, "w-5 h-5")} ${meta.label}</span><span class="px-2 py-0.5 rounded-full bg-white/90 text-xs">${count}</span>`;
           btn.onclick = () => {
             if (currentDraftSelectedResources.length < 3) {
               currentDraftSelectedResources.push(key);
@@ -1253,12 +1409,12 @@
             }
             const isSel = currentDraftSelectedCards.has(card.uid);
             el.classList.toggle("ring-4", isSel);
-            el.classList.toggle("ring-emerald-600", isSel);
+            el.classList.toggle("ring-emerald-700", isSel);
             el.querySelector(".draft-selected-badge")?.classList.toggle("hidden", !isSel);
             updateCounters();
           }
         });
-        el.insertAdjacentHTML("afterbegin", `<div class="draft-selected-badge hidden bg-emerald-600 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionada</div>`);
+        el.insertAdjacentHTML("afterbegin", `<div class="draft-selected-badge hidden bg-emerald-800 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionada</div>`);
         dList.appendChild(el);
       });
 
@@ -1276,12 +1432,12 @@
             }
             const isSel = currentDraftSelectedCards.has(card.uid);
             el.classList.toggle("ring-4", isSel);
-            el.classList.toggle("ring-emerald-600", isSel);
+            el.classList.toggle("ring-emerald-700", isSel);
             el.querySelector(".draft-selected-badge")?.classList.toggle("hidden", !isSel);
             updateCounters();
           }
         });
-        el.insertAdjacentHTML("afterbegin", `<div class="draft-selected-badge hidden bg-emerald-600 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionada</div>`);
+        el.insertAdjacentHTML("afterbegin", `<div class="draft-selected-badge hidden bg-emerald-800 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionada</div>`);
         cList.appendChild(el);
       });
 
@@ -1402,34 +1558,34 @@
         // 3 retângulos laterais à esquerda (Escarlate, Dourada, Ametista) como na carta física
         const habRects = [0, 1, 2].map(hIdx => {
           const active = (card.hab || []).includes(hIdx);
-          const bgColors = ["#9e2a2b", "#c88a1e", "#6a3d8a"];
-          return `<div class="w-3.5 h-5 rounded-r-xs border border-stone-400/80" style="background:${active ? bgColors[hIdx] : '#ffffff'}"></div>`;
+          const bgColors = ["#982b2b", "#c2841d", "#653b85"];
+          return `<div class="w-3.5 h-5 rounded-r-xs border border-stone-500/80 shadow-2xs" style="background:${active ? bgColors[hIdx] : '#fbf6eb'}"></div>`;
         }).join("");
 
-        // Ícones de ninhos à direita
+        // Ícones oficiais de ninhos à direita
         let nestsHtml = "";
         for (let i = 0; i < (card.ninhos || 0); i++) {
-          nestsHtml += `<span class="text-xs leading-none" title="Espaço de Ninho">🥚</span>`;
+          nestsHtml += `<span title="Espaço de Ninho">${getIconHtml("ovo", "w-3.5 h-3.5")}</span>`;
         }
 
-        el.className = `physical-dragon-card rounded-xl flex flex-col justify-between ${options.selectable ? 'cursor-pointer' : ''} ${options.selected ? 'ring-3 ring-emerald-600' : ''}`;
+        el.className = `physical-dragon-card rounded-xl flex flex-col justify-between ${options.selectable ? 'cursor-pointer' : ''} ${options.selected ? 'ring-3 ring-emerald-700' : ''}`;
         el.innerHTML = `
           <div>
-            <!-- Título no topo estilo pergaminho físico -->
-            <div class="px-2.5 pt-2 pb-1 text-center border-b border-stone-300/70">
+            <!-- Cabeçalho em pergaminho ornamentado -->
+            <div class="px-2.5 pt-2 pb-1 text-center border-b border-[#cbb591] bg-gradient-to-b from-white/75 to-transparent">
               <h4 class="font-display text-xs font-extrabold text-stone-900 uppercase tracking-tight leading-tight line-clamp-1" title="${card.nome}">
                 ${card.nome}
               </h4>
             </div>
 
-            <!-- Faixa marrom escura de custo + Emblema de PV e Tamanho -->
-            <div class="flex items-center justify-between px-2 py-1 bg-gradient-to-r from-[#3a2a21] to-[#594436] text-white">
+            <!-- Faixa marrom-couro de custo + Medalhão circular dourado de PV e Tamanho -->
+            <div class="flex items-center justify-between px-2 py-1 bg-gradient-to-r from-[#38251c] via-[#4c3428] to-[#38251c] text-white border-y border-[#6e5038]">
               <div class="flex items-center gap-1 flex-wrap">
                 ${formatCostIconsOnly(card.custo)}
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <span class="text-[9px] font-extrabold tracking-wider text-amber-200">${SIZE_LABELS[card.tam] || ''}</span>
-                <span class="w-6 h-6 rounded-full bg-amber-100 border-2 border-amber-500 text-stone-950 font-display text-xs font-black flex items-center justify-center shadow-xs" title="Pontos de Vitória">
+                <span class="text-[8.5px] font-extrabold tracking-widest text-amber-200">${SIZE_LABELS[card.tam] || ''}</span>
+                <span class="w-6 h-6 rounded-full bg-gradient-to-b from-[#fef3c7] to-[#f59e0b] border-2 border-[#78350f] text-stone-950 font-display text-xs font-black flex items-center justify-center shadow-xs" title="Pontos de Vitória">
                   ${card.pv}
                 </span>
               </div>
@@ -1439,7 +1595,7 @@
             <div class="relative flex items-center justify-between py-1.5 pr-2">
               <div class="flex flex-col gap-1 z-10">
                 ${habRects}
-                <span class="text-[9px] font-bold text-stone-500 pl-1 mt-0.5">${card.numero}</span>
+                <span class="text-[9px] font-bold text-stone-600 pl-1 mt-0.5">${card.numero}</span>
               </div>
 
               <div class="flex-1 px-1 flex items-center justify-center">
@@ -1459,10 +1615,10 @@
                 ${card.traco || ''}
               </span>
             </div>
-            <div class="bg-[#efe4cf] border-t-2 border-stone-700/70 p-2">
+            <div class="bg-[#efe2c6] border-t-2 border-[#7c603e] p-2">
               <div class="flex items-start gap-1.5">
-                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold shrink-0 ${habMeta.badgeBg}" title="${habMeta.label}">
-                  ${habMeta.icon}
+                <span class="px-1.5 py-0.5 rounded shrink-0 ${habMeta.badgeBg} inline-flex items-center justify-center" title="${habMeta.label}">
+                  ${getIconHtml(habMeta.iconName, "w-3.5 h-3.5")}
                 </span>
                 <p class="text-[10.5px] text-stone-900 leading-snug font-medium">
                   ${formatCardText(card.texto)}
@@ -1477,12 +1633,14 @@
         el.innerHTML = `
           <div class="relative">
             ${getCaveIllustrationSVG(card)}
-            <span class="absolute top-1.5 right-2 px-1.5 py-0.2 rounded bg-black/60 text-amber-100 text-[10px] font-bold">
+            <span class="absolute top-1.5 right-2 px-1.5 py-0.2 rounded bg-black/65 text-amber-100 text-[10px] font-bold">
               #${card.numero}
             </span>
           </div>
-          <div class="p-2 bg-[#1c1714] text-amber-50 flex-1 flex items-center gap-1.5 border-t border-stone-600">
-            <span class="px-1 py-0.5 rounded bg-emerald-700 text-white text-[9px] font-bold shrink-0" title="Quando Jogado">📥</span>
+          <div class="p-2 bg-[#1a1411] text-amber-50 flex-1 flex items-center gap-1.5 border-t border-[#7c603e]">
+            <span class="px-1 py-0.5 rounded bg-emerald-900 text-emerald-100 shrink-0 inline-flex items-center justify-center" title="Quando Jogado">
+              ${getIconHtml("jogado", "w-3.5 h-3.5")}
+            </span>
             <p class="text-[10.5px] leading-snug text-stone-100 font-medium">
               ${formatCardText(card.texto)}
             </p>
@@ -1517,23 +1675,23 @@
 
       const showcase = gameState.lastActionShowcase;
       if (!showcase) {
-        container.innerHTML = `<div class="p-3 rounded-xl bg-white/70 border border-dashed border-stone-300 text-center text-xs text-stone-500">Nenhuma carta jogada ainda nesta rodada.</div>`;
+        container.innerHTML = `<div class="p-3 rounded-xl bg-white/75 border border-dashed border-stone-300 text-center text-xs text-stone-500">Nenhuma carta jogada ainda nesta rodada.</div>`;
         return;
       }
 
       container.innerHTML = `
         <div class="showcase-pop-in space-y-2.5">
-          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-white/90 border border-amber-300/80">
+          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-white/90 border border-amber-400/80">
             <div class="flex items-center gap-2">
               <span class="w-3 h-3 rounded-full shrink-0 border border-white shadow-2xs" style="background:${showcase.playerColor}"></span>
               <div>
                 <div class="font-bold text-stone-900 text-xs">${showcase.playerName}</div>
-                <div class="text-[11px] text-amber-900 font-semibold">${showcase.actionTitle}</div>
+                <div class="text-[11px] text-amber-950 font-semibold">${showcase.actionTitle}</div>
               </div>
             </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-stone-800 text-amber-100">R${showcase.round}</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#2c1f18] text-amber-100">R${showcase.round}</span>
           </div>
-          ${showcase.detail ? `<div class="text-[11px] text-stone-700 bg-white/70 px-2.5 py-1.5 rounded-lg border border-stone-200">${showcase.detail}</div>` : ''}
+          ${showcase.detail ? `<div class="text-[11px] text-stone-700 bg-white/75 px-2.5 py-1.5 rounded-lg border border-stone-300">${showcase.detail}</div>` : ''}
           <div id="public-showcase-card-slot" class="max-w-[260px] mx-auto"></div>
         </div>
       `;
@@ -1569,7 +1727,6 @@
       ghost.style.height = `${startRect.height}px`;
       document.body.appendChild(ghost);
 
-      // Força reflow para disparar transição CSS suave
       ghost.getBoundingClientRect();
 
       const dx = targetRect.left - startRect.left;
@@ -1604,12 +1761,12 @@
         const currentVal = objCount(obj, viewingPlayer);
 
         objContainer.innerHTML += `
-          <div class="px-2.5 py-1.5 rounded-xl border text-xs ${isCurrent ? 'bg-amber-100 border-amber-500 shadow-xs' : isPast ? 'bg-stone-100 border-stone-300 opacity-75' : 'bg-white border-stone-200'}">
+          <div class="px-2.5 py-1.5 rounded-xl border text-xs ${isCurrent ? 'bg-amber-100 border-amber-600 shadow-xs' : isPast ? 'bg-stone-100 border-stone-300 opacity-75' : 'bg-white/90 border-stone-300'}">
             <div class="flex items-center justify-between gap-2">
-              <span class="font-bold text-[10px] uppercase ${isCurrent ? 'text-amber-900' : 'text-stone-500'}">R${idx + 1} (${pts[0]}/${pts[1]}/${pts[2]})</span>
-              <span class="px-1.5 rounded bg-stone-800 text-white text-[10px] font-bold">${currentVal}</span>
+              <span class="font-bold text-[10px] uppercase ${isCurrent ? 'text-amber-950' : 'text-stone-500'}">R${idx + 1} (${pts[0]}/${pts[1]}/${pts[2]})</span>
+              <span class="px-1.5 rounded bg-[#2c1f18] text-amber-100 text-[10px] font-bold">${currentVal}</span>
             </div>
-            <div class="font-semibold text-stone-800 truncate max-w-[140px]" title="${obj.titulo}">${obj.titulo}</div>
+            <div class="font-semibold text-stone-900 truncate max-w-[140px]" title="${obj.titulo}">${obj.titulo}</div>
           </div>
         `;
       });
@@ -1624,16 +1781,16 @@
         const btn = document.createElement("button");
         btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border transition cursor-pointer ${
           isViewing
-            ? "bg-stone-900 text-white border-stone-900 shadow-xs"
-            : "bg-white hover:bg-stone-100 text-stone-700 border-stone-300"
+            ? "bg-[#2c1f18] text-amber-50 border-[#2c1f18] shadow-xs"
+            : "bg-white/90 hover:bg-stone-100 text-stone-800 border-stone-300"
         }`;
         btn.innerHTML = `
           <span class="w-2.5 h-2.5 rounded-full" style="background:${p.color.hex}"></span>
           <span>${p.name}</span>
-          <span class="opacity-80">💰${p.coins} 🥚${countPlayerEggs(p)}</span>
-          ${idx === myIdx ? '<span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">Você</span>' : ''}
+          <span class="opacity-90 inline-flex items-center gap-1">${getIconHtml("moeda", "w-3.5 h-3.5")}${p.coins} ${getIconHtml("ovo", "w-3.5 h-3.5")}${countPlayerEggs(p)}</span>
+          ${idx === myIdx ? '<span class="px-1.5 py-0.2 rounded bg-emerald-700 text-white text-[10px]">Você</span>' : ''}
           ${isSeatOffline(p) ? '<span class="px-1.5 py-0.2 rounded bg-stone-400 text-white text-[10px]">offline</span>' : ''}
-          ${p.passed ? '<span class="px-1.5 py-0.2 rounded bg-red-600 text-white text-[10px]">Passou</span>' : ''}
+          ${p.passed ? '<span class="px-1.5 py-0.2 rounded bg-red-700 text-white text-[10px]">Passou</span>' : ''}
           ${isActive && !p.passed ? '<span class="px-1.5 py-0.2 rounded bg-amber-400 text-stone-950 text-[10px]">Ativo</span>' : ''}
         `;
         btn.onclick = () => {
@@ -1656,23 +1813,23 @@
 
       const resBar = document.getElementById("player-resources-bar");
       resBar.innerHTML = `
-        <div class="px-3 py-1.5 rounded-xl bg-amber-200/90 border border-amber-400 text-amber-950 text-xs font-extrabold flex items-center gap-1.5" title="Moedas">
-          <span>💰</span><span class="text-sm">${player.coins}</span>
+        <div class="px-3 py-1.5 rounded-xl bg-amber-200/90 border border-amber-500 text-amber-950 text-xs font-extrabold flex items-center gap-1.5" title="Moedas (máx. 9)">
+          ${getIconHtml("moeda", "w-4 h-4")}<span class="text-sm">${player.coins}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-rose-100 border border-rose-300 text-rose-950 text-xs font-bold flex items-center gap-1" title="Carne">
-          <span>🥩</span><span>${player.resources.carne}</span>
+        <div class="px-2.5 py-1.5 rounded-xl bg-rose-100 border border-rose-300 text-rose-950 text-xs font-bold flex items-center gap-1.5" title="Carne">
+          ${getIconHtml("carne", "w-4 h-4")}<span>${player.resources.carne}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 text-xs font-bold flex items-center gap-1" title="Ouro">
-          <span>🪙</span><span>${player.resources.ouro}</span>
+        <div class="px-2.5 py-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 text-xs font-bold flex items-center gap-1.5" title="Ouro">
+          ${getIconHtml("ouro", "w-4 h-4")}<span>${player.resources.ouro}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-purple-100 border border-purple-300 text-purple-950 text-xs font-bold flex items-center gap-1" title="Cristal">
-          <span>💎</span><span>${player.resources.cristal}</span>
+        <div class="px-2.5 py-1.5 rounded-xl bg-purple-100 border border-purple-300 text-purple-950 text-xs font-bold flex items-center gap-1.5" title="Cristal">
+          ${getIconHtml("cristal", "w-4 h-4")}<span>${player.resources.cristal}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-sky-100 border border-sky-300 text-sky-950 text-xs font-bold flex items-center gap-1" title="Leite">
-          <span>🥛</span><span>${player.resources.leite}</span>
+        <div class="px-2.5 py-1.5 rounded-xl bg-sky-100 border border-sky-300 text-sky-950 text-xs font-bold flex items-center gap-1.5" title="Leite">
+          ${getIconHtml("leite", "w-4 h-4")}<span>${player.resources.leite}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-stone-100 border border-stone-300 text-stone-800 text-xs font-bold flex items-center gap-1" title="Ovos">
-          <span>🥚</span><span>${countPlayerEggs(player)}</span>
+        <div class="px-2.5 py-1.5 rounded-xl bg-stone-100 border border-stone-300 text-stone-900 text-xs font-bold flex items-center gap-1.5" title="Ovos Totais no Tabuleiro">
+          ${getIconHtml("ovo", "w-4 h-4")}<span>${countPlayerEggs(player)}</span>
         </div>
       `;
 
@@ -1680,7 +1837,6 @@
       actionBar.classList.toggle("opacity-40", !canPerformMainAction);
       actionBar.classList.toggle("pointer-events-none", !canPerformMainAction);
 
-      // Controle do Pop-up Flutuante Fixo no Topo (Desfazer / Confirmar Jogada)
       const floatingBanner = document.getElementById("floating-turn-banner");
       const floatingUndoBtn = document.getElementById("btn-floating-undo");
       const floatingConfirmBtn = document.getElementById("btn-floating-confirm");
@@ -1732,8 +1888,8 @@
       for (let i = 0; i < 2; i++) {
         const hasEgg = i < player.baseEggs;
         nestsContainer.innerHTML += `
-          <div class="w-8 h-8 rounded-full border-2 ${hasEgg ? 'bg-amber-100 border-amber-500' : 'bg-stone-100 border-dashed border-stone-300'} flex items-center justify-center text-base">
-            ${hasEgg ? '🥚' : ''}
+          <div class="w-8 h-8 rounded-full border-2 ${hasEgg ? 'bg-amber-100 border-amber-600 shadow-2xs' : 'bg-[#ede0c9] border-dashed border-[#8a704c]'} flex items-center justify-center">
+            ${hasEgg ? getIconHtml("ovo", "w-5 h-5") : ''}
           </div>
         `;
       }
@@ -1744,11 +1900,17 @@
       player.caverns.forEach(cav => {
         const meta = CAVERNS_META[cav.id];
         const exploreCount = cav.explorationsThisRound;
-        const exploreCostText = exploreCount === 0 ? "1💰" : exploreCount === 1 ? "1💰+1🥚" : exploreCount === 2 ? "1💰+2🥚" : "Máx";
+        const exploreCostHtml = exploreCount === 0
+          ? `1${getIconHtml("moeda", "w-3 h-3")}`
+          : exploreCount === 1
+            ? `1${getIconHtml("moeda", "w-3 h-3")}+1${getIconHtml("ovo", "w-3 h-3")}`
+            : exploreCount === 2
+              ? `1${getIconHtml("moeda", "w-3 h-3")}+2${getIconHtml("ovo", "w-3 h-3")}`
+              : "Máx";
         const canExplore = isMyTurn && exploreCount < 3 && player.coins >= 1 && countPlayerEggs(player) >= exploreCount;
 
         const rowEl = document.createElement("div");
-        rowEl.className = `rounded-2xl border-2 p-3 cavern-row-${cav.id} shadow-xs`;
+        rowEl.className = `rounded-2xl p-3 cavern-row-${cav.id}`;
 
         let colsHtml = "";
         cav.cols.forEach(col => {
@@ -1762,30 +1924,42 @@
                                gameState.justPlacedSlot.cavernId === cav.id &&
                                gameState.justPlacedSlot.col === col.col;
 
-          const excavateCost = col.col === 1 ? "1💰" : col.col === 2 ? "1💰 + 1🥚" : col.col === 3 ? "1💰 + 2🥚" : "Aberta";
+          const excavateCostHtml = col.col === 1
+            ? `1${getIconHtml("moeda", "w-3 h-3")}`
+            : col.col === 2
+              ? `1${getIconHtml("moeda", "w-3 h-3")}+1${getIconHtml("ovo", "w-3 h-3")}`
+              : col.col === 3
+                ? `1${getIconHtml("moeda", "w-3 h-3")}+2${getIconHtml("ovo", "w-3 h-3")}`
+                : "Aberta";
 
-          // Trilha inferior com ícone de Aventureiro + Benefício específico daquela caverna + Sinal de PARE (⛔)
+          // Trilha inferior contínua de exploração + Símbolo oficial da caverna + Placa octogonal de PARE
           const pathFooterHtml = `
-            <div class="mt-1.5 pt-1.5 border-t-2 flex items-center justify-between px-1.5 py-1 rounded-lg bg-white/90 shadow-2xs" style="border-color: ${meta.lineBg}">
+            <div class="mt-1.5 pt-1.5 border-t-2 flex items-center justify-between px-1.5 py-1 rounded-lg bg-[#fcf8ef]/95 shadow-2xs" style="border-color: ${meta.lineBg}">
               <div class="flex items-center gap-1.5">
-                <span class="px-1 py-0.2 rounded bg-stone-900 text-white text-[9px] font-bold" title="Ativado ao passar">🧭</span>
-                <span class="text-xs font-extrabold text-stone-900 leading-none" title="${stepInfo.label}">+${stepInfo.icon}</span>
+                <span class="px-1 py-0.5 rounded bg-[#2c1f18] text-amber-200 inline-flex items-center" title="Ativado ao passar">
+                  ${getIconHtml("aventureiro", "w-3 h-3")}
+                </span>
+                <span class="text-xs font-extrabold text-stone-900 inline-flex items-center gap-0.5" title="${stepInfo.label}">
+                  +${getIconHtml(stepInfo.iconName, "w-4 h-4")}
+                </span>
               </div>
-              ${!col.dragonSlot ? `<span class="text-xs leading-none" title="Sinal de PARE: a exploração termina aqui se não houver dragão">⛔</span>` : `<span class="text-[9px] font-bold text-emerald-700">✓</span>`}
+              ${!col.dragonSlot
+                ? `<span title="Placa de PARE: a exploração termina aqui se não houver dragão">${getIconHtml("pare", "w-4 h-4")}</span>`
+                : `<span class="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-1.5 py-0.2 rounded-full border border-emerald-300">→</span>`}
             </div>
           `;
 
           if (!col.excavated) {
             colsHtml += `
-              <div data-board-slot="${cav.id}-${col.col}" class="rounded-xl border border-dashed border-stone-500/70 bg-white/60 p-2 flex flex-col justify-between min-h-[215px]">
-                <div class="flex items-center justify-between text-[10px] font-bold text-stone-600">
+              <div data-board-slot="${cav.id}-${col.col}" class="unexcavated-rock-slot rounded-xl p-2 flex flex-col justify-between min-h-[218px]">
+                <div class="flex items-center justify-between text-[10px] font-bold text-stone-700">
                   <span>Col. ${col.col + 1}</span>
-                  <span class="px-1.5 py-0.5 rounded bg-stone-800 text-amber-100 text-[9px]">${excavateCost}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-[#2c1f18] text-amber-100 text-[9px] inline-flex items-center gap-0.5">${excavateCostHtml}</span>
                 </div>
                 <div class="text-center my-auto py-2">
-                  <div class="text-2xl opacity-60">🪨</div>
-                  <div class="text-[11px] font-bold text-stone-700 mt-1">Não Escavado</div>
-                  ${col.col === 3 ? '<div class="text-[9px] text-amber-900 font-bold mt-1 bg-amber-100/90 rounded px-1 py-0.5">Cobrir: 3 itens → 1💰</div>' : ''}
+                  <div class="flex justify-center opacity-75">${getIconHtml("caverna", "w-7 h-7")}</div>
+                  <div class="font-display text-[11px] font-bold text-stone-800 mt-1">Rocha Fechada</div>
+                  ${col.col === 3 ? `<div class="text-[9px] text-amber-950 font-bold mt-1 bg-amber-100/95 border border-amber-400 rounded px-1 py-0.5 inline-flex items-center gap-0.5">Cobrir: 3 itens → 1${getIconHtml("moeda", "w-3 h-3")}</div>` : ''}
                 </div>
                 ${pathFooterHtml}
               </div>
@@ -1800,37 +1974,37 @@
 
             const habRects = [0, 1, 2].map(hIdx => {
               const active = (d.hab || []).includes(hIdx);
-              const bgColors = ["#9e2a2b", "#c88a1e", "#6a3d8a"];
-              return `<div class="w-2.5 h-3.5 rounded-r-xs border border-stone-400/80" style="background:${active ? bgColors[hIdx] : '#ffffff'}"></div>`;
+              const bgColors = ["#982b2b", "#c2841d", "#653b85"];
+              return `<div class="w-2.5 h-3.5 rounded-r-xs border border-stone-500/80" style="background:${active ? bgColors[hIdx] : '#fbf6eb'}"></div>`;
             }).join("");
 
             let nestsVisual = "";
             for (let nIdx = 0; nIdx < (d.ninhos || 0); nIdx++) {
               const filled = nIdx < eggs;
-              nestsVisual += `<span class="text-[11px] leading-none ${filled ? 'opacity-100 scale-110' : 'opacity-30 grayscale'}" title="${filled ? 'Ovo colocado' : 'Ninho vazio'}">🥚</span>`;
+              nestsVisual += `<span class="${filled ? 'opacity-100 scale-110' : 'opacity-30 grayscale'}" title="${filled ? 'Ovo colocado' : 'Ninho vazio'}">${getIconHtml("ovo", "w-3 h-3")}</span>`;
             }
 
             colsHtml += `
-              <div data-board-slot="${cav.id}-${col.col}" onclick="inspectPlacedDragon(${cav.id}, ${col.col})" class="physical-dragon-card rounded-xl flex flex-col justify-between min-h-[215px] cursor-pointer relative ${isJustPlaced ? 'card-slotted-anim' : ''}">
-                ${isAdvHere ? `<div class="absolute -top-3 -right-2 z-20 w-7 h-7 rounded-full text-white flex items-center justify-center text-xs font-bold shadow-lg adventurer-pulse border-2 border-white" style="background:${player.color.hex}">🧭</div>` : ''}
+              <div data-board-slot="${cav.id}-${col.col}" onclick="inspectPlacedDragon(${cav.id}, ${col.col})" class="physical-dragon-card rounded-xl flex flex-col justify-between min-h-[218px] cursor-pointer relative ${isJustPlaced ? 'card-slotted-anim' : ''}">
+                ${isAdvHere ? `<div class="absolute -top-3 -right-2 z-20 w-7 h-7 rounded-full text-white flex items-center justify-center shadow-lg adventurer-pulse border-2 border-white" style="background:${player.color.hex}">${getIconHtml("aventureiro", "w-4 h-4")}</div>` : ''}
                 
                 <div>
-                  <div class="px-2 pt-1.5 pb-1 text-center border-b border-stone-300/70">
+                  <div class="px-2 pt-1.5 pb-1 text-center border-b border-[#cbb591]">
                     <span class="font-display text-[10px] font-extrabold text-stone-900 uppercase leading-tight line-clamp-1 block" title="${d.nome}">${d.nome}</span>
                   </div>
 
-                  <div class="flex items-center justify-between px-1.5 py-0.5 bg-gradient-to-r from-[#3a2a21] to-[#594436] text-white">
+                  <div class="flex items-center justify-between px-1.5 py-0.5 bg-gradient-to-r from-[#38251c] to-[#52382b] text-white">
                     <div class="flex items-center gap-0.5 flex-wrap">${formatCostIconsOnly(d.custo)}</div>
                     <div class="flex items-center gap-1 shrink-0">
                       <span class="text-[8px] font-extrabold text-amber-200">${SIZE_LABELS[d.tam] || ''}</span>
-                      <span class="w-5 h-5 rounded-full bg-amber-100 border border-amber-500 text-stone-950 font-display text-[10px] font-black flex items-center justify-center">${d.pv}</span>
+                      <span class="w-5 h-5 rounded-full bg-gradient-to-b from-[#fef3c7] to-[#f59e0b] border border-[#78350f] text-stone-950 font-display text-[10px] font-black flex items-center justify-center">${d.pv}</span>
                     </div>
                   </div>
 
                   <div class="relative flex items-center justify-between py-1 pr-1.5">
                     <div class="flex flex-col gap-0.5 z-10">
                       ${habRects}
-                      <span class="text-[8px] font-bold text-stone-500 pl-0.5">${d.numero}</span>
+                      <span class="text-[8px] font-bold text-stone-600 pl-0.5">${d.numero}</span>
                     </div>
                     <div class="flex-1 px-0.5 flex items-center justify-center scale-90">
                       ${getDragonIllustrationSVG(d)}
@@ -1844,40 +2018,39 @@
                 <div>
                   <div class="flex items-center justify-between px-1.5 -mb-0.5 relative z-10">
                     <div class="flex items-center gap-1">
-                      ${tuckedRes > 0 ? `<span class="px-1 rounded bg-emerald-800 text-white text-[9px] font-bold shadow-2xs" title="Recursos Estocados">📦${tuckedRes}</span>` : ''}
-                      ${tuckedCards > 0 ? `<span class="px-1 rounded bg-indigo-800 text-white text-[9px] font-bold shadow-2xs" title="Cartas Inseridas">🃏${tuckedCards}</span>` : ''}
-                      ${col.caveCard ? `<span class="px-1 rounded bg-stone-700 text-amber-100 text-[8px] font-bold" title="Escavada com Caverna #${col.caveCard.numero}">🪨#${col.caveCard.numero}</span>` : ''}
+                      ${tuckedRes > 0 ? `<span class="px-1 rounded bg-emerald-900 text-white text-[9px] font-bold shadow-2xs inline-flex items-center gap-0.5" title="Recursos Estocados">${getIconHtml("estocar", "w-2.5 h-2.5")}${tuckedRes}</span>` : ''}
+                      ${tuckedCards > 0 ? `<span class="px-1 rounded bg-indigo-900 text-white text-[9px] font-bold shadow-2xs inline-flex items-center gap-0.5" title="Cartas Inseridas">${getIconHtml("dragao", "w-2.5 h-2.5")}${tuckedCards}</span>` : ''}
+                      ${col.caveCard ? `<span class="px-1 rounded bg-stone-800 text-amber-100 text-[8px] font-bold" title="Escavada com Caverna #${col.caveCard.numero}">#${col.caveCard.numero}</span>` : ''}
                     </div>
                     <span class="trait-ribbon pl-3 pr-2 py-0.2 text-[8px] font-extrabold uppercase ${traitClass}">${d.traco || ''}</span>
                   </div>
 
-                  <div class="bg-[#efe4cf] border-t border-stone-700/70 p-1.5">
+                  <div class="bg-[#efe2c6] border-t border-[#7c603e] p-1.5">
                     <div class="flex items-start gap-1">
-                      <span class="px-1 py-0.2 rounded text-[8px] font-bold shrink-0 ${habMeta.badgeBg}">${habMeta.icon}</span>
+                      <span class="px-1 py-0.2 rounded shrink-0 ${habMeta.badgeBg} inline-flex items-center">${getIconHtml(habMeta.iconName, "w-2.5 h-2.5")}</span>
                       <p class="text-[9.5px] text-stone-900 leading-tight line-clamp-2 font-medium">${formatCardText(d.texto)}</p>
                     </div>
                   </div>
 
-                  <div class="px-1.5 pb-1.5 bg-[#efe4cf]">
+                  <div class="px-1.5 pb-1.5 bg-[#efe2c6]">
                     ${pathFooterHtml}
                   </div>
                 </div>
               </div>
             `;
           } else {
-            // Espaço Escavado sem Dragão: mostra a Carta Física de Caverna completa se houver (colunas 2, 3, 4) ou entrada aberta (coluna 1)
             colsHtml += `
-              <div data-board-slot="${cav.id}-${col.col}" class="${col.caveCard ? 'physical-cave-card' : 'rounded-xl border-2 border-emerald-700/60 bg-emerald-50/75'} rounded-xl flex flex-col justify-between min-h-[215px] relative overflow-hidden ${isJustPlaced ? 'card-slotted-anim' : ''}">
-                ${isAdvHere ? `<div class="absolute -top-3 -right-2 z-20 w-7 h-7 rounded-full text-white flex items-center justify-center text-xs font-bold shadow-lg adventurer-pulse border-2 border-white" style="background:${player.color.hex}">🧭</div>` : ''}
+              <div data-board-slot="${cav.id}-${col.col}" class="${col.caveCard ? 'physical-cave-card' : 'rounded-xl border-2 border-emerald-800/60 bg-emerald-50/80'} rounded-xl flex flex-col justify-between min-h-[218px] relative overflow-hidden ${isJustPlaced ? 'card-slotted-anim' : ''}">
+                ${isAdvHere ? `<div class="absolute -top-3 -right-2 z-20 w-7 h-7 rounded-full text-white flex items-center justify-center shadow-lg adventurer-pulse border-2 border-white" style="background:${player.color.hex}">${getIconHtml("aventureiro", "w-4 h-4")}</div>` : ''}
                 
                 ${col.caveCard ? `
                   <div>
                     <div class="relative">
                       ${getCaveIllustrationSVG(col.caveCard)}
-                      <span class="absolute top-1 left-1.5 px-1.5 py-0.2 rounded bg-black/70 text-emerald-300 text-[9px] font-extrabold uppercase">Escavada</span>
-                      <span class="absolute top-1 right-1.5 px-1.5 py-0.2 rounded bg-black/70 text-amber-100 text-[9px] font-bold">#${col.caveCard.numero}</span>
+                      <span class="absolute top-1 left-1.5 px-1.5 py-0.2 rounded bg-black/75 text-emerald-300 text-[9px] font-extrabold uppercase">Escavada</span>
+                      <span class="absolute top-1 right-1.5 px-1.5 py-0.2 rounded bg-black/75 text-amber-100 text-[9px] font-bold">#${col.caveCard.numero}</span>
                     </div>
-                    <div class="p-1.5 bg-[#1c1714] text-amber-50 border-t border-stone-600">
+                    <div class="p-1.5 bg-[#1a1411] text-amber-50 border-t border-[#7c603e]">
                       <p class="text-[9.5px] leading-tight text-stone-200 line-clamp-2">${formatCardText(col.caveCard.texto)}</p>
                     </div>
                   </div>
@@ -1888,14 +2061,14 @@
                       <span class="px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-950 text-[9px]">Aberta</span>
                     </div>
                     <div class="text-center my-auto">
-                      <div class="text-lg">🕳️</div>
-                      <div class="text-xs font-extrabold text-emerald-950">Entrada Escavada</div>
-                      <div class="text-[9.5px] text-emerald-800">Pronta para Dragão</div>
+                      <div class="flex justify-center">${getIconHtml("caverna", "w-7 h-7")}</div>
+                      <div class="font-display text-xs font-extrabold text-emerald-950 mt-1">Entrada Escavada</div>
+                      <div class="text-[9.5px] text-emerald-900">Pronta para Dragão</div>
                     </div>
                   </div>
                 `}
 
-                <div class="p-1.5 ${col.caveCard ? 'bg-[#1c1714]' : ''}">
+                <div class="p-1.5 ${col.caveCard ? 'bg-[#1a1411]' : ''}">
                   ${pathFooterHtml}
                 </div>
               </div>
@@ -1908,14 +2081,15 @@
             <div class="flex items-center gap-2">
               <span class="w-3.5 h-3.5 rounded-full border border-white shadow-xs" style="background:${meta.cor}"></span>
               <h3 class="font-display text-sm sm:text-base font-extrabold text-stone-900 uppercase tracking-wide">${meta.nome}</h3>
-              <span class="text-[10px] font-semibold text-stone-700 bg-white/75 px-2 py-0.5 rounded-full border border-stone-300/70 hidden md:inline">
-                Fim: ${meta.fimIcon} ${meta.fimDesc}
+              <span class="text-[10px] font-semibold text-stone-800 bg-[#fcf8ef]/85 px-2.5 py-0.5 rounded-full border border-[#bfa780] hidden md:inline-flex items-center gap-1">
+                Fim: ${getIconHtml(meta.fimIconName, "w-3.5 h-3.5")} ${meta.fimDesc}
               </span>
             </div>
             <button data-explore-cav="${cav.id}" ${canExplore ? '' : 'disabled'}
-              class="px-3 py-1.5 rounded-xl text-xs font-extrabold shadow-xs transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center gap-1.5"
+              class="px-3 py-1.5 rounded-xl text-xs font-extrabold shadow-xs transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center gap-1.5 border border-white/25"
               style="background-color: ${meta.cor}">
-              <span>🧭 Explorar (${exploreCostText})</span>
+              ${getIconHtml("aventureiro", "w-3.5 h-3.5")}
+              <span class="inline-flex items-center gap-0.5">Explorar (${exploreCostHtml})</span>
               <span class="bg-black/25 px-1.5 py-0.2 rounded text-[10px]">${exploreCount}/3</span>
             </button>
           </div>
@@ -1940,7 +2114,7 @@
       const badge = document.getElementById("hand-count-badge");
 
       badge.textContent = `${player.hand.length} / 9`;
-      badge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${player.hand.length > 9 ? 'bg-red-600 text-white' : 'bg-stone-200 text-stone-800'}`;
+      badge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${player.hand.length > 9 ? 'bg-red-700 text-white' : 'bg-stone-200 text-stone-900'}`;
 
       document.getElementById("btn-hand-pos-bottom").onclick = () => setHandLayoutMode("bottom");
       document.getElementById("btn-hand-pos-top").onclick = () => setHandLayoutMode("top");
@@ -1948,11 +2122,11 @@
 
       container.innerHTML = "";
       if (gameState.viewingPlayerIdx !== myIdx) {
-        container.innerHTML = `<div class="w-full text-center py-6 text-xs text-stone-600 bg-stone-100/70 rounded-xl border border-dashed border-stone-300">🂠 ${player.name} tem ${player.hand.length} carta(s) na mão (ocultas). Clique na sua aba para ver a sua.</div>`;
+        container.innerHTML = `<div class="w-full text-center py-6 text-xs text-stone-700 bg-white/75 rounded-xl border border-dashed border-stone-400">${player.name} possui ${player.hand.length} carta(s) na mão (ocultas). Clique na sua aba para ver suas cartas.</div>`;
         return;
       }
       if (player.hand.length === 0) {
-        container.innerHTML = `<div class="w-full text-center py-6 text-xs text-stone-500 bg-stone-100/70 rounded-xl border border-dashed border-stone-300">Nenhuma carta na mão deste jogador.</div>`;
+        container.innerHTML = `<div class="w-full text-center py-6 text-xs text-stone-500 bg-white/75 rounded-xl border border-dashed border-stone-400">Nenhuma carta na mão deste dracologista.</div>`;
         return;
       }
 
@@ -1972,8 +2146,8 @@
     }
 
     function renderDisplayMarket() {
-      document.getElementById("deck-dragons-count").textContent = `🐉 Baralho: ${gameState.dragonDeck.length}`;
-      document.getElementById("deck-caves-count").textContent = `🪨 Baralho: ${gameState.caveDeck.length}`;
+      document.getElementById("deck-dragons-count").innerHTML = `${getIconHtml("dragao", "w-3.5 h-3.5")} Baralho: ${gameState.dragonDeck.length}`;
+      document.getElementById("deck-caves-count").innerHTML = `${getIconHtml("caverna", "w-3.5 h-3.5")} Baralho: ${gameState.caveDeck.length}`;
 
       const dContainer = document.getElementById("display-dragons");
       dContainer.innerHTML = "";
@@ -1990,23 +2164,40 @@
 
     function renderGuildBoard() {
       const sheet = getGuild();
-      document.getElementById("guild-title").textContent = `🛡️ ${sheet.nome}`;
+      document.getElementById("guild-title").innerHTML = `<span class="inline-flex items-center gap-1.5">${getIconHtml("guilda", "w-4 h-4")} ${sheet.nome}</span>`;
       document.getElementById("guild-subtitle").textContent = sheet.subtitulo;
 
-      const grid = document.getElementById("guild-track-grid");
+      // Posiciona os 12 passos formando um anel ao redor do emblema central
+      const ringOrder = [0, 1, 2, 3, 11, -1, -2, 4, 10, 9, 8, 7, 6, 5];
+      const grid = document.getElementById("guild-track-ring");
       grid.innerHTML = "";
 
-      GUILD_TRACK_STEPS.forEach(step => {
+      ringOrder.forEach(idx => {
+        if (idx === -1) {
+          grid.innerHTML += `
+            <div class="col-span-2 rounded-xl bg-gradient-to-br from-[#38251c] to-[#593a2b] border-2 border-amber-500/70 text-amber-100 flex flex-col items-center justify-center p-1.5 text-center shadow-inner">
+              ${getIconHtml("guilda", "w-5 h-5 mb-0.5")}
+              <span class="font-display text-[9px] font-extrabold uppercase tracking-wider leading-tight">Guilda do Dragão</span>
+            </div>
+          `;
+          return;
+        }
+        if (idx === -2) return;
+
+        const step = GUILD_TRACK_STEPS[idx];
         const playersHere = gameState.players.filter(p => p.guildPos === step.idx);
         const markersHtml = playersHere.map(p =>
           `<span class="w-3 h-3 rounded-full border border-white shadow-xs" style="background:${p.color.hex}" title="${p.name}"></span>`
         ).join("");
 
         grid.innerHTML += `
-          <div class="p-1.5 rounded-lg border text-center ${step.isBrown ? 'bg-amber-900 text-amber-50 border-amber-950' : 'bg-white border-stone-200 text-stone-800'}">
-            <div class="text-[9px] font-bold opacity-75">#${step.idx}</div>
-            <div class="text-xs font-bold leading-tight">${step.icon} ${step.label}</div>
-            <div class="flex justify-center gap-0.5 mt-1 min-h-[12px]">${markersHtml}</div>
+          <div class="p-1.5 rounded-xl border text-center ${step.isBrown ? 'bg-[#4a2f20] text-amber-50 border-[#29180f] shadow-xs' : 'bg-[#fcf8ef] border-[#bfa780] text-stone-900'}">
+            <div class="text-[8.5px] font-bold opacity-75">#${step.idx}</div>
+            <div class="text-[11px] font-bold leading-tight flex items-center justify-center gap-1 my-0.5">
+              ${getIconHtml(step.iconName, "w-3.5 h-3.5")}
+              <span>${step.label}</span>
+            </div>
+            <div class="flex justify-center gap-0.5 mt-0.5 min-h-[12px]">${markersHtml}</div>
           </div>
         `;
       });
@@ -2017,13 +2208,13 @@
         const occupants = gameState.guildSlotOccupants[slot.id] || [];
         const occHtml = occupants.map(pid => {
           const p = gameState.players[pid];
-          return `<span class="w-3.5 h-3.5 rounded-xs inline-block border border-white" style="background:${p.color.hex}" title="${p.name}"></span>`;
+          return `<span class="w-3.5 h-3.5 rounded-xs inline-block border border-white shadow-2xs" style="background:${p.color.hex}" title="${p.name}"></span>`;
         }).join(" ");
 
         slotsContainer.innerHTML += `
-          <div class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-white border border-stone-200 text-xs">
-            <span class="text-stone-700 leading-tight">${slot.label}</span>
-            <div class="flex items-center gap-1 shrink-0">${occHtml || `<span class="text-[10px] text-stone-400">(${slot.cap === 99 ? '∞' : slot.cap}v)</span>`}</div>
+          <div class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-[#fcf8ef] border border-[#cbb591] text-xs">
+            <span class="text-stone-800 leading-tight font-medium">${slot.label}</span>
+            <div class="flex items-center gap-1 shrink-0">${occHtml || `<span class="text-[10px] font-bold text-stone-500">(${slot.cap === 99 ? '∞' : slot.cap}v)</span>`}</div>
           </div>
         `;
       });
@@ -2032,8 +2223,8 @@
     function renderLog() {
       const container = document.getElementById("game-log");
       container.innerHTML = gameState.logs.map(entry => `
-        <div class="p-1.5 rounded-lg bg-white/80 border border-stone-200/80 leading-snug">
-          <span class="font-bold text-amber-900">[${entry.round}]</span> ${entry.text}
+        <div class="p-1.5 rounded-lg bg-white/85 border border-[#d6c3a3] leading-snug">
+          <span class="font-bold text-amber-950">[${entry.round}]</span> ${entry.text}
         </div>
       `).join("");
     }
@@ -2052,7 +2243,7 @@
       footer.innerHTML = "";
       footerButtons.forEach(btnCfg => {
         const btn = document.createElement("button");
-        btn.className = btnCfg.className || "px-4 py-2 rounded-xl bg-stone-800 text-white text-xs font-bold cursor-pointer";
+        btn.className = btnCfg.className || "px-4 py-2 rounded-xl bg-stone-900 text-white text-xs font-bold cursor-pointer";
         btn.textContent = btnCfg.text;
         btn.onclick = btnCfg.onClick;
         footer.appendChild(btn);
@@ -2061,15 +2252,14 @@
       closeBtn.classList.toggle("hidden", !closable);
       closeBtn.onclick = closeModal;
 
-      // Decisão de OUTRO jogador: o pop-up fica oculto aqui e é espelhado na tela dele.
       const ownerIdx = (owner === null || owner === undefined) ? myIdx : owner;
       const remote = gameState && ownerIdx !== myIdx && gameState.players[ownerIdx];
       if (remote) {
         backdrop.classList.add("hidden");
-        showWaiting(`⏳ Aguardando ${gameState.players[ownerIdx].name} decidir…`);
+        showWaiting(`Aguardando ${gameState.players[ownerIdx].name} decidir…`);
         const id = ++mirrorSeq;
         activeMirror = { ownerIdx, id, payload: null };
-        queueMicrotask(() => {   // espera quem chamou terminar de montar o conteúdo (cartas etc.)
+        queueMicrotask(() => {
           if (!activeMirror || activeMirror.id !== id) return;
           activeMirror.payload = snapshotModal();
           sendMirror();
@@ -2095,16 +2285,16 @@
         bodyHtml: `
           <div class="space-y-3">
             <div class="flex flex-wrap gap-2 text-xs font-bold">
-              <span class="px-2.5 py-1 rounded-lg bg-stone-900 text-amber-300">⭐ ${d.pv} PV Base</span>
-              <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-950">🥚 Ovos: ${slot.eggs} / ${d.ninhos}</span>
-              <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-950">📦 Recursos Estocados: ${slot.tuckedResources.length}</span>
-              <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-950">🃏 Cartas Inseridas: ${slot.tuckedCards.length}</span>
+              <span class="px-2.5 py-1 rounded-lg bg-[#2c1f18] text-amber-300 inline-flex items-center gap-1">${getIconHtml("fim", "w-3.5 h-3.5")} ${d.pv} PV Base</span>
+              <span class="px-2.5 py-1 rounded-lg bg-amber-100 border border-amber-300 text-amber-950 inline-flex items-center gap-1">${getIconHtml("ovo", "w-3.5 h-3.5")} Ovos: ${slot.eggs} / ${d.ninhos}</span>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-950 inline-flex items-center gap-1">${getIconHtml("estocar", "w-3.5 h-3.5")} Recursos Estocados: ${slot.tuckedResources.length}</span>
+              <span class="px-2.5 py-1 rounded-lg bg-indigo-100 border border-indigo-300 text-indigo-950 inline-flex items-center gap-1">${getIconHtml("dragao", "w-3.5 h-3.5")} Cartas Inseridas: ${slot.tuckedCards.length}</span>
             </div>
-            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-sm">
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-sm">
               <strong>Habilidade (${ABILITY_TYPE_META[d.tipo].label}):</strong><br/>
               ${formatCardText(d.texto)}
             </div>
-            ${slot.tuckedResources.length > 0 ? `<div class="text-xs text-stone-600"><strong>Recursos aqui:</strong> ${slot.tuckedResources.map(r => RESOURCE_META[r]?.icon || r).join(" ")}</div>` : ''}
+            ${slot.tuckedResources.length > 0 ? `<div class="text-xs text-stone-700 flex items-center gap-1.5"><strong>Recursos aqui:</strong> ${slot.tuckedResources.map(r => getIconHtml(r, "w-4 h-4")).join(" ")}</div>` : ''}
           </div>
         `,
         footerButtons: [{ text: "Fechar", onClick: closeModal }]
@@ -2125,29 +2315,29 @@
         const payBtns = Object.entries(RESOURCE_META).map(([k, m]) => {
           const avail = player.resources[k] - selectedToPay.filter(x => x === k).length;
           return `<button data-pay="${k}" ${avail <= 0 || selectedToPay.length >= 2 ? 'disabled' : ''}
-            class="px-3 py-2 rounded-xl border ${m.color} text-xs font-bold disabled:opacity-40 cursor-pointer">
-            ${m.icon} ${m.label} (Disp: ${avail})
+            class="px-3 py-2 rounded-xl border ${m.color} text-xs font-bold disabled:opacity-40 cursor-pointer inline-flex items-center justify-center gap-1.5">
+            ${getIconHtml(m.iconName, "w-4 h-4")} ${m.label} (Disp: ${avail})
           </button>`;
         }).join("");
 
         const gainBtns = Object.entries(RESOURCE_META).map(([k, m]) => `
           <button data-gain="${k}"
-            class="px-3 py-2 rounded-xl border text-xs font-bold cursor-pointer ${selectedToGain === k ? 'ring-2 ring-stone-900 ' + m.color : 'bg-white border-stone-300'}">
-            ${m.icon} ${m.label}
+            class="px-3 py-2 rounded-xl border text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 ${selectedToGain === k ? 'ring-2 ring-stone-900 ' + m.color : 'bg-white border-stone-300'}">
+            ${getIconHtml(m.iconName, "w-4 h-4")} ${m.label}
           </button>
         `).join("");
 
         document.getElementById("modal-body").innerHTML = `
-          <p class="text-xs text-stone-600">Regra Oficial: A qualquer momento da partida, troque 2 recursos em qualquer combinação por 1 recurso à sua escolha.</p>
+          <p class="text-xs text-stone-700">Regra Oficial: A qualquer momento da partida, troque 2 recursos em qualquer combinação por 1 recurso à sua escolha.</p>
           <div>
-            <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">1. Selecione 2 recursos para pagar (${selectedToPay.length}/2):</div>
+            <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">1. Selecione 2 recursos para pagar (${selectedToPay.length}/2):</div>
             <div class="grid grid-cols-2 gap-2">${payBtns}</div>
-            <div class="mt-2 text-xs font-semibold text-stone-700">Selecionados: ${selectedToPay.map(k => RESOURCE_META[k].icon + RESOURCE_META[k].label).join(" + ") || "Nenhum"}
+            <div class="mt-2 text-xs font-semibold text-stone-800 flex items-center gap-1">Selecionados: ${selectedToPay.map(k => `${getIconHtml(RESOURCE_META[k].iconName, "w-3.5 h-3.5")} ${RESOURCE_META[k].label}`).join(" + ") || "Nenhum"}
               ${selectedToPay.length > 0 ? '<button id="btn-reset-2to1" class="ml-2 text-red-700 underline cursor-pointer">Limpar</button>' : ''}
             </div>
           </div>
           <div>
-            <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">2. Escolha 1 recurso para receber:</div>
+            <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">2. Escolha 1 recurso para receber:</div>
             <div class="grid grid-cols-2 gap-2">${gainBtns}</div>
           </div>
         `;
@@ -2169,13 +2359,13 @@
       };
 
       openModal({
-        title: "🔄 Conversão de Recursos (2 por 1)",
+        title: "Conversão de Recursos (2 por 1)",
         bodyHtml: "",
         footerButtons: [
           { text: "Cancelar", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 cursor-pointer", onClick: closeModal },
           {
             text: "Confirmar Troca",
-            className: "px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-bold cursor-pointer",
+            className: "px-4 py-2 rounded-xl bg-emerald-800 text-white text-xs font-bold cursor-pointer",
             onClick: () => {
               if (selectedToPay.length !== 2) {
                 showToast("Selecione exatamente 2 recursos para pagar.", "warn");
@@ -2240,14 +2430,14 @@
         } else {
           await new Promise(resolve => {
             openModal({
-              title: `🥚 ${player.name}: Escolha onde botar o Ovo (${i + 1}/${count})`,
+              title: `${player.name}: Escolha onde botar o Ovo (${i + 1}/${count})`,
               owner: player.id,
               closable: false,
               bodyHtml: `
                 <div class="space-y-2">
                   ${validTargets.map((t, idx) => `
-                    <button data-egg-target="${idx}" class="w-full text-left px-4 py-2.5 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-500 text-xs font-bold cursor-pointer">
-                      🥚 ${t.label}
+                    <button data-egg-target="${idx}" class="w-full text-left px-4 py-2.5 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-500 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                      ${getIconHtml("ovo", "w-4 h-4")} <span>${t.label}</span>
                     </button>
                   `).join("")}
                 </div>
@@ -2271,14 +2461,14 @@
     async function promptChooseResource(player, titleText = "Escolha 1 recurso") {
       return new Promise(resolve => {
         openModal({
-          title: `🌈 ${player.name}: ${titleText}`,
+          title: `${player.name}: ${titleText}`,
           owner: player.id,
           closable: false,
           bodyHtml: `
             <div class="grid grid-cols-2 gap-3">
               ${Object.entries(RESOURCE_META).map(([k, m]) => `
-                <button data-pick-res="${k}" class="p-3 rounded-xl border ${m.color} font-bold text-sm hover:brightness-95 cursor-pointer">
-                  ${m.icon} ${m.label}
+                <button data-pick-res="${k}" class="p-3 rounded-xl border ${m.color} font-bold text-sm hover:brightness-95 cursor-pointer inline-flex items-center justify-center gap-2">
+                  ${getIconHtml(m.iconName, "w-5 h-5")} <span>${m.label}</span>
                 </button>
               `).join("")}
             </div>
@@ -2313,17 +2503,17 @@
 
       return new Promise(resolve => {
         openModal({
-          title: `🃏 ${player.name}: Ganhe 1 ${label}`,
+          title: `${player.name}: Ganhe 1 ${label}`,
           owner: player.id,
           closable: false,
           bodyHtml: `
             <div class="space-y-3">
               ${source === "any" ? `
-                <button id="btn-draw-from-deck" class="w-full p-3 rounded-xl bg-stone-900 text-amber-100 font-bold text-xs hover:bg-stone-800 cursor-pointer">
-                  🎲 Comprar do Topo do Baralho Fechado
+                <button id="btn-draw-from-deck" class="w-full p-3 rounded-xl bg-[#2c1f18] text-amber-100 font-bold text-xs hover:bg-[#3e2c22] cursor-pointer inline-flex items-center justify-center gap-2">
+                  ${getIconHtml(isDragon ? "dragao" : "caverna", "w-4 h-4")} <span>Comprar do Topo do Baralho Fechado</span>
                 </button>
               ` : ''}
-              <div class="text-xs font-bold uppercase text-stone-500">Ou escolha uma carta da Exibição:</div>
+              <div class="text-xs font-bold uppercase text-stone-600">Ou escolha uma carta da Exibição:</div>
               <div id="modal-display-cards" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5"></div>
             </div>
           `
@@ -2361,8 +2551,8 @@
       for (let s = 0; s < steps; s++) {
         player.guildPos = (player.guildPos + 1) % 12;
         const stepObj = GUILD_TRACK_STEPS[player.guildPos];
-        addLog(`🛡️ ${player.name} avançou na Guilda do Dragão para a casa #${stepObj.idx} (${stepObj.icon} ${stepObj.label}).`);
-        showToast(`🛡️ ${player.name} avançou na Guilda: ${stepObj.icon} ${stepObj.label}!`, "success");
+        addLog(`${player.name} avançou na Guilda do Dragão para a casa #${stepObj.idx} (${stepObj.label}).`);
+        showToast(`${player.name} avançou na Guilda: ${stepObj.label}!`, "success");
         renderGuildBoard();
         await new Promise(r => setTimeout(r, 380));
 
@@ -2377,15 +2567,15 @@
           if (availableSlots.length > 0) {
             await new Promise(resolve => {
               openModal({
-                title: `🛡️ ${player.name}: Marco da Guilda do Dragão!`,
+                title: `${player.name}: Marco da Guilda do Dragão!`,
                 owner: player.id,
                 closable: false,
                 bodyHtml: `
-                  <p class="text-xs text-stone-600">Você alcançou um espaço marrom da trilha! Escolha um espaço disponível na Ficha Central para colocar 1 dos seus Marcadores (${player.guildMarkersUsed + 1}/4):</p>
+                  <p class="text-xs text-stone-700">Você alcançou um espaço marrom da trilha! Escolha um espaço disponível no Medalhão Central para colocar 1 dos seus Marcadores (${player.guildMarkersUsed + 1}/4):</p>
                   <div class="space-y-2 mt-2">
                     ${availableSlots.map(sl => `
-                      <button data-guild-slot="${sl.id}" class="w-full text-left p-3 rounded-xl border border-amber-300 bg-amber-50/70 hover:bg-amber-100 text-xs font-bold text-stone-900 cursor-pointer">
-                        🛡️ ${sl.label}
+                      <button data-guild-slot="${sl.id}" class="w-full text-left p-3 rounded-xl border border-amber-400 bg-amber-50/80 hover:bg-amber-100 text-xs font-bold text-stone-900 cursor-pointer inline-flex items-center gap-2">
+                        ${getIconHtml("guilda", "w-4 h-4")} <span>${sl.label}</span>
                       </button>
                     `).join("")}
                   </div>
@@ -2517,7 +2707,7 @@
           for (let step = 0; step < numDiff; step++) {
             await new Promise(resolve => {
               openModal({
-                title: `✨ ${player.name}: Escolha benefício (${step + 1}/${numDiff})`,
+                title: `${player.name}: Escolha benefício (${step + 1}/${numDiff})`,
                 owner: player.id,
                 closable: false,
                 bodyHtml: `
@@ -2549,13 +2739,13 @@
             if (!canPay) break;
             const accepted = await new Promise(resolve => {
               openModal({
-                title: `🔁 ${player.name}: Realizar troca (${t + 1}/${maxTimes})?`,
+                title: `${player.name}: Realizar troca (${t + 1}/${maxTimes})?`,
                 owner: player.id,
                 closable: false,
                 bodyHtml: `<p class="text-xs text-stone-700">Deseja pagar <strong>${JSON.stringify(eff.pague)}</strong> para receber o benefício?</p>`,
                 footerButtons: [
                   { text: "Não", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } },
-                  { text: "Sim, Trocar", className: "px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }
+                  { text: "Sim, Trocar", className: "px-4 py-2 rounded-xl bg-emerald-800 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }
                 ]
               });
             });
@@ -2630,15 +2820,15 @@
 
         await new Promise(resolve => {
           openModal({
-            title: `📦 ${player.name}: Estocar recurso em Dragão (${i + 1}/${maxCount})`,
+            title: `${player.name}: Estocar recurso em Dragão (${i + 1}/${maxCount})`,
             owner: player.id,
             closable: false,
             bodyHtml: `
-              <p class="text-xs text-stone-600 mb-2">Escolha qual recurso do seu suprimento deseja estocar (vale 1 PV no fim da partida):</p>
+              <p class="text-xs text-stone-700 mb-2">Escolha qual recurso do seu suprimento deseja estocar (vale 1 PV no fim da partida):</p>
               <div class="grid grid-cols-2 gap-2">
                 ${availTypes.map(r => `
-                  <button data-tuck-r="${r}" class="p-2.5 rounded-xl border ${RESOURCE_META[r].color} text-xs font-bold cursor-pointer">
-                    ${RESOURCE_META[r].icon} Estocar ${RESOURCE_META[r].label}
+                  <button data-tuck-r="${r}" class="p-2.5 rounded-xl border ${RESOURCE_META[r].color} text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5">
+                    ${getIconHtml(RESOURCE_META[r].iconName, "w-4 h-4")} Estocar ${RESOURCE_META[r].label}
                   </button>
                 `).join("")}
               </div>
@@ -2677,15 +2867,15 @@
 
         await new Promise(resolve => {
           openModal({
-            title: `🃏 ${player.name}: Inserir Dragão da mão (${i + 1}/${maxCount})`,
+            title: `${player.name}: Inserir Dragão da mão (${i + 1}/${maxCount})`,
             owner: player.id,
             closable: false,
             bodyHtml: `
-              <p class="text-xs text-stone-600 mb-2">Escolha um Dragão da sua mão para inserir embaixo de <strong>${dragonsOnBoard[0].card.nome}</strong> (vale 1 PV):</p>
+              <p class="text-xs text-stone-700 mb-2">Escolha um Dragão da sua mão para inserir embaixo de <strong>${dragonsOnBoard[0].card.nome}</strong> (vale 1 PV):</p>
               <div class="space-y-2">
                 ${handDragons.map(hd => `
-                  <button data-tuck-hd="${hd.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer">
-                    🐉 ${hd.nome} (#${hd.numero})
+                  <button data-tuck-hd="${hd.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                    ${getIconHtml("dragao", "w-4 h-4")} <span>${hd.nome} (#${hd.numero})</span>
                   </button>
                 `).join("")}
               </div>
@@ -2720,12 +2910,12 @@
         ? dragonEntry.slot.tuckedCards.length
         : dragonEntry.slot.tuckedResources.filter(r => r === f.aceita).length;
 
-      addLog(`🐣 Filhote ${dragonEntry.card.nome} ativado (${count}/3)!`);
+      addLog(`Filhote ${dragonEntry.card.nome} ativado (${count}/3)!`);
       if (f.ganha && f.ganha.length > 0) {
         await executeEffectList(player, f.ganha, { cavernId: dragonEntry.cavernId, col: dragonEntry.col });
       }
       if (count === 3 && f.bonus && f.bonus.length > 0) {
-        addLog(`🌟 ${dragonEntry.card.nome} atingiu a 3ª marca e ativou seu bônus de crescimento!`);
+        addLog(`${dragonEntry.card.nome} atingiu a 3ª marca e ativou seu bônus de crescimento!`);
         await executeEffectList(player, f.bonus, { cavernId: dragonEntry.cavernId, col: dragonEntry.col });
       }
     }
@@ -2733,8 +2923,6 @@
     /* =========================================================================
        10. AS 5 AÇÕES DO TURNO: ESCAVAR, ATRAIR, EXPLORAR (3 CAVERNAS) E PASSAR
        ========================================================================= */
-
-    // AÇÃO 1: ESCAVAR
     function openExcavateModal(preselectedCardUid = null, isFree = false, forPlayerIdx = null) {
       return new Promise(resolve => _openExcavate(preselectedCardUid, isFree, forPlayerIdx, resolve));
     }
@@ -2762,7 +2950,7 @@
             coinCost,
             eggCost,
             affordable,
-            label: `${CAVERNS_META[cav.id].nome} — Coluna ${nextCol.col + 1} (Custo: ${coinCost}💰${eggCost > 0 ? ` + ${eggCost}🥚` : ''})`
+            labelHtml: `${CAVERNS_META[cav.id].nome} — Coluna ${nextCol.col + 1} (Custo: ${coinCost}${getIconHtml("moeda", "w-3.5 h-3.5")}${eggCost > 0 ? ` + ${eggCost}${getIconHtml("ovo", "w-3.5 h-3.5")}` : ''})`
           });
         }
       });
@@ -2776,30 +2964,30 @@
       let chosenCardUid = preselectedCardUid || caveCards[0].uid;
 
       openModal({
-        title: `⛏️ Ação: Escavar Espaço de Caverna`,
+        title: `Ação: Escavar Espaço de Caverna`,
         owner: player.id,
         closable: !isFree,
         bodyHtml: `
           <div class="space-y-4">
             <div>
-              <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">1. Escolha a Carta de Caverna da sua mão:</div>
+              <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">1. Escolha a Carta de Caverna da sua mão:</div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 ${caveCards.map(cc => `
                   <button data-exc-card="${cc.uid}" class="text-left p-2.5 rounded-xl border ${cc.uid === chosenCardUid ? 'border-amber-600 bg-amber-50 ring-2 ring-amber-500' : 'border-stone-300 bg-white'} text-xs cursor-pointer">
-                    <div class="font-bold text-stone-800">🪨 Caverna #${cc.numero}</div>
-                    <div class="text-stone-600 mt-0.5">${formatCardText(cc.texto)}</div>
+                    <div class="font-bold text-stone-900 inline-flex items-center gap-1">${getIconHtml("caverna", "w-3.5 h-3.5")} Caverna #${cc.numero}</div>
+                    <div class="text-stone-700 mt-0.5">${formatCardText(cc.texto)}</div>
                   </button>
                 `).join("")}
               </div>
             </div>
 
             <div>
-              <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">2. Escolha onde escavar (esquerda para direita):</div>
+              <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">2. Escolha onde escavar (esquerda para direita):</div>
               <div class="space-y-2">
                 ${targets.map((t, idx) => `
                   <button data-exc-target="${idx}" ${t.affordable ? '' : 'disabled'}
-                    class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer">
-                    ⛏️ ${t.label} ${t.affordable ? '' : '(Recursos insuficientes)'}
+                    class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                    ${getIconHtml("caverna", "w-4 h-4")} <span>${t.labelHtml} ${t.affordable ? '' : '(Recursos insuficientes)'}</span>
                   </button>
                 `).join("")}
               </div>
@@ -2836,7 +3024,7 @@
             round: gameState.round,
             playerName: player.name,
             playerColor: player.color.hex,
-            actionTitle: `⛏️ Escavou em ${CAVERNS_META[t.cavernId].nome} (Col. ${t.col + 1})`,
+            actionTitle: `Escavou em ${CAVERNS_META[t.cavernId].nome} (Col. ${t.col + 1})`,
             detail: `Jogou a Carta de Caverna #${playedCard.numero}.`,
             card: playedCard
           };
@@ -2845,24 +3033,22 @@
           renderAll();
           setTimeout(() => { if (gameState) gameState.justPlacedSlot = null; }, 650);
 
-          // 1. Ativa efeito "Quando Jogado" da Carta de Caverna
           if (playedCard.efeito && playedCard.efeito.length > 0) {
             await executeEffectList(player, playedCard.efeito, { cavernId: t.cavernId, col: t.col });
           }
 
-          // 2. Se cobriu a 4ª coluna (col === 3), ativa bônus "quando coberto" (1x: pague 3 itens -> ganhe 1 Moeda)
           if (t.col === 3) {
             const totalItems = totalResourcesCount(player) + player.hand.length;
             if (totalItems >= 3) {
               const wantCoverBonus = await new Promise(resolve => {
                 openModal({
-                  title: `💰 Bônus da 4ª Coluna Coberta`,
+                  title: `Bônus da 4ª Coluna Coberta`,
                   owner: player.id,
                   closable: false,
                   bodyHtml: `<p class="text-xs text-stone-700">Você cobriu a 4ª coluna! Deseja pagar <strong>3 itens quaisquer</strong> (recursos e/ou cartas da mão) para ganhar <strong>1 Moeda</strong>?</p>`,
                   footerButtons: [
                     { text: "Não", className: "px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } },
-                    { text: "Sim, Pagar 3 itens → +1💰", className: "px-4 py-2 rounded-xl bg-amber-700 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }
+                    { text: "Sim, Pagar 3 itens → +1 Moeda", className: "px-4 py-2 rounded-xl bg-amber-800 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }
                   ]
                 });
               });
@@ -2896,7 +3082,6 @@
       });
     }
 
-    // AÇÃO 2: ATRAIR DRAGÃO (COM CARTAS FÍSICAS COMPLETAS NA SELEÇÃO)
     async function openEnticeModal(preselectedDragonUid = null) {
       const player = gameState.players[gameState.activePlayerIdx];
       const dragonsInHand = player.hand.filter(c => c.cardType === "dragon");
@@ -2934,29 +3119,29 @@
       });
 
       openModal({
-        title: `🐉 Ação: Atrair Dragão para o Santuário`,
+        title: `Ação: Atrair Dragão para o Santuário`,
         bodyHtml: `
           <div class="space-y-4">
             <div>
-              <div class="text-xs font-bold uppercase text-stone-500 mb-2">1. Selecione um Dragão da sua mão (clique na carta para inspecionar e escolher):</div>
+              <div class="text-xs font-bold uppercase text-stone-600 mb-2">1. Selecione um Dragão da sua mão (clique na carta para inspecionar e escolher):</div>
               <div id="modal-entice-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto p-1"></div>
             </div>
 
-            <div class="p-3 rounded-xl bg-stone-100 border border-stone-200 text-xs">
+            <div class="p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs">
               <strong>Dragão Selecionado:</strong> <span class="font-bold text-stone-900">${selectedDragon.nome}</span> •
-              <strong>Custo Total:</strong> 1💰 + ${formatCostIconsOnly(selectedDragon.custo)}
-              ${!canPayCost ? '<span class="block text-red-700 font-bold mt-1">⚠️ Recursos ou Moedas insuficientes para atrair este Dragão.</span>' : ''}
+              <strong class="inline-flex items-center gap-1">Custo Total: 1${getIconHtml("moeda", "w-3.5 h-3.5")} + ${formatCostIconsOnly(selectedDragon.custo)}</strong>
+              ${!canPayCost ? '<span class="block text-red-700 font-bold mt-1">Recursos ou Moedas insuficientes para atrair este Dragão.</span>' : ''}
             </div>
 
             <div>
-              <div class="text-xs font-bold uppercase text-stone-500 mb-1.5">2. Escolha a Caverna compatível:</div>
+              <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">2. Escolha a Caverna compatível:</div>
               ${validCavernSlots.length === 0
-                ? `<div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-semibold">Nenhum espaço escavado disponível nas cavernas preferidas deste dragão. Escave primeiro!</div>`
+                ? `<div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 font-semibold">Nenhum espaço escavado disponível nas cavernas preferidas deste dragão. Escave primeiro!</div>`
                 : `<div class="space-y-2">
                     ${validCavernSlots.map((s, idx) => `
                       <button data-ent-slot="${idx}" ${canPayCost ? '' : 'disabled'}
-                        class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer">
-                        🐉 Colocar em ${s.label}
+                        class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                        ${getIconHtml("dragao", "w-4 h-4")} <span>Colocar em ${s.label}</span>
                       </button>
                     `).join("")}
                   </div>`
@@ -2976,8 +3161,8 @@
           onClick: () => openEnticeModal(d.uid)
         });
         if (isSel) {
-          cardEl.classList.add("ring-4", "ring-emerald-600");
-          cardEl.insertAdjacentHTML("afterbegin", `<div class="bg-emerald-600 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionado</div>`);
+          cardEl.classList.add("ring-4", "ring-emerald-700");
+          cardEl.insertAdjacentHTML("afterbegin", `<div class="bg-emerald-800 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionado</div>`);
         }
         enticeGrid.appendChild(cardEl);
       });
@@ -3012,7 +3197,7 @@
             round: gameState.round,
             playerName: player.name,
             playerColor: player.color.hex,
-            actionTitle: `🐉 Atraiu Dragão em ${CAVERNS_META[targetSlot.cavernId].nome} (Col. ${targetSlot.col + 1})`,
+            actionTitle: `Atraiu Dragão em ${CAVERNS_META[targetSlot.cavernId].nome} (Col. ${targetSlot.col + 1})`,
             detail: `Colocou ${card.nome} (#${card.numero}) no santuário.`,
             card
           };
@@ -3030,7 +3215,6 @@
       });
     }
 
-    // AÇÕES 3, 4 E 5: EXPLORAR CAVERNA (COM BÔNUS ESPECÍFICOS DE CADA UMA DAS 3 CAVERNAS!)
     async function exploreCavern(cavernId) {
       const player = gameState.players[gameState.activePlayerIdx];
       const cav = player.caverns[cavernId];
@@ -3052,7 +3236,7 @@
         round: gameState.round,
         playerName: player.name,
         playerColor: player.color.hex,
-        actionTitle: `🧭 Explorou ${meta.nome}`,
+        actionTitle: `Explorou ${meta.nome}`,
         detail: `${cav.explorationsThisRound}ª exploração nesta rodada.`,
         card: null
       };
@@ -3067,7 +3251,6 @@
         scheduleSync();
         await new Promise(r => setTimeout(r, 320));
 
-        // 1. Ativa o bônus específico da trilha da caverna naquela coluna!
         if (stepInfo.type === "resource_any") {
           await promptChooseResource(player, `${meta.nome} (Col. ${c + 1}): Ganhe 1 recurso`);
         } else if (stepInfo.type === "dragon_card") {
@@ -3080,7 +3263,6 @@
           await layEggsForPlayer(player, 1);
         }
 
-        // 2. Se houver um Dragão nesta casa, ativa sua habilidade 'Se Ativado' ('ativado')
         if (colObj.dragonSlot) {
           const dCard = colObj.dragonSlot.card;
           if (dCard.tipo === "ativado") {
@@ -3099,13 +3281,11 @@
             }
           }
 
-          // Se chegou ao fim da caverna (4º dragão), ativa bônus de fim de caverna!
           if (c === 3) {
             await resolveCavernEndBonus(player, cavernId);
           }
         } else {
-          // Encontrou espaço vazio (sinal de PARE ⛔): encerra exploração e retorna à base!
-          addLog(`⛔ Aventureiro de ${player.name} alcançou um espaço sem Dragão na Coluna ${c + 1} e retornou à Base.`);
+          addLog(`Aventureiro de ${player.name} alcançou a placa de PARE na Coluna ${c + 1} e retornou à Base.`);
           break;
         }
       }
@@ -3116,7 +3296,7 @@
     }
 
     async function resolveCavernEndBonus(player, cavernId) {
-      addLog(`✨ ${player.name} completou toda a trilha de ${CAVERNS_META[cavernId].nome}!`);
+      addLog(`${player.name} completou toda a trilha de ${CAVERNS_META[cavernId].nome}!`);
       if (cavernId === 0) {
         await promptTuckResource(player, "qualquer", 2);
       } else if (cavernId === 1) {
@@ -3126,15 +3306,16 @@
           if (player.hand.length === 0) break;
           const didDiscard = await new Promise(resolve => {
             openModal({
-              title: `🟣 Fim do Abismo Ametista (${i + 1}/2)`,
+              title: `Fim do Abismo Ametista (${i + 1}/2)`,
               owner: player.id,
               closable: false,
               bodyHtml: `
-                <p class="text-xs text-stone-600 mb-2">Descarte 1 carta da sua mão para botar 1 Ovo:</p>
+                <p class="text-xs text-stone-700 mb-2">Descarte 1 carta da sua mão para botar 1 Ovo:</p>
                 <div class="space-y-1.5">
                   ${player.hand.map(c => `
-                    <button data-disc-c="${c.uid}" class="w-full text-left p-2 rounded-xl border border-stone-300 bg-white hover:bg-purple-50 text-xs font-bold cursor-pointer">
-                      ${c.cardType === 'dragon' ? `🐉 ${c.nome}` : `🪨 Caverna #${c.numero}`}
+                    <button data-disc-c="${c.uid}" class="w-full text-left p-2 rounded-xl border border-stone-300 bg-white hover:bg-purple-50 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                      ${getIconHtml(c.cardType === 'dragon' ? 'dragao' : 'caverna', 'w-4 h-4')}
+                      <span>${c.cardType === 'dragon' ? c.nome : `Caverna #${c.numero}`}</span>
                     </button>
                   `).join("")}
                 </div>
@@ -3166,17 +3347,17 @@
         round: gameState.round,
         playerName: player.name,
         playerColor: player.color.hex,
-        actionTitle: `🏳️ Passou a Rodada ${gameState.round}`,
+        actionTitle: `Passou a Rodada ${gameState.round}`,
         detail: "Encerrou suas ações nesta rodada.",
         card: null
       };
-      addLog(`🏳️ ${player.name} optou por passar a rodada (aguardando confirmação).`);
+      addLog(`${player.name} optou por passar a rodada (aguardando confirmação).`);
       renderAll();
     }
 
     async function finishPlayerTurn() {
       gameState.pendingTurnConfirmation = true;
-      showToast("✅ Ação concluída! Confirme sua jogada ou clique em Desfazer.", "success");
+      showToast("Ação concluída! Confirme sua jogada ou clique em Desfazer.", "success");
       renderAll();
     }
 
@@ -3232,14 +3413,14 @@
        ========================================================================= */
     async function handleEndOfRound() {
       const rIdx = gameState.round - 1;
-      addLog(`🔔 Fim da Rodada ${gameState.round}! Iniciando manutenção...`);
+      addLog(`Fim da Rodada ${gameState.round}! Iniciando manutenção...`);
 
       const total = gameState.players.length;
       for (let offset = 0; offset < total; offset++) {
         const p = gameState.players[(gameState.firstPlayerIdx + offset) % total];
         const roundDragons = getVisibleDragons(p).filter(d => d.card.tipo === "rodada");
         for (const rd of roundDragons) {
-          addLog(`⏳ Ativando ${rd.card.nome} (1x/Rodada) de ${p.name}.`);
+          addLog(`Ativando ${rd.card.nome} (1x/Rodada) de ${p.name}.`);
           if (rd.card.pague) {
             await executeEffectList(p, [{ op: "troca", ate: 1, pague: rd.card.pague, ganhe: rd.card.efeito }], { cavernId: rd.cavernId, col: rd.col });
           } else {
@@ -3262,7 +3443,7 @@
 
         tiedGroup.forEach(entry => {
           entry.player.objectiveScores[rIdx] = awardedPts;
-          addLog(`🎯 Objetivo R${gameState.round} (${obj.titulo}): ${entry.player.name} (${entry.val}) ganhou ${awardedPts} PV.`);
+          addLog(`Objetivo R${gameState.round} (${obj.titulo}): ${entry.player.name} (${entry.val}) ganhou ${awardedPts} PV.`);
         });
 
         rankCursor++;
@@ -3298,7 +3479,7 @@
       gameState.viewingPlayerIdx = myIdx;
       gameState.pendingTurnConfirmation = false;
       saveTurnSnapshot();
-      addLog(`🌅 Rodada ${gameState.round} começou! Todos receberam +6 Moedas e +1 Ovo. Jogador Inicial: ${gameState.players[gameState.firstPlayerIdx].name}.`);
+      addLog(`Rodada ${gameState.round} começou! Todos receberam +6 Moedas e +1 Ovo. Jogador Inicial: ${gameState.players[gameState.firstPlayerIdx].name}.`);
       renderAll();
       flushSync();
     }
@@ -3386,23 +3567,23 @@
 
       const winner = results[0];
       document.getElementById("winner-announcement").textContent =
-        `🎉 ${winner.player.name} venceu com ${winner.total} Pontos de Vitória (${winner.visibleDragonsCount} Dragões no santuário)!`;
+        `${winner.player.name} venceu com ${winner.total} Pontos de Vitória (${winner.visibleDragonsCount} Dragões no santuário)!`;
 
       const rows = [
-        { label: "🛡️ Marcadores na Guilda do Dragão", key: "guildPts" },
-        { label: "🐉 PVs Impressos nos Dragões", key: "dragonBasePts" },
-        { label: "🏆 Habilidades de Fim de Partida", key: "endAbilityPts" },
-        { label: "🥚 Ovos no Tabuleiro (1 PV cada)", key: "eggPts" },
-        { label: "📦 Recursos Estocados (1 PV cada)", key: "tuckedResPts" },
-        { label: "🃏 Cartas Inseridas (1 PV cada)", key: "tuckedCardsPts" },
-        { label: "🎯 Objetivos Públicos (R1–R4)", key: "objectivesPts" },
-        { label: "💰 Moedas Restantes (1 PV cada)", key: "coinsPts" },
-        { label: "🎒 Itens Restantes (1 PV a cada 4)", key: "itemsPts" }
+        { label: "Marcadores na Guilda do Dragão", icon: "guilda", key: "guildPts" },
+        { label: "PVs Impressos nos Dragões", icon: "dragao", key: "dragonBasePts" },
+        { label: "Habilidades de Fim de Partida", icon: "fim", key: "endAbilityPts" },
+        { label: "Ovos no Tabuleiro (1 PV cada)", icon: "ovo", key: "eggPts" },
+        { label: "Recursos Estocados (1 PV cada)", icon: "estocar", key: "tuckedResPts" },
+        { label: "Cartas Inseridas (1 PV cada)", icon: "caverna", key: "tuckedCardsPts" },
+        { label: "Objetivos Públicos (R1–R4)", icon: "aventureiro", key: "objectivesPts" },
+        { label: "Moedas Restantes (1 PV cada)", icon: "moeda", key: "coinsPts" },
+        { label: "Itens Restantes (1 PV a cada 4)", icon: "qualquer", key: "itemsPts" }
       ];
 
       const table = document.getElementById("final-score-table");
       table.innerHTML = `
-        <thead class="bg-stone-900 text-amber-100">
+        <thead class="bg-[#2c1f18] text-amber-100">
           <tr>
             <th class="p-3 font-display">Categoria de Pontuação</th>
             ${results.map(r => `<th class="p-3 text-center font-display">${r.player.name}</th>`).join("")}
@@ -3411,7 +3592,7 @@
         <tbody class="divide-y divide-stone-200">
           ${rows.map(row => `
             <tr>
-              <td class="p-3 font-semibold text-stone-700">${row.label}</td>
+              <td class="p-3 font-semibold text-stone-800 flex items-center gap-2">${getIconHtml(row.icon, "w-4 h-4")} <span>${row.label}</span></td>
               ${results.map(r => `<td class="p-3 text-center font-bold text-stone-900">${r[row.key]}</td>`).join("")}
             </tr>
           `).join("")}
@@ -3425,16 +3606,16 @@
 
     document.getElementById("btn-open-rules").addEventListener("click", () => {
       openModal({
-        title: "📖 Resumo Rápido de Wyrmspan",
+        title: "Guia Rápido de Wyrmspan",
         bodyHtml: `
-          <div class="space-y-3 text-xs leading-relaxed text-stone-700">
-            <div class="p-3 rounded-xl bg-stone-100">
+          <div class="space-y-3 text-xs leading-relaxed text-stone-800">
+            <div class="p-3 rounded-xl bg-stone-100 border border-stone-300">
               <strong>1. Escavar:</strong> Pague 1 Moeda (+1 Ovo na 3ª coluna, +2 Ovos na 4ª) e jogue 1 Carta de Caverna da mão no espaço vazio mais à esquerda de uma caverna.
             </div>
-            <div class="p-3 rounded-xl bg-emerald-50">
+            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
               <strong>2. Atrair:</strong> Pague 1 Moeda + o custo do Dragão e coloque-o no espaço escavado mais à esquerda de uma caverna compatível com seu habitat. Ativa habilidades <em>Quando Jogado</em>.
             </div>
-            <div class="p-3 rounded-xl bg-amber-50">
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200">
               <strong>3. Explorar (1 das 3 cavernas):</strong>
               <ul class="list-disc pl-4 mt-1 space-y-0.5">
                 <li><strong>Caverna Escarlate:</strong> Dá Recursos (Col. 1 e 3), Guilda (Col. 2), Ovo (Col. 4) e estoca até 2 recursos no fim.</li>
@@ -3442,7 +3623,7 @@
                 <li><strong>Abismo Ametista:</strong> Dá Cartas de Caverna (Col. 1 e 3), Guilda (Col. 2), Ovo (Col. 4) e descarta até 2 cartas por ovos no fim.</li>
               </ul>
             </div>
-            <div class="p-3 rounded-xl bg-purple-50">
+            <div class="p-3 rounded-xl bg-purple-50 border border-purple-200">
               <strong>Limites & Troca 2:1:</strong> A qualquer momento, troque 2 recursos quaisquer por 1 à escolha. No fim do turno, o limite máximo é de 9 Moedas, 9 cartas na mão e 9 fichas de recurso.
             </div>
           </div>
@@ -3452,11 +3633,7 @@
     });
 
     /* =========================================================================
-       12. CAMADA ONLINE (WebSocket + salas)
-       Modelo: o jogador da vez roda o motor de regras no próprio navegador e
-       envia o estado ao servidor; os demais recebem e desenham. Quando uma
-       carta obriga OUTRO jogador a decidir (ex.: "cada oponente ganha..."),
-       o pop-up é espelhado na tela dele e o clique volta para quem roda o motor.
+       12. CAMADA ONLINE (WebSocket + Salas)
        ========================================================================= */
     const BASE_TITLE = document.title;
     const NET = {
@@ -3470,9 +3647,9 @@
     let syncTimer = null;
     let needsSync = false;
     let pendingHandoff = false;
-    let activeMirror = null;   // modal do motor que está sendo exibido a outro jogador
+    let activeMirror = null;
     let mirrorSeq = 0;
-    let remoteModal = null;    // modal espelhado exibido AQUI (decidido por mim, rodando no motor de outro)
+    let remoteModal = null;
     let draftSentSel = null;
     let draftShownIdx = null;
     let cardsLoaded = false;
@@ -3480,7 +3657,6 @@
     const byId = (id) => document.getElementById(id);
     const cleanName = (s) => String(s || "").replace(/[<>&"'`\\]/g, "").trim().slice(0, 24);
 
-    /* ---------- sessão (por aba) ---------- */
     function getToken() {
       let t = sessionStorage.getItem("wyrm_token");
       if (!t) {
@@ -3500,7 +3676,6 @@
       try { sessionStorage.setItem("wyrm_last", JSON.stringify({ v: msg.v, phase: msg.phase, state: msg.state })); } catch {}
     }
 
-    /* ---------- conexão ---------- */
     function wsOpen() { return NET.ws && NET.ws.readyState === 1; }
     function netSend(obj) {
       if (!wsOpen()) return false;
@@ -3603,7 +3778,6 @@
     function onNoRoom() {
       const s = loadSession();
       if (!NET.pendingHello && s && !NET.restoreTried) {
-        // O servidor reiniciou: reconstruímos a sala com o que este navegador guardou.
         NET.restoreTried = true;
         let last = null;
         try { last = JSON.parse(sessionStorage.getItem("wyrm_last") || "null"); } catch {}
@@ -3636,9 +3810,7 @@
       NET.prevConn = m.seats.map(s => Boolean(s && s.connected));
       const justBack = (seat) => NET.prevConn[seat] && !prev[seat];
 
-      // Alguém voltou enquanto eu esperava uma decisão dele: reenvia o pop-up
       if (activeMirror && gameState && justBack(seatOfIdx(activeMirror.ownerIdx))) sendMirror();
-      // O anfitrião voltou e minha escolha inicial ainda não foi aplicada
       if (gameState && gameState.phase === "draft" && draftSentSel && myIdx >= 0 &&
           !gameState.players[myIdx].draftDone && justBack(NET.hostSeat)) {
         submitDraftChoice(myIdx, draftSentSel);
@@ -3657,13 +3829,12 @@
       const banner = byId("reconnect-banner");
       const ok = NET.connected && wsOpen();
       if (pill) {
-        pill.textContent = ok ? "🟢 Online" : "🟠 Reconectando…";
-        pill.className = "px-2 py-0.5 rounded-full text-[10px] font-bold " + (ok ? "bg-emerald-100 text-emerald-900" : "bg-amber-200 text-amber-950");
+        pill.textContent = ok ? "Online" : "Reconectando…";
+        pill.className = "px-2 py-0.5 rounded-full text-[10px] font-bold " + (ok ? "bg-emerald-100 text-emerald-950 border border-emerald-300" : "bg-amber-200 text-amber-950");
       }
       if (banner) banner.classList.toggle("hidden", ok || !NET.room);
     }
 
-    /* ---------- estado compartilhado ---------- */
     function sendState(handoff = false) {
       if (!gameState) return;
       clearTimeout(syncTimer);
@@ -3679,7 +3850,7 @@
       if (!engineOwner || !gameState) return;
       sendState(handoff);
       if (gameState.activePlayerIdx !== myIdx || gameState.phase !== "game") {
-        engineOwner = false;      // passei a vez: daqui em diante só leio
+        engineOwner = false;
         renderAll();
       }
     }
@@ -3704,7 +3875,7 @@
 
     function onRemoteState(m) {
       if (m.v <= NET.version) return;
-      if (engineOwner && m.state && m.state.activePlayerIdx === myIdx && m.phase === "game") return; // eu sou quem escreve
+      if (engineOwner && m.state && m.state.activePlayerIdx === myIdx && m.phase === "game") return;
       NET.version = m.v;
       cacheLast(m);
       adoptState(m.state, null, true);
@@ -3745,9 +3916,9 @@
     }
 
     function notifyMyTurn() {
-      showToast("🔔 É a sua vez!", "success");
+      showToast("É a sua vez!", "success");
       if (document.hidden) {
-        document.title = "🔔 Sua vez! — Wyrmspan";
+        document.title = "Sua vez! — Wyrmspan";
         try {
           const Ctx = window.AudioContext || window.webkitAudioContext;
           const c = new Ctx();
@@ -3787,9 +3958,22 @@
     }
 
     function closeRoom() {
-      if (!confirm("Encerrar a sala para todos? A partida será apagada.")) return;
-      netSend({ t: "close" });
-      resetToConnect("Sala encerrada.");
+      openModal({
+        title: "Encerrar Sala?",
+        bodyHtml: `<p class="text-xs text-stone-700">Deseja realmente encerrar a sala para todos os jogadores? A partida atual será apagada.</p>`,
+        footerButtons: [
+          { text: "Cancelar", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold cursor-pointer", onClick: closeModal },
+          {
+            text: "Encerrar Sala",
+            className: "px-4 py-2 rounded-xl bg-red-800 text-white text-xs font-bold cursor-pointer",
+            onClick: () => {
+              closeModal();
+              netSend({ t: "close" });
+              resetToConnect("Sala encerrada.");
+            }
+          }
+        ]
+      });
     }
 
     function onClosed() { resetToConnect("A sala foi encerrada pelo anfitrião."); }
@@ -3828,7 +4012,6 @@
       renderLobby();
     }
 
-    /* ---------- draft inicial (cada um escolhe no seu aparelho) ---------- */
     function renderDraftOnline() {
       if (myIdx < 0) return;
       const me = gameState.players[myIdx];
@@ -3859,7 +4042,7 @@
       renderDraftOnline();
     }
 
-    function applyDraftChoice(idx, sel) {   // só o anfitrião executa
+    function applyDraftChoice(idx, sel) {
       if (!gameState || gameState.phase !== "draft") return;
       const player = gameState.players[idx];
       if (!player || player.draftDone || !player.draftPool || !sel) return;
@@ -3893,7 +4076,6 @@
       routePhase();
     }
 
-    /* ---------- espelhamento de pop-ups ---------- */
     function showWaiting(text) {
       const el = byId("waiting-banner");
       el.textContent = text;
@@ -3970,7 +4152,6 @@
       }
     }
 
-    /* ---------- sala (lobby) ---------- */
     function renderLobby() {
       if (!byId("lobby-connect")) return;
       byId("lobby-connect").classList.toggle("hidden", Boolean(NET.room));
@@ -3983,95 +4164,118 @@
 
       let colorIdx = 0;
       byId("lobby-seats").innerHTML = NET.seats.map((s, seat) => {
-        if (!s) return "";
-        const color = PLAYER_COLORS[Math.min(colorIdx++, PLAYER_COLORS.length - 1)];
-        return `
-          <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-stone-200">
-            <span class="w-7 h-7 rounded-full ${color.bg} text-white text-xs font-bold flex items-center justify-center shrink-0">${colorIdx}</span>
-            <span class="flex-1 text-sm font-bold text-stone-800">${s.name}${seat === mySeat ? ' <span class="text-[10px] font-bold text-emerald-700">(você)</span>' : ''}</span>
-            ${seat === NET.hostSeat ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-950">ANFITRIÃO</span>' : ''}
-            <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${s.connected ? 'bg-emerald-100 text-emerald-900' : 'bg-stone-200 text-stone-600'}">${s.connected ? 'online' : 'offline'}</span>
+        if (!s) {
+          return `<div class="flex items-center gap-3 p-3 rounded-xl bg-white/50 border border-dashed border-stone-300 text-stone-400">
+            <span class="w-7 h-7 rounded-full border border-dashed border-stone-300 text-xs font-bold flex items-center justify-center">${seat + 1}</span>
+            <span class="text-xs font-semibold">Assento vazio</span>
           </div>`;
+        }
+        const c = PLAYER_COLORS[colorIdx++];
+        return `<div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-stone-300">
+          <span class="w-7 h-7 rounded-full ${c.bg} text-white text-xs font-bold flex items-center justify-center shrink-0">${seat + 1}</span>
+          <span class="flex-1 text-sm font-bold text-stone-900">${s.name}${seat === mySeat ? " (você)" : ""}</span>
+          ${seat === NET.hostSeat ? '<span class="px-2 py-0.5 rounded-full bg-amber-200 border border-amber-400 text-amber-950 text-[10px] font-bold uppercase">Anfitrião</span>' : ''}
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${s.connected ? "bg-emerald-100 text-emerald-950" : "bg-stone-200 text-stone-600"}">${s.connected ? "Conectado" : "Desconectado"}</span>
+        </div>`;
       }).join("");
 
-      const ready = NET.seats.filter(s => s && s.connected).length;
+      const connCount = NET.seats.filter(s => s && s.connected).length;
       const startBtn = byId("btn-start-game");
       startBtn.classList.toggle("hidden", !isHost);
-      startBtn.disabled = !(isHost && ready >= 2 && cardsLoaded);
+      startBtn.disabled = !isHost || connCount < 2 || !cardsLoaded;
       byId("lobby-wait-text").classList.toggle("hidden", isHost);
-      byId("lobby-need-text").classList.toggle("hidden", !(isHost && ready < 2));
+      byId("lobby-need-text").classList.toggle("hidden", !isHost || connCount >= 2);
       byId("guild-select").disabled = !isHost;
     }
 
-    async function loadCards() {
-      const badge = byId("deck-stats-badge");
+    function initOnline() {
+      initStaticIcons();
+
       try {
-        const res = await fetch("/cartas.json?v=" + Date.now(), { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const j = await res.json();
-        if (!Array.isArray(j.dragoes) || !Array.isArray(j.cavernas)) throw new Error("formato inválido");
-        cardDatabase = { dragoes: j.dragoes, cavernas: j.cavernas };
-        cardsLoaded = true;
-        updateDeckStatsBadge();
-      } catch (e) {
-        badge.textContent = "Erro ao ler cartas.json";
-        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-900";
-        console.error("cartas.json:", e);
+        const saved = localStorage.getItem("wyrm_name");
+        if (saved) byId("my-name-input").value = saved;
+      } catch {}
+
+      const qRoom = new URLSearchParams(location.search).get("sala");
+      if (qRoom) {
+        const clean = qRoom.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+        byId("join-code-input").value = clean;
       }
-      renderLobby();
-    }
 
-    function initLobby() {
-      const nameInput = byId("my-name-input");
-      try { nameInput.value = localStorage.getItem("wyrm_name") || ""; } catch {}
-      const urlRoom = new URLSearchParams(location.search).get("sala");
-      if (urlRoom) byId("join-code-input").value = urlRoom.toUpperCase().slice(0, 4);
-
-      byId("btn-create-room").onclick = () => startConnect({ create: true });
-      byId("btn-join-room").onclick = () => startConnect({ room: byId("join-code-input").value.trim() });
+      byId("btn-create-room").addEventListener("click", () => startConnect({}));
+      byId("btn-join-room").addEventListener("click", () => startConnect({ room: byId("join-code-input").value.trim() }));
       byId("join-code-input").addEventListener("keydown", (e) => { if (e.key === "Enter") byId("btn-join-room").click(); });
-      byId("btn-start-game").onclick = startDraftPhase;
-      ["btn-close-room", "btn-close-room-hud", "btn-close-room-over"].forEach(id => { byId(id).onclick = closeRoom; });
-      byId("btn-leave-room").onclick = () => { if (confirm("Sair da sala?")) leaveRoom(); };
-      byId("btn-copy-link").onclick = async () => {
-        const url = location.origin + "/?sala=" + NET.room;
-        try { await navigator.clipboard.writeText(url); showToast("Link copiado! Envie para o outro jogador.", "success"); }
-        catch { prompt("Copie o link:", url); }
-      };
+      byId("my-name-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") (byId("join-code-input").value.trim() ? byId("btn-join-room") : byId("btn-create-room")).click();
+      });
+      byId("btn-leave-room").addEventListener("click", leaveRoom);
+      byId("btn-close-room").addEventListener("click", closeRoom);
+      byId("btn-close-room-hud").addEventListener("click", closeRoom);
+      byId("btn-close-room-over").addEventListener("click", closeRoom);
+      byId("btn-start-game").addEventListener("click", startDraftPhase);
 
-      // Cliques no pop-up espelhado vão para quem roda o motor de regras
-      byId("modal-box").addEventListener("click", (e) => {
+      byId("btn-copy-link").addEventListener("click", () => {
+        const url = `${location.origin}${location.pathname}?sala=${NET.room}`;
+        const tmp = document.createElement("textarea");
+        tmp.value = url;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        tmp.remove();
+        showToast("Link copiado para a área de transferência!", "success");
+      });
+
+      byId("modal-box").addEventListener("click", (ev) => {
         if (!remoteModal || remoteModal.busy) return;
-        const sel = "button, .cursor-pointer";
-        const el = e.target.closest(sel);
-        if (!el || el.disabled) return;
-        const idx = [...byId("modal-box").querySelectorAll(sel)].indexOf(el);
+        const t = ev.target.closest("button, .cursor-pointer");
+        if (!t || !byId("modal-box").contains(t) || t.disabled) return;
+        const els = [...byId("modal-box").querySelectorAll("button, .cursor-pointer")];
+        const idx = els.indexOf(t);
         if (idx < 0) return;
         remoteModal.busy = true;
         netSendTo(remoteModal.from, { k: "mClick", id: remoteModal.id, idx });
+        setTimeout(() => { if (remoteModal) remoteModal.busy = false; }, 1200);
       });
 
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) {
-          document.title = BASE_TITLE;
-          if ((loadSession() || NET.pendingHello) && !wsOpen()) { NET.retry = 0; connectWS(); }
+      window.addEventListener("focus", () => { document.title = BASE_TITLE; });
+      window.addEventListener("beforeunload", () => {
+        if (engineOwner && gameState) sendState(false);
+      });
+
+      const sess = loadSession();
+      if (sess && sess.room) {
+        NET.name = sess.name || "";
+        if (NET.name) byId("my-name-input").value = NET.name;
+        let last = null;
+        try { last = JSON.parse(sessionStorage.getItem("wyrm_last") || "null"); } catch {}
+        if (last && last.state) {
+          NET.version = last.v || 0;
+          adoptState(last.state, null, false);
         }
-      });
-      window.addEventListener("online", () => { if ((loadSession() || NET.pendingHello) && !wsOpen()) connectWS(); });
-
-      updateDeckStatsBadge();
-      loadCards();
-      renderLobby();
-
-      const s = loadSession();
-      if (s) {
-        NET.name = s.name;
-        byId("lobby-error").textContent = "Reconectando à sala " + s.room + "…";
         connectWS();
+      } else {
+        renderLobby();
       }
     }
 
-    initLobby();
+    async function loadCardsJson() {
+      try {
+        const res = await fetch("/cartas.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        cardDatabase.dragoes = data.dragoes || [];
+        cardDatabase.cavernas = data.cavernas || [];
+        cardsLoaded = true;
+        updateDeckStatsBadge();
+        renderLobby();
+      } catch (e) {
+        const b = byId("deck-stats-badge");
+        if (b) { b.textContent = "Erro ao carregar cartas.json"; b.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-900"; }
+      }
+    }
+
+    initOnline();
+    loadCardsJson();
   </script>
 </body>
 </html>
