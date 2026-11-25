@@ -2253,7 +2253,7 @@
       closeBtn.onclick = closeModal;
 
       const ownerIdx = (owner === null || owner === undefined) ? myIdx : owner;
-      const remote = gameState && ownerIdx !== myIdx && gameState.players[ownerIdx];
+      const remote = !SANDBOX && gameState && ownerIdx !== myIdx && gameState.players[ownerIdx];
       if (remote) {
         backdrop.classList.add("hidden");
         showWaiting(`Aguardando ${gameState.players[ownerIdx].name} decidir…`);
@@ -2774,6 +2774,7 @@
             await openExcavateModal(gained ? gained.uid : null, true, player.id, gained ? gained.uid : null);
           }
         } else {
+          (window.__unimpl || (window.__unimpl = [])).push(eff.op);
           console.warn("Efeito ainda não implementado:", eff.op, eff);
           addLog(`Aviso: o efeito "${eff.op}" ainda não está implementado no jogo e foi ignorado.`);
           showToast(`Efeito "${eff.op}" ainda não implementado.`, "warn");
@@ -3233,7 +3234,9 @@
           setTimeout(() => { if (gameState) gameState.justPlacedSlot = null; }, 650);
 
           if (card.tipo === "jogado" && card.efeito && card.efeito.length > 0) {
-            await executeEffectList(player, card.efeito, { cavernId: targetSlot.cavernId, col: targetSlot.col });
+            const playCtx = { cavernId: targetSlot.cavernId, col: targetSlot.col };
+            if (card.pague) await executeEffectList(player, [{ op: "troca", ate: 1, pague: card.pague, ganhe: card.efeito }], playCtx);
+            else await executeEffectList(player, card.efeito, playCtx);
           }
 
           await finishPlayerTurn();
@@ -3662,6 +3665,7 @@
        12. CAMADA ONLINE (WebSocket + Salas)
        ========================================================================= */
     const BASE_TITLE = document.title;
+    const SANDBOX = new URLSearchParams(location.search).has("testador");
     const NET = {
       ws: null, room: null, seats: [], hostSeat: 0, phase: "lobby", version: 0,
       name: "", pendingHello: null, retry: 0, reconnectTimer: null,
@@ -3862,7 +3866,7 @@
     }
 
     function sendState(handoff = false) {
-      if (!gameState) return;
+      if (!gameState || SANDBOX) return;
       clearTimeout(syncTimer);
       syncTimer = null;
       NET.version++;
@@ -3881,7 +3885,7 @@
       }
     }
     function scheduleSync() {
-      if (!engineOwner) return;
+      if (!engineOwner || SANDBOX) return;
       clearTimeout(syncTimer);
       syncTimer = setTimeout(() => doSync(false), 90);
     }
@@ -4216,6 +4220,7 @@
 
     function initOnline() {
       initStaticIcons();
+      if (SANDBOX) return;
 
       try {
         const saved = localStorage.getItem("wyrm_name");
@@ -4294,10 +4299,403 @@
         cardsLoaded = true;
         updateDeckStatsBadge();
         renderLobby();
+        if (SANDBOX) sbStart();
       } catch (e) {
         const b = byId("deck-stats-badge");
         if (b) { b.textContent = "Erro ao carregar cartas.json"; b.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-900"; }
       }
+    }
+
+    /* =========================================================================
+       13. TESTADOR DE CARTAS (abra o jogo com /?testador=1)
+       ========================================================================= */
+    // Mantenha estas listas em sincronia com o motor de efeitos (executeEffectList / computeEndGameDragonPoints)
+    const SUPPORTED_OPS = new Set(["moeda", "ganhe", "ovo", "dragao", "caverna", "guilda", "avancarGuilda", "estocar", "inserir", "oponentes", "escolha", "troca", "ativarOutro", "escavar"]);
+    const SUPPORTED_FIM_CONTAR = new Set(["outrosDragoesCaverna", "marcadoresGuilda", "dragoesRodada", "medio", "filhote", "cavernasEscavadas"]);
+    const SUPPORTED_FIM_COND = new Set(["colunaCheia", "cavernaCheia"]);
+
+    const SB = { results: {}, tab: "dragon", filter: "", onlyBad: false, busy: false, stop: false, modals: 0, errors: [], info: "", last: null };
+
+    function sbCollectOps(x, out) {
+      if (Array.isArray(x)) x.forEach(v => sbCollectOps(v, out));
+      else if (x && typeof x === "object") {
+        if (typeof x.op === "string") out.add(x.op);
+        Object.values(x).forEach(v => sbCollectOps(v, out));
+      }
+      return out;
+    }
+
+    function sbStaticIssues(card, kind) {
+      const issues = [];
+      const ops = sbCollectOps(card.efeito || [], new Set());
+      if (card.filhote) { sbCollectOps(card.filhote.ganha || [], ops); sbCollectOps(card.filhote.bonus || [], ops); }
+      ops.forEach(o => { if (!SUPPORTED_OPS.has(o)) issues.push(`efeito "${o}" não implementado`); });
+      if (kind === "dragon" && card.tipo === "fim") {
+        const f = card.fim;
+        if (!f) issues.push('tipo "fim" sem o campo fim');
+        else if (f.contar) { if (!SUPPORTED_FIM_CONTAR.has(f.contar)) issues.push(`fim "contar: ${f.contar}" não implementado`); }
+        else if (f.condicao) { if (!SUPPORTED_FIM_COND.has(f.condicao)) issues.push(`fim "condicao: ${f.condicao}" não implementado`); }
+        else issues.push("fim sem contar/condicao");
+      }
+      return issues;
+    }
+
+    let sbUid = 0;
+    function sbCard(src, kind) {
+      return { ...JSON.parse(JSON.stringify(src)), uid: `T${++sbUid}`, cardType: kind === "dragon" ? "dragon" : "cave" };
+    }
+    function sbFiller(i) {
+      return {
+        cardType: "dragon", uid: `F${++sbUid}`, numero: 900 + i, nome: "Dragão Figurante",
+        tam: ["pequeno", "medio", "grande", "filhote"][i % 4], hab: [0, 1, 2], custo: {}, pv: 1, ninhos: 3,
+        tipo: ["jogado", "ativado", "rodada"][i % 3], traco: ["timido", "agressivo", "brincalhao", "prestativo"][i % 4],
+        pague: null, efeito: [{ op: "moeda", n: 1 }], fim: null, filhote: null, texto: "(figurante de teste: ganhe 1 moeda)"
+      };
+    }
+
+    function sbNewState() {
+      const { dragonDeck, caveDeck } = buildDecks();
+      const mk = (i, name) => ({
+        id: i, seat: i, name, color: PLAYER_COLORS[i], coins: 6,
+        resources: { carne: 3, ouro: 3, cristal: 3, leite: 3 }, baseEggs: 1, hand: [],
+        caverns: [0, 1, 2].map(id => ({ id, explorationsThisRound: 0, cols: [0, 1, 2, 3].map(c => ({ col: c, excavated: true, caveCard: null, dragonSlot: null })) })),
+        guildPos: 0, guildMarkersUsed: 0, passed: false, draftDone: true, objectiveScores: [0, 0, 0, 0]
+      });
+      const players = [mk(0, "Testador"), mk(1, "Oponente")];
+      let f = 0;
+      players.forEach(p => p.caverns.forEach(cav => cav.cols.forEach(col => {
+        col.dragonSlot = { card: sbFiller(f++), eggs: 0, tuckedResources: [], tuckedCards: [] };
+      })));
+      for (let i = 0; i < 3; i++) {
+        players[0].hand.push(dragonDeck.pop(), caveDeck.pop());
+        players[1].hand.push(dragonDeck.pop());
+      }
+      return {
+        phase: "game", players, dragonDeck, dragonDiscard: [], caveDeck, caveDiscard: [],
+        displayDragons: [dragonDeck.pop(), dragonDeck.pop(), dragonDeck.pop()].filter(Boolean),
+        displayCaves: [caveDeck.pop(), caveDeck.pop(), caveDeck.pop()].filter(Boolean),
+        guildId: "navegantes", guildSlotOccupants: {},
+        objectives: OBJECTIVE_TILES.slice(0, 4).map(o => ({ id: o.id, titulo: o.titulo })),
+        round: 1, firstPlayerIdx: 0, activePlayerIdx: 0, viewingPlayerIdx: 0, adventurerPos: null,
+        logs: [], pendingTurnConfirmation: false, lastActionShowcase: null, justPlacedSlot: null
+      };
+    }
+
+    function sbReset() {
+      closeModal();
+      hideWaiting();
+      gameState = sbNewState();
+      myIdx = 0; mySeat = 0; engineOwner = true;
+      saveTurnSnapshot();
+      showScreen("game-screen");
+      renderAll();
+    }
+
+    function sbMetrics(st) {
+      return st.players.map(p => ({
+        "Moedas": p.coins, "Carne": p.resources.carne, "Ouro": p.resources.ouro, "Cristal": p.resources.cristal, "Leite": p.resources.leite,
+        "Ovos": countPlayerEggs(p), "Cartas na mão": p.hand.length, "Recursos estocados": countTuckedResources(p),
+        "Cartas inseridas": countTuckedCards(p), "Posição na Guilda": p.guildPos, "Marcadores da Guilda": p.guildMarkersUsed,
+        "Cavernas escavadas": countExcavatedCards(p), "Dragões no tabuleiro": getVisibleDragons(p).length
+      }));
+    }
+
+    function sbDiff(before, after) {
+      const lines = [];
+      const who = ["Você", "Oponente"];
+      after.forEach((a, i) => {
+        const parts = [];
+        Object.keys(a).forEach(k => { const d = a[k] - before[i][k]; if (d !== 0) parts.push(`${k} ${d > 0 ? "+" : ""}${d}`); });
+        if (parts.length) lines.push(`${who[i]}: ${parts.join(", ")}`);
+      });
+      return lines;
+    }
+
+    async function sbRunDragon(st, p, card) {
+      const cavernId = card.hab && card.hab.length ? card.hab[0] : 0;
+      p.caverns[cavernId].cols[1].dragonSlot = { card, eggs: 0, tuckedResources: [], tuckedCards: [] };
+      const ctx = { cavernId, col: 1 };
+      if (sbCollectOps(card.efeito || [], new Set()).has("escavar")) {
+        // abre espaço para a escavação gratuita do teste
+        const free = p.caverns[2].cols[3];
+        free.excavated = false; free.dragonSlot = null;
+      }
+      renderAll();
+      const runEffect = async () => {
+        if (!card.efeito || card.efeito.length === 0) return;
+        if (card.pague) await executeEffectList(p, [{ op: "troca", ate: 1, pague: card.pague, ganhe: card.efeito }], ctx);
+        else await executeEffectList(p, card.efeito, ctx);
+      };
+      if (card.tipo === "jogado") {
+        await runEffect();
+      } else if (card.tipo === "ativado") {
+        if (card.tam === "filhote" && card.filhote) {
+          SB.info = "Filhote: estoca 3 vezes para testar também o bônus da 3ª marca.";
+          for (let i = 0; i < 3; i++) {
+            if (card.filhote.aceita === "carta") await promptTuckHandDragon(p, 1, ctx);
+            else await promptTuckResource(p, card.filhote.aceita, 1, ctx);
+          }
+        } else await runEffect();
+      } else if (card.tipo === "rodada") {
+        await runEffect();
+      } else if (card.tipo === "fim") {
+        SB.info = `Pontos de fim de partida deste dragão neste cenário de teste: ${computeEndGameDragonPoints(p)} PV (cavernas cheias de figurantes de traços variados).`;
+      }
+    }
+
+    function sbAutoStep() {
+      if (byId("modal-backdrop").classList.contains("hidden")) return false;
+      const box = byId("modal-box");
+      const sels = ["[data-exc-target]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]", "[data-choice-idx]:not([disabled])",
+        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-hd]", "[data-disc-c]"];
+      for (const s of sels) { const el = box.querySelector(s); if (el) { el.click(); return true; } }
+      const foot = [...byId("modal-footer").querySelectorAll("button")];
+      const btn = foot.find(b => /^(sim|confirmar|entendi)/i.test(b.textContent.trim())) || foot[0];
+      if (btn) { btn.click(); return true; }
+      return false;
+    }
+
+    async function sbDrain() {
+      for (let i = 0; i < 15; i++) {
+        if (!byId("modal-backdrop").classList.contains("hidden")) {
+          const foot = [...byId("modal-footer").querySelectorAll("button")];
+          const cancel = foot.find(b => /^(pular|não|nao|cancelar|fechar)/i.test(b.textContent.trim())) || foot[foot.length - 1];
+          if (cancel) cancel.click(); else sbAutoStep();
+        }
+        await new Promise(r => setTimeout(r, 150));
+      }
+      closeModal();
+    }
+
+    async function sbRunOne(kind, idx, auto) {
+      const src = (kind === "dragon" ? cardDatabase.dragoes : cardDatabase.cavernas)[idx];
+      const key = kind + idx;
+      sbReset();
+      const st = gameState, p = st.players[0];
+      const card = sbCard(src, kind);
+      const issues = sbStaticIssues(src, kind);
+      const before = sbMetrics(st);
+      const logsBefore = st.logs.length;
+      SB.errors = []; SB.modals = 0; SB.info = ""; window.__unimpl = [];
+      let thrown = null, timedOut = false;
+
+      const work = (async () => {
+        try {
+          if (kind === "dragon") await sbRunDragon(st, p, card);
+          else {
+            p.caverns.forEach(cav => cav.cols.forEach(c => { if (c.col > 0) { c.excavated = false; c.dragonSlot = null; } }));
+            p.hand.push(card);
+            renderAll();
+            await openExcavateModal(card.uid, true, 0, card.uid);
+          }
+        } catch (e) { thrown = e; }
+      })();
+
+      let timer = null;
+      if (auto) timer = setInterval(sbAutoStep, 140);
+      const limit = auto ? 9000 : 10 * 60 * 1000;
+      let tId;
+      await Promise.race([work, new Promise(r => { tId = setTimeout(() => { timedOut = true; r(); }, limit); })]);
+      clearTimeout(tId);
+      if (timer) clearInterval(timer);
+      if (timedOut) await sbDrain();
+      await new Promise(r => setTimeout(r, 200));
+
+      const after = sbMetrics(st);
+      const diff = sbDiff(before, after);
+      const newLogs = st.logs.slice(0, Math.max(0, st.logs.length - logsBefore)).reverse().map(l => l.text);
+      const unimpl = [...new Set(window.__unimpl || [])];
+      const problems = [...issues];
+      unimpl.forEach(o => { const m = `efeito "${o}" não implementado`; if (!problems.includes(m)) problems.push(m); });
+      if (thrown) problems.push("erro: " + (thrown.message || thrown));
+      SB.errors.forEach(e => problems.push("erro: " + e));
+      if (timedOut) problems.push("travou: um pop-up ficou aberto sem resposta");
+
+      let status = "ok";
+      if (problems.length) status = (thrown || SB.errors.length || timedOut) ? "erro" : "naoimpl";
+      else if (diff.length === 0 && SB.modals === 0 && !SB.info) status = "semefeito";
+
+      const res = { key, kind, numero: src.numero, nome: src.nome, status, problems, diff, logs: newLogs, info: SB.info, text: src.texto, auto };
+      SB.results[key] = res;
+      SB.last = res;
+      saveTurnSnapshot();
+      renderAll();
+      return res;
+    }
+
+    const SB_STATUS = {
+      ok: { chip: "OK", cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+      semefeito: { chip: "Sem efeito visível", cls: "bg-amber-100 text-amber-900 border-amber-300" },
+      naoimpl: { chip: "Não implementado", cls: "bg-red-100 text-red-900 border-red-300" },
+      erro: { chip: "Erro", cls: "bg-red-200 text-red-950 border-red-400" },
+      novo: { chip: "Não testada", cls: "bg-stone-100 text-stone-600 border-stone-300" }
+    };
+
+    function sbList() {
+      const arr = SB.tab === "dragon" ? cardDatabase.dragoes : cardDatabase.cavernas;
+      const q = SB.filter.trim().toLowerCase();
+      return arr.map((c, idx) => ({ c, idx })).filter(({ c, idx }) => {
+        const r = SB.results[SB.tab + idx];
+        const st = r ? r.status : (sbStaticIssues(c, SB.tab).length ? "naoimpl" : "novo");
+        if (SB.onlyBad && (st === "ok" || st === "novo")) return false;
+        if (!q) return true;
+        return String(c.numero).includes(q) || (c.nome || "").toLowerCase().includes(q) || (c.texto || "").toLowerCase().includes(q);
+      });
+    }
+
+    function sbRenderList() {
+      const box = byId("sb-list");
+      const list = sbList();
+      box.innerHTML = list.map(({ c, idx }) => {
+        const r = SB.results[SB.tab + idx];
+        const issues = sbStaticIssues(c, SB.tab);
+        const st = r ? r.status : (issues.length ? "naoimpl" : "novo");
+        const meta = SB_STATUS[st];
+        const detail = (r && r.problems.length ? r.problems : issues).join("; ");
+        return `<div class="p-2 border-b border-[#d6c3a3] ${SB.last && SB.last.key === SB.tab + idx ? "bg-amber-50" : ""}">
+          <div class="flex items-start gap-2">
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-stone-900 truncate">#${c.numero} ${c.nome || "Carta de Caverna"}</div>
+              <div class="text-[10px] text-stone-600 leading-snug">${SB.tab === "dragon" ? `${(c.tipo || "").toUpperCase()} · ${c.tam || ""} · ` : ""}${formatCardText(c.texto)}</div>
+              <span class="inline-block mt-1 px-1.5 py-0.5 rounded border text-[10px] font-bold ${meta.cls}">${meta.chip}</span>
+              ${detail ? `<div class="text-[10px] text-red-800 mt-0.5">${detail}</div>` : ""}
+            </div>
+            <div class="flex flex-col gap-1 shrink-0">
+              <button data-sb-run="${idx}" class="px-2 py-1 rounded-lg bg-[#2c1f18] text-amber-50 font-bold cursor-pointer">Testar</button>
+              <button data-sb-auto="${idx}" class="px-2 py-1 rounded-lg border border-stone-400 bg-white font-bold cursor-pointer">Auto</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("") || `<div class="p-4 text-center text-stone-500">Nenhuma carta nesta lista.</div>`;
+
+      box.querySelectorAll("[data-sb-run]").forEach(b => b.onclick = () => sbClickRun(parseInt(b.dataset.sbRun, 10), false));
+      box.querySelectorAll("[data-sb-auto]").forEach(b => b.onclick = () => sbClickRun(parseInt(b.dataset.sbAuto, 10), true));
+
+      const all = (SB.tab === "dragon" ? cardDatabase.dragoes : cardDatabase.cavernas).map((c, i) => SB.results[SB.tab + i] ? SB.results[SB.tab + i].status : (sbStaticIssues(c, SB.tab).length ? "naoimpl" : "novo"));
+      const count = (s) => all.filter(x => x === s).length;
+      byId("sb-summary").textContent = `${all.length} cartas · OK ${count("ok")} · sem efeito ${count("semefeito")} · não impl. ${count("naoimpl")} · erro ${count("erro")} · não testadas ${count("novo")}`;
+      byId("sb-tab-dragon").className = "flex-1 py-1.5 font-bold cursor-pointer " + (SB.tab === "dragon" ? "bg-[#2c1f18] text-amber-50" : "bg-white text-stone-800");
+      byId("sb-tab-cave").className = "flex-1 py-1.5 font-bold cursor-pointer " + (SB.tab === "cave" ? "bg-[#2c1f18] text-amber-50" : "bg-white text-stone-800");
+    }
+
+    function sbRenderResult() {
+      const r = SB.last;
+      const box = byId("sb-result");
+      if (!r) { box.innerHTML = `<div class="text-stone-500">Clique em "Testar" (você joga os pop-ups) ou "Auto" (responde sozinho) em uma carta.</div>`; return; }
+      const meta = SB_STATUS[r.status];
+      box.innerHTML = `
+        <div class="flex items-center gap-2 mb-1"><span class="font-bold text-stone-900">#${r.numero} ${r.nome || "Caverna"}</span>
+          <span class="px-1.5 py-0.5 rounded border text-[10px] font-bold ${meta.cls}">${meta.chip}</span></div>
+        <div class="text-[10px] text-stone-600 mb-1">${formatCardText(r.text)}</div>
+        ${r.problems.length ? `<div class="text-red-800 font-semibold mb-1">${r.problems.join("<br>")}</div>` : ""}
+        ${r.info ? `<div class="text-stone-700 mb-1">${r.info}</div>` : ""}
+        <div class="font-bold text-stone-800">Mudanças na mesa:</div>
+        <div class="mb-1">${r.diff.length ? r.diff.join("<br>") : '<span class="text-stone-500">nenhuma</span>'}</div>
+        ${r.logs.length ? `<div class="font-bold text-stone-800">Registro:</div><div class="text-[10px] text-stone-700">${r.logs.join("<br>")}</div>` : ""}`;
+    }
+
+    async function sbClickRun(idx, auto) {
+      if (SB.busy) { showToast("Já existe um teste em andamento. Use 'Reiniciar mesa' para cancelar.", "warn"); return; }
+      SB.busy = true;
+      try { await sbRunOne(SB.tab, idx, auto); } finally { SB.busy = false; }
+      sbRenderList(); sbRenderResult();
+    }
+
+    async function sbRunAll() {
+      if (SB.busy) return;
+      SB.busy = true; SB.stop = false;
+      const list = sbList();
+      const btn = byId("sb-all");
+      try {
+        for (let i = 0; i < list.length; i++) {
+          if (SB.stop) break;
+          btn.textContent = `Parar (${i + 1}/${list.length})`;
+          await sbRunOne(SB.tab, list[i].idx, true);
+          sbRenderList(); sbRenderResult();
+        }
+      } finally { SB.busy = false; btn.textContent = "Auto-testar a lista"; }
+    }
+
+    function sbReport() {
+      const lines = [];
+      ["dragon", "cave"].forEach(kind => {
+        const arr = kind === "dragon" ? cardDatabase.dragoes : cardDatabase.cavernas;
+        arr.forEach((c, i) => {
+          const r = SB.results[kind + i];
+          const issues = r ? r.problems : sbStaticIssues(c, kind);
+          const st = r ? r.status : (issues.length ? "naoimpl" : "novo");
+          lines.push(`[${kind === "dragon" ? "Dragão" : "Caverna"} #${c.numero}] ${c.nome || ""} — ${SB_STATUS[st].chip}${issues.length ? " — " + issues.join("; ") : ""}`);
+        });
+      });
+      return lines.join("\n");
+    }
+
+    function sbBuildPanel() {
+      const el = document.createElement("div");
+      el.id = "sb-panel";
+      el.className = "fixed left-0 top-0 bottom-0 z-[55] w-[390px] max-w-[94vw] flex flex-col bg-[#fcf8ef] border-r-2 border-[#7c603e] shadow-2xl text-xs";
+      el.innerHTML = `
+        <div class="px-3 py-2 bg-[#2c1f18] text-amber-100 flex items-center justify-between gap-2">
+          <span class="font-display font-extrabold tracking-wide">Testador de Cartas</span>
+          <div class="flex gap-1.5">
+            <button id="sb-reset" class="px-2 py-1 rounded-lg bg-amber-700 text-white font-bold cursor-pointer">Reiniciar mesa</button>
+            <button id="sb-hide" class="px-2 py-1 rounded-lg bg-white/15 font-bold cursor-pointer">Recolher</button>
+          </div>
+        </div>
+        <div class="flex border-b border-stone-300">
+          <button id="sb-tab-dragon" class="flex-1 py-1.5 font-bold cursor-pointer">Dragões</button>
+          <button id="sb-tab-cave" class="flex-1 py-1.5 font-bold cursor-pointer">Cavernas</button>
+        </div>
+        <div class="p-2 space-y-1.5 border-b border-stone-300">
+          <input id="sb-filter" type="text" placeholder="Buscar por número, nome ou texto" class="w-full rounded-lg border border-stone-300 bg-white px-2 py-1.5" />
+          <div class="flex items-center justify-between gap-2">
+            <label class="inline-flex items-center gap-1.5 font-semibold"><input id="sb-bad" type="checkbox" /> Só com problema</label>
+            <div class="flex gap-1.5">
+              <button id="sb-all" class="px-2 py-1 rounded-lg bg-emerald-800 text-white font-bold cursor-pointer">Auto-testar a lista</button>
+              <button id="sb-copy" class="px-2 py-1 rounded-lg border border-stone-400 bg-white font-bold cursor-pointer">Copiar relatório</button>
+            </div>
+          </div>
+          <div id="sb-summary" class="text-[10px] font-semibold text-stone-700"></div>
+        </div>
+        <div id="sb-list" class="flex-1 overflow-y-auto"></div>
+        <div id="sb-result" class="p-2 border-t-2 border-[#7c603e] bg-white/80 max-h-[34vh] overflow-y-auto"></div>`;
+      document.body.appendChild(el);
+      document.body.style.paddingLeft = "390px";
+
+      const open = document.createElement("button");
+      open.id = "sb-open";
+      open.textContent = "Testador";
+      open.className = "hidden fixed left-2 top-2 z-[55] px-3 py-1.5 rounded-xl bg-[#2c1f18] text-amber-50 text-xs font-bold shadow cursor-pointer";
+      document.body.appendChild(open);
+
+      byId("sb-hide").onclick = () => { el.classList.add("hidden"); open.classList.remove("hidden"); document.body.style.paddingLeft = "0"; };
+      open.onclick = () => { el.classList.remove("hidden"); open.classList.add("hidden"); document.body.style.paddingLeft = "390px"; };
+      byId("sb-reset").onclick = () => { SB.busy = false; SB.stop = true; sbReset(); showToast("Mesa de testes reiniciada.", "info"); };
+      byId("sb-tab-dragon").onclick = () => { SB.tab = "dragon"; sbRenderList(); };
+      byId("sb-tab-cave").onclick = () => { SB.tab = "cave"; sbRenderList(); };
+      byId("sb-filter").oninput = (e) => { SB.filter = e.target.value; sbRenderList(); };
+      byId("sb-bad").onchange = (e) => { SB.onlyBad = e.target.checked; sbRenderList(); };
+      byId("sb-all").onclick = () => { if (SB.busy) { SB.stop = true; } else sbRunAll(); };
+      byId("sb-copy").onclick = () => {
+        const tmp = document.createElement("textarea");
+        tmp.value = sbReport();
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        tmp.remove();
+        showToast("Relatório copiado.", "success");
+      };
+    }
+
+    function sbStart() {
+      const origOpen = openModal;
+      openModal = function (cfg) { SB.modals++; return origOpen(cfg); };
+      window.addEventListener("error", (e) => { SB.errors.push(e.message); });
+      window.addEventListener("unhandledrejection", (e) => { SB.errors.push(String(e.reason && e.reason.message || e.reason)); });
+      sbReset();
+      sbBuildPanel();
+      sbRenderList();
+      sbRenderResult();
     }
 
     initOnline();
