@@ -294,6 +294,13 @@
               </button>
             </div>
           </div>
+          <div class="mt-4 p-4 rounded-xl bg-white/85 border border-stone-300 space-y-2">
+            <h3 class="font-display font-bold text-stone-900">Jogar contra o Computador</h3>
+            <p class="text-xs text-stone-600">Partida individual de 2 jogadores, sem sala e sem esperar ninguém. Usa o nome acima.</p>
+            <button id="btn-solo" class="w-full px-4 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-display font-bold tracking-wide shadow-md active:scale-[0.99] transition cursor-pointer">
+              Jogar contra o computador →
+            </button>
+          </div>
           <p id="lobby-error" class="text-xs font-semibold text-red-700 min-h-[1rem] mt-2"></p>
         </div>
       </div>
@@ -1743,7 +1750,7 @@
     function renderHUD() {
       const activePlayer = gameState.players[gameState.activePlayerIdx];
       document.getElementById("hud-round").textContent = `${gameState.round} / 4`;
-      document.getElementById("hud-room-code").textContent = NET.room ? `Sala ${NET.room}` : "";
+      document.getElementById("hud-room-code").textContent = SOLO ? "Contra o computador" : (NET.room ? `Sala ${NET.room}` : "");
       updateCloseButtons();
       document.getElementById("hud-active-player-dot").style.backgroundColor = activePlayer.color.hex;
       document.getElementById("hud-active-player-name").textContent = `Turno de ${activePlayer.name}${gameState.activePlayerIdx === myIdx ? " (você)" : ""}`;
@@ -2253,7 +2260,12 @@
       closeBtn.onclick = closeModal;
 
       const ownerIdx = (owner === null || owner === undefined) ? myIdx : owner;
-      const remote = !SANDBOX && gameState && ownerIdx !== myIdx && gameState.players[ownerIdx];
+      if (SOLO && gameState && gameState.players[ownerIdx] && gameState.players[ownerIdx].isBot) {
+        backdrop.classList.add("hidden");
+        botOnModal(ownerIdx);
+        return;
+      }
+      const remote = !SANDBOX && !SOLO && gameState && ownerIdx !== myIdx && gameState.players[ownerIdx];
       if (remote) {
         backdrop.classList.add("hidden");
         showWaiting(`Aguardando ${gameState.players[ownerIdx].name} decidir…`);
@@ -2270,6 +2282,7 @@
     }
 
     function closeModal() {
+      if (typeof BOT !== "undefined") BOT.modalOpen = false;
       document.getElementById("modal-backdrop").classList.add("hidden");
       endMirror();
     }
@@ -2703,6 +2716,7 @@
             }
           }
         } else if (eff.op === "escolha") {
+          window.__lastEscolha = eff.opcoes;
           const numDiff = eff.diferentes || 1;
           let chosenIndices = new Set();
           for (let step = 0; step < numDiff; step++) {
@@ -2738,6 +2752,7 @@
           for (let t = 0; t < maxTimes; t++) {
             const canPay = checkCanPaySimple(player, eff.pague);
             if (!canPay) break;
+            window.__lastTroca = eff;
             const accepted = await new Promise(resolve => {
               openModal({
                 title: `${player.name}: Realizar troca (${t + 1}/${maxTimes})?`,
@@ -3653,6 +3668,7 @@
 
       openModal({
         title: `Ação: Atrair Dragão para o Santuário`,
+        owner: player.id,
         bodyHtml: `
           <div class="space-y-4">
             <div>
@@ -3892,7 +3908,8 @@
 
     async function finishPlayerTurn() {
       gameState.pendingTurnConfirmation = true;
-      showToast("Ação concluída! Confirme sua jogada ou clique em Desfazer.", "success");
+      const ap = gameState.players[gameState.activePlayerIdx];
+      if (!(SOLO && ap && ap.isBot)) showToast("Ação concluída! Confirme sua jogada ou clique em Desfazer.", "success");
       renderAll();
     }
 
@@ -4246,6 +4263,7 @@
        ========================================================================= */
     const BASE_TITLE = document.title;
     const SANDBOX = new URLSearchParams(location.search).has("testador");
+    let SOLO = false; // partida individual contra o computador (sem servidor)
     const NET = {
       ws: null, room: null, seats: [], hostSeat: 0, phase: "lobby", version: 0,
       name: "", pendingHello: null, retry: 0, reconnectTimer: null,
@@ -4446,7 +4464,7 @@
     }
 
     function sendState(handoff = false) {
-      if (!gameState || SANDBOX) return;
+      if (!gameState || SANDBOX || SOLO) return;
       clearTimeout(syncTimer);
       syncTimer = null;
       NET.version++;
@@ -4457,6 +4475,7 @@
     }
 
     function doSync(handoff = false) {
+      if (SOLO) return;
       if (!engineOwner || !gameState) return;
       sendState(handoff);
       if (gameState.activePlayerIdx !== myIdx || gameState.phase !== "game") {
@@ -4465,7 +4484,7 @@
       }
     }
     function scheduleSync() {
-      if (!engineOwner || SANDBOX) return;
+      if (!engineOwner || SANDBOX || SOLO) return;
       clearTimeout(syncTimer);
       syncTimer = setTimeout(() => doSync(false), 90);
     }
@@ -4512,6 +4531,7 @@
         } else if (!mine) {
           engineOwner = false;
         }
+        if (SOLO) engineOwner = true;
         renderAll();
         setConnState();
       } else if (ph === "over") {
@@ -4589,6 +4609,7 @@
     function onClosed() { resetToConnect("A sala foi encerrada pelo anfitrião."); }
 
     function resetToConnect(msg) {
+      if (SOLO) { location.reload(); return; }
       clearSession();
       clearTimeout(NET.reconnectTimer);
       const ws = NET.ws;
@@ -4606,7 +4627,7 @@
       byId("lobby-error").textContent = msg || "";
     }
 
-    function requestNewMatch() { netSend({ t: "reset" }); }
+    function requestNewMatch() { if (SOLO) { location.reload(); return; } netSend({ t: "reset" }); }
 
     function leaveRoom() {
       netSend({ t: "leave" });
@@ -4824,6 +4845,7 @@
       byId("btn-close-room-hud").addEventListener("click", closeRoom);
       byId("btn-close-room-over").addEventListener("click", closeRoom);
       byId("btn-start-game").addEventListener("click", startDraftPhase);
+      byId("btn-solo").addEventListener("click", startSoloGame);
 
       byId("btn-copy-link").addEventListener("click", () => {
         const url = `${location.origin}${location.pathname}?sala=${NET.room}`;
@@ -4884,6 +4906,521 @@
         const b = byId("deck-stats-badge");
         if (b) { b.textContent = "Erro ao carregar cartas.json"; b.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-900"; }
       }
+    }
+
+    /* =========================================================================
+       14. COMPUTADOR (modo "Jogar contra o computador")
+       O bot usa as mesmas funções de ação do jogador. Cada modal do bot é respondido
+       por botHandleModal, que escolhe a opção com heurísticas de valor em PV.
+       ========================================================================= */
+    const BOT = { speed: 1, ownerIdx: 1, busy: false, modalOpen: false, seq: 0, tries: 0, steps: 0, cancelled: false, intent: null, timer: null };
+    const BOT_RES = ["carne", "ouro", "cristal", "leite"];
+    const botPause = (ms) => new Promise(r => setTimeout(r, ms * BOT.speed));
+    const botNoise = (a = 0.3) => (Math.random() - 0.5) * a;
+    const botPlayerObj = () => gameState && (gameState.players[BOT.ownerIdx] || gameState.players.find(p => p.isBot));
+
+    /* ---------- Valores (em PV aproximados) ---------- */
+    function botCostValue(p, c) {
+      let v = 0;
+      Object.entries(c || {}).forEach(([k, n]) => {
+        if (!n) return;
+        if (k === "moeda" || k === "ovo" || k === "dragao") v += n;
+        else v += n * 0.8;
+      });
+      return v;
+    }
+
+    function botEffVal(p, effs, depth = 0) {
+      if (!Array.isArray(effs) || depth > 4) return 0;
+      let v = 0;
+      effs.forEach(e => {
+        const n = e.n || 1;
+        switch (e.op) {
+          case "moeda": v += n; break;
+          case "ganhe": v += n * 0.8; break;
+          case "ovo": v += n * 0.9; break;
+          case "dragao": v += n; break;
+          case "caverna": v += n * 0.8; break;
+          case "guilda": case "avancarGuilda": v += n; break;
+          case "estocar": v += n * 0.7; break;
+          case "inserir": v += n * 0.9; break;
+          case "oponentes": v -= 0.3 * Math.max(1, botEffVal(p, e.efeito || [], depth + 1)); break;
+          case "escolha": v += Math.max(0, ...(e.opcoes || []).map(o => botEffVal(p, o.efeito, depth + 1))); break;
+          case "troca": v += Math.max(0, (e.ate || 1) * (botEffVal(p, e.ganhe, depth + 1) - botCostValue(p, e.pague))); break;
+          case "ativarOutro": v += 1.5; break;
+          case "escavar": v += 2.2; break;
+          case "jogarDragao": v += 3; break;
+          case "trocarPosicao": break;
+          case "revelarInserir": v += 1.0; break;
+          case "condicional": v += 0.6 * botEffVal(p, e.entao, depth + 1); break;
+          case "ovoCadaDragaoCaverna": v += 2.0; break;
+          case "ovoCadaDragaoColuna": v += 1.5; break;
+          case "comprarInserirPorTraco": case "ganharPorTracoEstocar": v += 2.0; break;
+          case "comprarManterDescartarInserir": v += 1.8; break;
+          case "inserirPorMarcadorGuilda": v += 1.5; break;
+          case "ativarTabuleiro": v += 1.2; break;
+          case "ganharDoCustoInserido": v += 0.8; break;
+          default: v += 1;
+        }
+      });
+      return v;
+    }
+
+    function botEndDelta(p, d, cavernId, col) {
+      try {
+        const slotCol = p.caverns[cavernId].cols[col];
+        if (slotCol.dragonSlot) return 0;
+        const before = computeEndGameDetail(p).pts;
+        slotCol.dragonSlot = { card: d, eggs: 0, tuckedResources: [], tuckedCards: [] };
+        const after = computeEndGameDetail(p).pts;
+        slotCol.dragonSlot = null;
+        return after - before;
+      } catch (e) { return 0; }
+    }
+
+    function botDragonValue(p, d, cavernId, col) {
+      const rounds = Math.max(1, 5 - gameState.round);
+      const base = (d.pv || 0) + 0.7 * (d.ninhos || 0);
+      const ev = botEffVal(p, d.pague ? [{ op: "troca", ate: 1, pague: d.pague, ganhe: d.efeito }] : d.efeito);
+      const cf = [1, 0.85, 0.7, 0.55][col] || 0.6;
+      let ab = 0;
+      if (d.tam === "filhote" && d.filhote) ab = Math.min(rounds, 3) * 0.9 + botEffVal(p, d.filhote.bonus) * 0.6;
+      else if (d.tipo === "jogado") ab = ev;
+      else if (d.tipo === "ativado") ab = ev * Math.min(rounds * 0.9, 3.5) * cf;
+      else if (d.tipo === "rodada") ab = ev * rounds;
+      return base + ab + botEndDelta(p, d, cavernId, col);
+    }
+
+    function botDragonCost(d) {
+      const c = d.custo || {};
+      return 1 + (c.moeda || 0) + (c.ovo || 0) + BOT_RES.reduce((a, r) => a + (c[r] || 0) * 0.75, 0);
+    }
+
+    // Nota de um dragão ainda na mão (melhor lugar possível menos o custo)
+    function botHandDragonScore(p, d) {
+      let best = -9;
+      (d.hab && d.hab.length ? d.hab : [0, 1, 2]).forEach(cid => {
+        const cav = p.caverns[cid];
+        const col = cav.cols.find(c => c.excavated && !c.dragonSlot) || cav.cols.find(c => !c.dragonSlot);
+        if (!col) return;
+        best = Math.max(best, botDragonValue(p, d, cid, col.col));
+      });
+      if (best === -9) best = (d.pv || 0) * 0.5;
+      return best - botDragonCost(d) * 0.8;
+    }
+    const botCaveScore = (p, c) => 1.6 + botEffVal(p, c.efeito);
+
+    function botNeedRes(p) {
+      const need = { carne: 0, ouro: 0, cristal: 0, leite: 0 };
+      p.hand.filter(c => c.cardType === "dragon").forEach(d => BOT_RES.forEach(r => { need[r] += Math.max(0, ((d.custo || {})[r] || 0) - p.resources[r]); }));
+      return need;
+    }
+
+    function botExploreValue(p, cav) {
+      let v = 0;
+      const meta = CAVERNS_META[cav.id];
+      const space = countAvailableNestSpace(p) > 0;
+      const hd = p.hand.filter(c => c.cardType === "dragon").length;
+      const need = botNeedRes(p);
+      let def = BOT_RES.reduce((a, r) => a + need[r], 0);
+      for (let c = 0; c < 4; c++) {
+        const t = meta.pathSteps[c].type;
+        let sv;
+        if (t === "resource_any") { if (def > 0) { sv = 1.6; def--; } else sv = 0.85; }
+        else if (t === "guild") sv = 1.0;
+        else if (t === "egg") sv = space ? 0.9 : 0.1;
+        else if (t === "dragon_card") sv = p.hand.length >= 8 ? 0.2 : (hd === 0 ? 1.8 : 1.0);
+        else sv = 0.8;
+        v += sv;
+        const col = cav.cols[c];
+        if (!col.dragonSlot) break;
+        const d = col.dragonSlot.card;
+        if (d.tipo === "ativado") {
+          if (d.tam === "filhote" && d.filhote) v += 1.0;
+          else v += botEffVal(p, d.pague ? [{ op: "troca", ate: 1, pague: d.pague, ganhe: d.efeito }] : d.efeito);
+        }
+        if (c === 3) v += 1.3;
+      }
+      return v;
+    }
+
+    /* ---------- Escolha da ação do turno ---------- */
+    function botPlan(p) {
+      const opts = [];
+      const dragons = p.hand.filter(c => c.cardType === "dragon");
+
+      dragons.forEach(d => {
+        const cost = d.custo || {};
+        const coins = 1 + (cost.moeda || 0);
+        if (p.coins < coins || countPlayerEggs(p) < (cost.ovo || 0)) return;
+        if (BOT_RES.some(r => p.resources[r] < (cost[r] || 0))) return;
+        p.caverns.forEach(cav => {
+          if (!(d.hab || []).includes(cav.id)) return;
+          const c = cav.cols.find(x => x.excavated && !x.dragonSlot);
+          if (!c) return;
+          opts.push({ type: "entice", uid: d.uid, cavernId: cav.id, col: c.col, net: botDragonValue(p, d, cav.id, c.col) - botDragonCost(d), name: d.nome });
+        });
+      });
+
+      p.caverns.forEach(cav => {
+        const e = cav.explorationsThisRound;
+        if (e >= 3 || p.coins < 1 || countPlayerEggs(p) < e) return;
+        opts.push({ type: "explore", cavernId: cav.id, net: botExploreValue(p, cav) - (1 + e), name: CAVERNS_META[cav.id].nome });
+      });
+
+      const caves = p.hand.filter(c => c.cardType === "cave");
+      if (caves.length && p.coins >= 1) {
+        const targets = [];
+        p.caverns.forEach(cav => {
+          const nc = cav.cols.find(c => !c.excavated);
+          if (!nc) return;
+          const eggCost = nc.col === 2 ? 1 : nc.col === 3 ? 2 : 0;
+          if (countPlayerEggs(p) < eggCost) return;
+          const wanted = dragons.filter(d => (d.hab || []).includes(cav.id) && !cav.cols.some(c => c.excavated && !c.dragonSlot)).length;
+          targets.push({ cavernId: cav.id, eggCost, wanted });
+        });
+        if (targets.length) {
+          targets.sort((a, b) => (b.wanted - a.wanted) || (a.eggCost - b.eggCost));
+          const t = targets[0];
+          const cave = caves.slice().sort((a, b) => botEffVal(p, b.efeito) - botEffVal(p, a.efeito))[0];
+          const unlock = t.wanted > 0 ? 1.8 : 0.4;
+          opts.push({ type: "excavate", caveUid: cave.uid, cavernId: t.cavernId, net: unlock + botEffVal(p, cave.efeito) + 0.5 - (1 + t.eggCost), name: "Caverna #" + cave.numero });
+        }
+      }
+
+      opts.forEach(o => { o.net += botNoise(0.3); });
+      opts.sort((a, b) => b.net - a.net);
+      const best = opts[0];
+      // com muitas moedas sobrando (o limite no fim do turno é 9), vale agir mesmo com ganho pequeno
+      const thr = p.coins >= 5 ? -0.6 : p.coins >= 3 ? 0.0 : 0.35;
+      if (!best || best.net < thr) return { type: "pass", opts };
+      return { ...best, opts };
+    }
+
+    async function botWaitPending(ms = 90000) {
+      const t0 = Date.now();
+      while (Date.now() - t0 < ms) {
+        if (gameState.pendingTurnConfirmation || BOT.cancelled) return;
+        await botPause(200);
+      }
+    }
+
+    async function botTakeTurn() {
+      BOT.busy = true; BOT.steps = 0; BOT.cancelled = false; BOT.tries = 0;
+      showWaiting("O computador está jogando…");
+      clearTimeout(BOT.timer);
+      BOT.timer = setTimeout(botUnstick, 120000);
+      try {
+        const p = gameState.players[gameState.activePlayerIdx];
+        await botPause(900);
+        const plan = botPlan(p);
+        BOT.intent = plan;
+        (BOT.trace = BOT.trace || []).push({ r: gameState.round, who: p.name, type: plan.type, net: Math.round((plan.net || 0) * 10) / 10, coins: p.coins, eggs: countPlayerEggs(p), res: totalResourcesCount(p), hd: p.hand.filter(c => c.cardType === 'dragon').length, hc: p.hand.filter(c => c.cardType === 'cave').length, dr: getVisibleDragons(p).length, opts: (plan.opts || []).slice(0, 3).map(o => o.type + ':' + Math.round(o.net * 10) / 10) });
+        const label = { entice: `atrair ${plan.name}`, explore: `explorar ${plan.name}`, excavate: `escavar (${plan.name})`, pass: "passar" }[plan.type];
+        addLog(`${p.name} vai ${label}.`);
+        if (plan.type === "pass") await handlePassRound();
+        else if (plan.type === "entice") { await openEnticeModal(plan.uid); await botWaitPending(); }
+        else if (plan.type === "explore") { await exploreCavern(plan.cavernId); await botWaitPending(5000); }
+        else if (plan.type === "excavate") { await openExcavateModal(plan.caveUid); await botWaitPending(5000); }
+        if (!gameState.pendingTurnConfirmation) { closeModal(); await handlePassRound(); }
+        await botPause(700);
+        BOT.intent = null;
+        hideWaiting();
+        await confirmPlayerTurn();
+        clearTimeout(BOT.timer);
+        BOT.busy = false;
+      } catch (e) {
+        console.error("Computador:", e);
+        botUnstick();
+      }
+    }
+
+    function botUnstick() {
+      if (!BOT.busy) return;
+      console.warn("Computador travou; passando a rodada por ele.");
+      clearTimeout(BOT.timer);
+      closeModal();
+      BOT.busy = false; BOT.intent = null; BOT.modalOpen = false;
+      hideWaiting();
+      const p = botPlayerObj();
+      if (p && gameState.players[gameState.activePlayerIdx] === p) {
+        p.passed = true;
+        gameState.pendingTurnConfirmation = false;
+        addLog(`${p.name} passou a rodada (jogada automática de segurança).`);
+        advanceToNextPlayer();
+      }
+    }
+
+    /* ---------- Respostas aos modais ---------- */
+    function botOnModal(ownerIdx) {
+      BOT.ownerIdx = ownerIdx;
+      BOT.modalOpen = true;
+      BOT.seq++;
+      BOT.tries = 0;
+      const seq = BOT.seq;
+      setTimeout(() => botAnswer(seq), (380 + Math.random() * 220) * BOT.speed);
+    }
+
+    function botAnswer(seq) {
+      if (!BOT.modalOpen || seq !== BOT.seq) return;
+      BOT.steps++;
+      if (BOT.steps > 600) { botUnstick(); return; }
+      const box = byId("modal-box");
+      let ok = false;
+      if (BOT.tries === 0) {
+        try { ok = botHandleModal(box); } catch (e) { console.error("Computador (modal):", e); }
+        if (!ok) ok = botFallback(box, false);
+      } else if (BOT.tries === 1) ok = botFallback(box, false);
+      else if (BOT.tries === 2) { ok = botFallback(box, true); BOT.cancelled = true; }
+      else { botUnstick(); return; }
+      setTimeout(() => {
+        if (BOT.modalOpen && BOT.seq === seq) { BOT.tries++; botAnswer(seq); }
+      }, Math.max(500, 1800 * BOT.speed));
+    }
+
+    function botFooter(re) {
+      return [...byId("modal-footer").querySelectorAll("button")].find(b => re.test(b.textContent.trim()));
+    }
+    function botClick(el) { if (el) { el.click(); return true; } return false; }
+
+    function botFallback(box, cancel) {
+      if (cancel) {
+        return botClick(botFooter(/^(pular|cancelar|não|nao|fechar|não descartar)/i)) || botClick([...byId("modal-footer").querySelectorAll("button")].pop());
+      }
+      const sels = ["[data-pd-slot]:not([disabled])", "[data-exc-target]:not([disabled])", "[data-ent-slot]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]",
+        "[data-choice-idx]:not([disabled])", "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-board-step]", "[data-ins-card]", "[data-cmdi]"];
+      for (const s of sels) { const el = box.querySelector(s); if (el) { el.click(); return true; } }
+      return botClick(botFooter(/^(sim|confirmar|continuar|entendi|ok)/i)) || botClick(botFooter(/^(pular|cancelar|não|nao|fechar)/i)) || botClick([...byId("modal-footer").querySelectorAll("button")][0]);
+    }
+
+    function botHandleModal(box) {
+      const p = botPlayerObj();
+      const q = (s) => box.querySelector(s);
+      const qa = (s) => [...box.querySelectorAll(s)];
+      const title = byId("modal-title").textContent;
+      const intent = BOT.intent || {};
+
+      // Escavar
+      if (q("[data-exc-target]")) {
+        const cards = qa("[data-exc-card]");
+        if (intent.type === "excavate" && intent.caveUid && cards.length > 1) {
+          const want = cards.find(c => c.dataset.excCard === intent.caveUid);
+          const cur = cards.find(c => /ring-amber-500/.test(c.className));
+          if (want && cur !== want) return botClick(want);
+        }
+        const ts = qa("[data-exc-target]:not([disabled])");
+        if (!ts.length) return botClick(botFooter(/^cancelar/i));
+        const nome = intent.cavernId !== undefined ? CAVERNS_META[intent.cavernId].nome : null;
+        return botClick((nome && ts.find(t => t.textContent.includes(nome))) || ts[0]);
+      }
+      // Atrair
+      if (q("[data-ent-slot]")) {
+        const ss = qa("[data-ent-slot]:not([disabled])");
+        if (!ss.length) return botClick(botFooter(/^cancelar/i));
+        const nome = intent.cavernId !== undefined ? CAVERNS_META[intent.cavernId].nome : null;
+        return botClick((nome && ss.find(t => t.textContent.includes(nome))) || ss[0]);
+      }
+      if (/Atrair Dragão/.test(title)) return botClick(botFooter(/^cancelar/i));
+      // Jogar dragão por efeito
+      if (q("#pd-grid")) {
+        const slots = qa("[data-pd-slot]:not([disabled])");
+        if (slots.length) {
+          const sel = q("[data-pd-sel]");
+          const card = sel && [...p.hand, ...gameState.displayDragons].find(c => c.uid === sel.dataset.pdDragon);
+          const opts = card ? pdSlots(p, card) : [];
+          let bi = 0, bs = -99;
+          slots.forEach(b => { const o = opts[parseInt(b.dataset.pdSlot, 10)]; if (!o || !card) return; const s = botDragonValue(p, card, o.cavernId, o.col); if (s > bs) { bs = s; bi = slots.indexOf(b); } });
+          return botClick(slots[bi]);
+        }
+        const discs = qa("[data-pd-disc]");
+        if (discs.length && !q("[data-pd-dsel]")) {
+          const sel = q("[data-pd-sel]");
+          const card = sel && [...p.hand, ...gameState.displayDragons].find(c => c.uid === sel.dataset.pdDragon);
+          const good = discs.find(b => card && pdCanPay(p, pdCost(card, false, b.dataset.pdDisc)));
+          return botClick(good || discs[0]);
+        }
+        const drs = qa("[data-pd-dragon]:not([data-pd-sel])");
+        if (drs.length && !q("[data-pd-sel]")) {
+          let bi = 0, bs = -99;
+          drs.forEach((el, i) => { const c = [...p.hand, ...gameState.displayDragons].find(x => x.uid === el.dataset.pdDragon); if (!c) return; const s = botHandDragonScore(p, c); if (s > bs) { bs = s; bi = i; } });
+          return botClick(drs[bi]);
+        }
+        return botClick(botFooter(/^pular/i));
+      }
+      // Trocar posições: não vale a pena
+      if (q("[data-swap-pos]")) return botClick(botFooter(/^(pular|cancelar)/i));
+      // Onde botar o ovo
+      if (q("[data-egg-target]")) {
+        let best = null, bs = -99;
+        qa("[data-egg-target]").forEach(b => {
+          const t = b.textContent;
+          let m = /Ovos (\d+)\/(\d+)/.exec(t), free;
+          if (m) free = +m[2] - +m[1];
+          else { m = /Base \((\d+)\/2\)/.exec(t); free = (m ? 2 - +m[1] : 0) - 0.5; }
+          if (free > bs) { bs = free; best = b; }
+        });
+        return botClick(best);
+      }
+      // Escolher recurso
+      if (q("[data-pick-res]")) {
+        const need = botNeedRes(p);
+        let best = null, bs = -99;
+        qa("[data-pick-res]").forEach(b => { const r = b.dataset.pickRes; const s = need[r] * 2 - p.resources[r] * 0.35 + botNoise(0.2); if (s > bs) { bs = s; best = b; } });
+        return botClick(best);
+      }
+      // Marcador da Guilda
+      if (q("[data-guild-slot]")) {
+        const slots = getGuild().slots;
+        let best = null, bs = -99;
+        qa("[data-guild-slot]").forEach(b => {
+          const sl = slots.find(x => x.id === b.dataset.guildSlot);
+          if (!sl) return;
+          const s = sl.type === "fim" ? (sl.scoreFn ? sl.scoreFn(p) : 1) : 2.5;
+          if (s > bs) { bs = s; best = b; }
+        });
+        return botClick(best);
+      }
+      // Escolha de benefício
+      if (q("[data-choice-idx]")) {
+        const opts = window.__lastEscolha || [];
+        let best = null, bs = -99;
+        qa("[data-choice-idx]:not([disabled])").forEach(b => {
+          const o = opts[parseInt(b.dataset.choiceIdx, 10)];
+          const s = (o ? botEffVal(p, o.efeito) : 0) + botNoise(0.2);
+          if (s > bs) { bs = s; best = b; }
+        });
+        return botClick(best);
+      }
+      // Trocar? (pague X para receber Y)
+      if (/Realizar troca/.test(title)) {
+        const e = window.__lastTroca;
+        const worth = e ? botEffVal(p, e.ganhe) - botCostValue(p, e.pague) : 0;
+        return botClick(botFooter(worth > 0.3 ? /^sim/i : /^não/i));
+      }
+      // Comprar carta (exibição ou baralho)
+      if (q("#btn-draw-from-deck") || q("#modal-display-cards")) {
+        const isDragon = /Dragão/.test(title);
+        const arr = isDragon ? gameState.displayDragons : gameState.displayCaves;
+        const els = qa("#modal-display-cards > *");
+        let bi = -1, bs = -99;
+        arr.forEach((c, i) => { const s = isDragon ? botHandDragonScore(p, c) : botCaveScore(p, c); if (s > bs) { bs = s; bi = i; } });
+        const deck = q("#btn-draw-from-deck");
+        const expect = isDragon ? 2.0 : 1.8;
+        if (deck && (bi < 0 || bs < expect)) return botClick(deck);
+        return botClick(els[bi] || deck);
+      }
+      // Estocar recurso
+      if (q("[data-tuck-r]")) {
+        const need = botNeedRes(p);
+        let best = null, bs = -99;
+        qa("[data-tuck-r]").forEach(b => { const r = b.dataset.tuckR; const s = p.resources[r] - need[r] * 1.5 + botNoise(0.2); if (s > bs) { bs = s; best = b; } });
+        if (bs <= 0 && gameState.round < 3) return botClick(botFooter(/^pular/i)) || botClick(best);
+        return botClick(best);
+      }
+      // Inserir dragão da mão
+      if (q("[data-tuck-hd]")) {
+        let best = null, bs = 99;
+        qa("[data-tuck-hd]").forEach(b => { const c = p.hand.find(x => x.uid === b.dataset.tuckHd); const s = c ? botHandDragonScore(p, c) : 0; if (s < bs) { bs = s; best = b; } });
+        if (bs > 2.0 && gameState.round < 4) return botClick(botFooter(/^pular/i)) || botClick(best);
+        return botClick(best);
+      }
+      // Descartar carta para botar ovo (fim do Abismo)
+      if (q("[data-disc-c]")) {
+        let best = null, bs = 99;
+        qa("[data-disc-c]").forEach(b => {
+          const c = p.hand.find(x => x.uid === b.dataset.discC);
+          const s = !c ? 0 : c.cardType === "dragon" ? botHandDragonScore(p, c) : botCaveScore(p, c);
+          if (s < bs) { bs = s; best = b; }
+        });
+        if (bs > 1.4) return botClick(botFooter(/^não descartar/i)) || botClick(best);
+        return botClick(best);
+      }
+      // Habilidade impressa do tabuleiro
+      if (q("[data-board-step]")) {
+        let best = null, bs = -99;
+        const space = countAvailableNestSpace(p) > 0;
+        qa("[data-board-step]").forEach(b => {
+          const [a, c] = b.dataset.boardStep.split("-").map(Number);
+          const t = CAVERNS_META[a].pathSteps[c].type;
+          const s = (t === "guild" ? 1.0 : t === "egg" ? (space ? 0.95 : 0) : t === "dragon_card" ? 1.0 : t === "cave_card" ? 0.8 : 0.85) + botNoise(0.1);
+          if (s > bs) { bs = s; best = b; }
+        });
+        return botClick(best);
+      }
+      // Inserir dos comprados / comprar-manter-descartar
+      if (q("[data-ins-card]")) {
+        let best = null, bs = 99;
+        qa("[data-ins-card]").forEach(b => { const c = p.hand.find(x => x.uid === b.dataset.insCard); const s = c ? botHandDragonScore(p, c) : 0; if (s < bs) { bs = s; best = b; } });
+        return botClick(best);
+      }
+      if (q("[data-cmdi]")) {
+        const keep = /Fique/.test(title);
+        let best = null, bs = keep ? -99 : 99;
+        const pool = [...p.hand, ...gameState.dragonDeck.slice(-6)];
+        qa("[data-cmdi]").forEach(b => {
+          const c = pool.find(x => x.uid === b.dataset.cmdi);
+          const s = c ? botHandDragonScore(p, c) : 0;
+          if (keep ? s > bs : s < bs) { bs = s; best = b; }
+        });
+        return botClick(best);
+      }
+      // Bônus da 4ª coluna: pagar 3 itens por 1 moeda não compensa
+      if (/4ª Coluna/.test(title)) return botClick(botFooter(/^não/i));
+      // Qualquer outro aviso
+      return botClick(botFooter(/^(continuar|entendi|ok|sim|confirmar)/i));
+    }
+
+    /* ---------- Draft do computador ---------- */
+    function botDraftChoice(p) {
+      const pool = p.draftPool;
+      const items = [
+        ...pool.dragons.map(c => ({ c, s: botHandDragonScore(p, c) })),
+        ...pool.caves.map(c => ({ c, s: botCaveScore(p, c) + 0.4 }))
+      ].sort((a, b) => b.s - a.s);
+      let pick = items.slice(0, 4);
+      if (!pick.some(i => i.c.cardType === "cave")) {
+        const cave = items.find(i => i.c.cardType === "cave");
+        if (cave) pick[3] = cave;
+      }
+      if (!pick.some(i => i.c.cardType === "dragon")) {
+        const dr = items.find(i => i.c.cardType === "dragon");
+        if (dr) pick[3] = dr;
+      }
+      const have = { carne: 0, ouro: 0, cristal: 0, leite: 0 };
+      const dragons = pick.filter(i => i.c.cardType === "dragon").map(i => i.c).sort((a, b) => botDragonCost(a) - botDragonCost(b));
+      const res = [];
+      for (let k = 0; k < 3; k++) {
+        let best = null, bs = -99;
+        BOT_RES.forEach(r => {
+          let need = 0;
+          dragons.slice(0, 2).forEach(d => { need += Math.max(0, ((d.custo || {})[r] || 0) - have[r]); });
+          const s = need + Math.random() * 0.2;
+          if (s > bs) { bs = s; best = r; }
+        });
+        res.push(best); have[best]++;
+      }
+      return { cards: pick.map(i => i.c.uid), resources: res };
+    }
+
+    /* ---------- Início da partida solo e laço do computador ---------- */
+    function startSoloGame() {
+      if (!cardsLoaded) { showToast("As cartas ainda não foram carregadas.", "warn"); return; }
+      const name = cleanName(byId("my-name-input").value) || "Você";
+      SOLO = true;
+      NET.room = "SOLO"; NET.hostSeat = 0; NET.connected = true;
+      mySeat = 0;
+      NET.seats = [{ name, connected: true }, { name: "Computador", connected: true }];
+      startDraftPhase();
+      const bot = gameState.players[1];
+      bot.isBot = true;
+      applyDraftChoice(1, botDraftChoice(bot));
+      clearInterval(window.__botLoop);
+      window.__botLoop = setInterval(() => {
+        if (!SOLO || BOT.busy || !gameState || gameState.phase !== "game") return;
+        if (!byId("modal-backdrop").classList.contains("hidden")) return;
+        const a = gameState.players[gameState.activePlayerIdx];
+        if (a && a.isBot && !a.passed && !gameState.pendingTurnConfirmation) botTakeTurn();
+      }, 700);
     }
 
     /* =========================================================================
