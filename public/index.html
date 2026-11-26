@@ -2773,6 +2773,10 @@
             addLog(`${player.name} escava de graça${gained ? ` com a Caverna #${gained.numero}` : ""}.`);
             await openExcavateModal(gained ? gained.uid : null, true, player.id, gained ? gained.uid : null);
           }
+        } else if (eff.op === "jogarDragao") {
+          await promptPlayDragon(player, eff);
+        } else if (eff.op === "trocarPosicao") {
+          await promptSwapPositions(player);
         } else {
           (window.__unimpl || (window.__unimpl = [])).push(eff.op);
           console.warn("Efeito ainda não implementado:", eff.op, eff);
@@ -2781,6 +2785,259 @@
         }
       }
       renderAll();
+    }
+
+    /* ---- Jogar um Dragão por efeito de carta (de graça ou com desconto) ---- */
+    function pdSource(player, origem) {
+      return origem === "exibicao" ? gameState.displayDragons : player.hand.filter(c => c.cardType === "dragon");
+    }
+    function pdCost(card, gratis, discKey) {
+      if (gratis) return {};
+      const c = { ...(card.custo || {}) };
+      if (discKey === "ovo" && c.ovo > 0) c.ovo--;
+      else if (discKey && discKey.startsWith("r:")) {
+        const r = discKey.slice(2);
+        if (c[r] > 0) c[r]--;
+      }
+      return c;
+    }
+    function pdCanPay(player, c) {
+      return player.coins >= (c.moeda || 0) && countPlayerEggs(player) >= (c.ovo || 0) &&
+        ["carne", "ouro", "cristal", "leite"].every(r => player.resources[r] >= (c[r] || 0));
+    }
+    function pdDiscOptions(card, desc) {
+      if (!desc) return [];
+      const opts = [];
+      const c = card.custo || {};
+      const allowed = desc.escolha || ["ovo", "qualquer"];
+      if (allowed.includes("ovo") && c.ovo > 0) opts.push({ key: "ovo", label: "1 Ovo", icon: "ovo" });
+      if (allowed.includes("qualquer")) {
+        ["carne", "ouro", "cristal", "leite"].forEach(r => {
+          if (c[r] > 0) opts.push({ key: "r:" + r, label: `1 ${RESOURCE_META[r].label}`, icon: RESOURCE_META[r].iconName });
+        });
+      }
+      return opts;
+    }
+    function pdSlots(player, card) {
+      const out = [];
+      player.caverns.forEach(cav => {
+        if ((card.hab || []).includes(cav.id)) {
+          const empty = cav.cols.find(c => c.excavated && !c.dragonSlot);
+          if (empty) out.push({ cavernId: cav.id, col: empty.col, label: `${CAVERNS_META[cav.id].nome} (Espaço ${empty.col + 1})` });
+        }
+      });
+      return out;
+    }
+    function pdPlayable(player, card, gratis, desc) {
+      if (pdSlots(player, card).length === 0) return false;
+      const opts = pdDiscOptions(card, desc);
+      if (opts.length === 0) return pdCanPay(player, pdCost(card, gratis, null));
+      return opts.some(o => pdCanPay(player, pdCost(card, gratis, o.key)));
+    }
+
+    async function promptPlayDragon(player, eff = {}) {
+      const origem = eff.origem || "mao";
+      const gratis = Boolean(eff.gratis);
+      const desc = eff.desconto || null;
+
+      const initial = pdSource(player, origem);
+      if (!initial.some(c => pdPlayable(player, c, gratis, desc))) {
+        showToast(`${player.name}: nenhum Dragão ${origem === "exibicao" ? "da exibição" : "da mão"} pode ser jogado agora (custo ou espaço insuficiente).`, "warn");
+        return null;
+      }
+
+      return new Promise(resolve => {
+        const state = { uid: null, disc: null };
+
+        const show = () => {
+          const src = pdSource(player, origem);
+          const sel = src.find(c => c.uid === state.uid) || null;
+          const opts = sel ? pdDiscOptions(sel, desc) : [];
+          const slots = sel ? pdSlots(player, sel) : [];
+          const cost = sel ? pdCost(sel, gratis, state.disc) : null;
+          const ready = Boolean(sel) && pdCanPay(player, cost) && (opts.length === 0 || Boolean(state.disc));
+          const rule = gratis ? "de graça (sem pagar o custo)" : desc ? "com desconto de 1 Ovo ou 1 recurso do custo" : "";
+
+          openModal({
+            title: `${player.name}: Jogar Dragão ${rule}`,
+            owner: player.id,
+            closable: false,
+            bodyHtml: `
+              <div class="space-y-4">
+                <div>
+                  <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">1. Escolha o Dragão ${origem === "exibicao" ? "da exibição" : "da sua mão"}:</div>
+                  <div id="pd-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[320px] overflow-y-auto p-1"></div>
+                </div>
+                ${sel && opts.length > 0 ? `
+                <div>
+                  <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">2. Escolha o desconto:</div>
+                  <div class="flex flex-wrap gap-2">
+                    ${opts.map(o => `
+                      <button data-pd-disc="${o.key}" ${state.disc === o.key ? 'data-pd-dsel="1"' : ''}
+                        class="px-3 py-2 rounded-xl border text-xs font-bold cursor-pointer inline-flex items-center gap-1.5 ${state.disc === o.key ? 'ring-2 ring-stone-900 bg-amber-100 border-amber-500' : 'bg-white border-stone-300'}">
+                        ${getIconHtml(o.icon, "w-4 h-4")} Descontar ${o.label}
+                      </button>`).join("")}
+                  </div>
+                </div>` : ""}
+                ${sel ? `
+                <div>
+                  <div class="text-xs font-bold uppercase text-stone-600 mb-1.5">${opts.length > 0 ? "3" : "2"}. Escolha a Caverna:</div>
+                  ${!pdCanPay(player, cost) && (opts.length === 0 || state.disc) ? `<div class="text-red-700 font-bold text-xs mb-1.5">Recursos, Ovos ou Moedas insuficientes para este Dragão.</div>` : ""}
+                  <div class="space-y-2">
+                    ${slots.map((s, i) => `
+                      <button data-pd-slot="${i}" ${ready ? '' : 'disabled'}
+                        class="w-full text-left p-3 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 disabled:opacity-40 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                        ${getIconHtml("dragao", "w-4 h-4")} <span>Colocar em ${s.label}</span>
+                      </button>`).join("")}
+                  </div>
+                </div>` : ""}
+              </div>`,
+            footerButtons: [{ text: "Pular", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(null); } }]
+          });
+
+          const grid = document.getElementById("pd-grid");
+          src.forEach(d => {
+            const playable = pdPlayable(player, d, gratis, desc);
+            const isSel = d.uid === state.uid;
+            const el = createCardElement(d, {
+              selectable: playable,
+              onClick: playable ? () => { state.uid = d.uid; state.disc = null; show(); } : null
+            });
+            if (playable) { el.dataset.pdDragon = d.uid; if (isSel) el.dataset.pdSel = "1"; }
+            else el.classList.add("opacity-40");
+            if (isSel) {
+              el.classList.add("ring-4", "ring-emerald-700");
+              el.insertAdjacentHTML("afterbegin", `<div class="bg-emerald-800 text-white text-[10px] font-black text-center py-0.5 uppercase tracking-wider">✓ Selecionado</div>`);
+            }
+            grid.appendChild(el);
+          });
+
+          document.querySelectorAll("[data-pd-disc]").forEach(btn => {
+            btn.onclick = () => { state.disc = btn.dataset.pdDisc; show(); };
+          });
+
+          document.querySelectorAll("[data-pd-slot]").forEach(btn => {
+            btn.onclick = async () => {
+              const slot = slots[parseInt(btn.dataset.pdSlot, 10)];
+              if (!sel || !slot) return;
+              closeModal();
+              await animateCardPlacement(sel, slot.cavernId, slot.col);
+
+              if (origem === "exibicao") {
+                const di = gameState.displayDragons.findIndex(c => c.uid === sel.uid);
+                if (di >= 0) gameState.displayDragons.splice(di, 1);
+              } else {
+                const hi = player.hand.findIndex(c => c.uid === sel.uid);
+                if (hi >= 0) player.hand.splice(hi, 1);
+              }
+
+              player.coins -= (cost.moeda || 0);
+              if (cost.ovo) payPlayerEggs(player, cost.ovo);
+              ["carne", "ouro", "cristal", "leite"].forEach(r => { if (cost[r]) player.resources[r] -= cost[r]; });
+
+              player.caverns[slot.cavernId].cols[slot.col].dragonSlot = { card: sel, eggs: 0, tuckedResources: [], tuckedCards: [] };
+              gameState.justPlacedSlot = { cavernId: slot.cavernId, col: slot.col };
+              gameState.lastActionShowcase = {
+                round: gameState.round,
+                playerName: player.name,
+                playerColor: player.color.hex,
+                actionTitle: `Jogou Dragão em ${CAVERNS_META[slot.cavernId].nome} (Col. ${slot.col + 1})`,
+                detail: `${sel.nome} (#${sel.numero}) por efeito de carta${gratis ? " (de graça)" : ""}.`,
+                card: sel
+              };
+              addLog(`${player.name} jogou ${sel.nome} em ${CAVERNS_META[slot.cavernId].nome} (Coluna ${slot.col + 1}) por efeito de carta${gratis ? " de graça" : ""}.`);
+              renderAll();
+              setTimeout(() => { if (gameState) gameState.justPlacedSlot = null; }, 650);
+
+              if (sel.tipo === "jogado" && sel.efeito && sel.efeito.length > 0) {
+                const playCtx = { cavernId: slot.cavernId, col: slot.col };
+                if (sel.pague) await executeEffectList(player, [{ op: "troca", ate: 1, pague: sel.pague, ganhe: sel.efeito }], playCtx);
+                else await executeEffectList(player, sel.efeito, playCtx);
+              }
+              resolve(sel);
+            };
+          });
+        };
+        show();
+      });
+    }
+
+    /* ---- Trocar a posição de 2 Dragões no tabuleiro (ignora preferências de caverna) ---- */
+    async function promptSwapPositions(player) {
+      if (getVisibleDragons(player).length < 2) {
+        showToast("Você precisa de pelo menos 2 Dragões no tabuleiro para trocar de posição.", "warn");
+        return false;
+      }
+      return new Promise(resolve => {
+        let picked = [];
+        const same = (a, b) => a.cavernId === b.cavernId && a.col === b.col;
+
+        const show = () => {
+          openModal({
+            title: `${player.name}: Trocar a posição de 2 Dragões`,
+            owner: player.id,
+            closable: false,
+            bodyHtml: `
+              <p class="text-xs text-stone-700 mb-2">Selecione 2 Dragões de qualquer caverna do seu tabuleiro (${picked.length}/2). Eles trocam de lugar com tudo o que têm (ovos e estoque). Ignora as preferências de caverna.</p>
+              ${player.caverns.map(cav => `
+                <div class="rounded-xl p-2 mb-2 cavern-row-${cav.id}">
+                  <div class="text-[11px] font-extrabold uppercase mb-1">${CAVERNS_META[cav.id].nome}</div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    ${cav.cols.map(col => {
+                      if (!col.dragonSlot) return `<div class="rounded-lg border border-dashed border-stone-400 bg-white/50 text-[10px] text-stone-500 flex items-center justify-center min-h-[56px]">${col.excavated ? "Vazio" : "Rocha fechada"}</div>`;
+                      const isPicked = picked.some(p => p.cavernId === cav.id && p.col === col.col);
+                      const d = col.dragonSlot.card;
+                      return `<button data-swap-pos="${cav.id}-${col.col}" ${isPicked ? 'data-sel="1"' : ''}
+                        class="p-2 rounded-lg border text-left text-[10.5px] font-bold cursor-pointer ${isPicked ? 'ring-4 ring-emerald-700 bg-emerald-50 border-emerald-700' : 'bg-white border-stone-300 hover:bg-amber-50'}">
+                        <div class="truncate">${d.nome}</div>
+                        <div class="font-medium text-stone-600 inline-flex items-center gap-1">Col. ${col.col + 1} · ${getIconHtml("ovo", "w-3 h-3")}${col.dragonSlot.eggs}/${d.ninhos || 0}</div>
+                      </button>`;
+                    }).join("")}
+                  </div>
+                </div>`).join("")}`,
+            footerButtons: [
+              { text: "Cancelar", className: "px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } },
+              {
+                text: "Confirmar troca",
+                className: "px-4 py-2 rounded-xl bg-emerald-800 text-white text-xs font-bold cursor-pointer",
+                onClick: () => {
+                  if (picked.length !== 2) { showToast("Selecione exatamente 2 Dragões.", "warn"); return; }
+                  const [a, b] = picked;
+                  const ca = player.caverns[a.cavernId].cols[a.col];
+                  const cb = player.caverns[b.cavernId].cols[b.col];
+                  const tmp = ca.dragonSlot;
+                  ca.dragonSlot = cb.dragonSlot;
+                  cb.dragonSlot = tmp;
+                  closeModal();
+                  addLog(`${player.name} trocou de lugar ${ca.dragonSlot.card.nome} (${CAVERNS_META[a.cavernId].nome}, Col. ${a.col + 1}) com ${cb.dragonSlot.card.nome} (${CAVERNS_META[b.cavernId].nome}, Col. ${b.col + 1}).`);
+                  gameState.lastActionShowcase = {
+                    round: gameState.round,
+                    playerName: player.name,
+                    playerColor: player.color.hex,
+                    actionTitle: "Trocou a posição de 2 Dragões",
+                    detail: `${ca.dragonSlot.card.nome} ⇄ ${cb.dragonSlot.card.nome}`,
+                    card: null
+                  };
+                  renderAll();
+                  resolve(true);
+                }
+              }
+            ]
+          });
+
+          document.querySelectorAll("[data-swap-pos]").forEach(btn => {
+            btn.onclick = () => {
+              const [cavernId, col] = btn.dataset.swapPos.split("-").map(Number);
+              const pos = { cavernId, col };
+              const at = picked.findIndex(p => same(p, pos));
+              if (at >= 0) picked.splice(at, 1);
+              else { picked.push(pos); if (picked.length > 2) picked.shift(); }
+              show();
+            };
+          });
+        };
+        show();
+      });
     }
 
     function payLabel(p) {
@@ -4310,7 +4567,7 @@
        13. TESTADOR DE CARTAS (abra o jogo com /?testador=1)
        ========================================================================= */
     // Mantenha estas listas em sincronia com o motor de efeitos (executeEffectList / computeEndGameDragonPoints)
-    const SUPPORTED_OPS = new Set(["moeda", "ganhe", "ovo", "dragao", "caverna", "guilda", "avancarGuilda", "estocar", "inserir", "oponentes", "escolha", "troca", "ativarOutro", "escavar"]);
+    const SUPPORTED_OPS = new Set(["moeda", "ganhe", "ovo", "dragao", "caverna", "guilda", "avancarGuilda", "estocar", "inserir", "oponentes", "escolha", "troca", "ativarOutro", "escavar", "jogarDragao", "trocarPosicao"]);
     const SUPPORTED_FIM_CONTAR = new Set(["outrosDragoesCaverna", "marcadoresGuilda", "dragoesRodada", "medio", "filhote", "cavernasEscavadas"]);
     const SUPPORTED_FIM_COND = new Set(["colunaCheia", "cavernaCheia"]);
 
@@ -4415,11 +4672,15 @@
       const cavernId = card.hab && card.hab.length ? card.hab[0] : 0;
       p.caverns[cavernId].cols[1].dragonSlot = { card, eggs: 0, tuckedResources: [], tuckedCards: [] };
       const ctx = { cavernId, col: 1 };
+      if (sbCollectOps(card.efeito || [], new Set()).has("jogarDragao")) {
+        p.caverns.forEach(cav => { cav.cols[2].dragonSlot = null; });
+      }
       if (sbCollectOps(card.efeito || [], new Set()).has("escavar")) {
         // abre espaço para a escavação gratuita do teste
         const free = p.caverns[2].cols[3];
         free.excavated = false; free.dragonSlot = null;
       }
+      SB.rebase();
       renderAll();
       const runEffect = async () => {
         if (!card.efeito || card.efeito.length === 0) return;
@@ -4446,8 +4707,13 @@
     function sbAutoStep() {
       if (byId("modal-backdrop").classList.contains("hidden")) return false;
       const box = byId("modal-box");
-      const sels = ["[data-exc-target]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]", "[data-choice-idx]:not([disabled])",
+      const sels = ["[data-pd-slot]:not([disabled])", "[data-pd-disc]:not([data-pd-dsel])", "[data-pd-dragon]:not([data-pd-sel])", "[data-exc-target]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]", "[data-choice-idx]:not([disabled])",
         "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-hd]", "[data-disc-c]"];
+      const swapBtns = box.querySelectorAll("[data-swap-pos]");
+      if (swapBtns.length) {
+        const picked = box.querySelectorAll("[data-swap-pos][data-sel]").length;
+        if (picked < 2) { const el = box.querySelector("[data-swap-pos]:not([data-sel])"); if (el) { el.click(); return true; } }
+      }
       for (const s of sels) { const el = box.querySelector(s); if (el) { el.click(); return true; } }
       const foot = [...byId("modal-footer").querySelectorAll("button")];
       const btn = foot.find(b => /^(sim|confirmar|entendi)/i.test(b.textContent.trim())) || foot[0];
@@ -4474,7 +4740,8 @@
       const st = gameState, p = st.players[0];
       const card = sbCard(src, kind);
       const issues = sbStaticIssues(src, kind);
-      const before = sbMetrics(st);
+      let before = sbMetrics(st);
+      SB.rebase = () => { before = sbMetrics(st); };
       const logsBefore = st.logs.length;
       SB.errors = []; SB.modals = 0; SB.info = ""; window.__unimpl = [];
       let thrown = null, timedOut = false;
@@ -4484,6 +4751,8 @@
           if (kind === "dragon") await sbRunDragon(st, p, card);
           else {
             p.caverns.forEach(cav => cav.cols.forEach(c => { if (c.col > 0) { c.excavated = false; c.dragonSlot = null; } }));
+            if (sbCollectOps(card.efeito || [], new Set()).has("jogarDragao")) p.caverns.forEach(cav => { cav.cols[2].excavated = true; cav.cols[2].dragonSlot = null; });
+            SB.rebase();
             p.hand.push(card);
             renderAll();
             await openExcavateModal(card.uid, true, 0, card.uid);
