@@ -10,6 +10,7 @@
   {
    "numero": 1,
    "nome": "Pastador de Barriga Branca",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     1
@@ -45,6 +46,7 @@
   {
    "numero": 2,
    "nome": "Dragão-Mariposa Afável",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     0
@@ -80,6 +82,7 @@
   {
    "numero": 3,
    "nome": "Lindworm das Algas",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     1,
@@ -117,6 +120,7 @@
   {
    "numero": 4,
    "nome": "Pastador Frugívoro",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     2
@@ -153,6 +157,7 @@
   {
    "numero": 5,
    "nome": "Dragão-Fada Presudo",
+   "traco": "agressivo",
    "tam": "filhote",
    "hab": [
     1
@@ -199,6 +204,7 @@
   {
    "numero": 6,
    "nome": "Dragonete de Bando",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     0
@@ -234,6 +240,7 @@
   {
    "numero": 7,
    "nome": "Dragão do Bambu Temperado",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     1
@@ -270,6 +277,7 @@
   {
    "numero": 8,
    "nome": "Dragão-Fada Leal",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     2
@@ -310,6 +318,7 @@
   {
    "numero": 9,
    "nome": "Papa-Grilos Herbívoro",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     1,
@@ -347,6 +356,7 @@
   {
    "numero": 10,
    "nome": "Dragão-de-Fogo Melodioso",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     0,
@@ -383,6 +393,7 @@
   {
    "numero": 11,
    "nome": "Draco Papa-Sementes",
+   "traco": "agressivo",
    "tam": "filhote",
    "hab": [
     1
@@ -419,6 +430,7 @@
   {
    "numero": 12,
    "nome": "Dragonete da Savana",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     1
@@ -455,6 +467,7 @@
   {
    "numero": 13,
    "nome": "Dragão-Fada Melífero",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     2
@@ -491,6 +504,7 @@
   {
    "numero": 14,
    "nome": "Papa-Grilos Carniceiro",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     1
@@ -527,6 +541,7 @@
   {
    "numero": 15,
    "nome": "Dragão Lung das Sequoias",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     2
@@ -563,6 +578,7 @@
   {
    "numero": 16,
    "nome": "Dragão-de-Fogo Peregrino",
+   "traco": "agressivo",
    "tam": "filhote",
    "hab": [
     1,
@@ -599,6 +615,7 @@
   {
    "numero": 17,
    "nome": "Lindworm-da-Grama Comum",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     1,
@@ -633,6 +650,7 @@
   {
    "numero": 18,
    "nome": "Anfíptero Lamuriante",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     0
@@ -666,6 +684,7 @@
   {
    "numero": 19,
    "nome": "Dragonete Tagarela",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     0,
@@ -703,6 +722,7 @@
   {
    "numero": 20,
    "nome": "Rex Miniatura",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     2
@@ -739,6 +759,7 @@
   {
    "numero": 21,
    "nome": "Tamarim-Fada",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     2
@@ -774,6 +795,7 @@
   {
    "numero": 22,
    "nome": "Dragão de Cheshire",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     2
@@ -810,6 +832,7 @@
   {
    "numero": 23,
    "nome": "Dragão de Granito Voraz",
+   "traco": "agressivo",
    "tam": "filhote",
    "hab": [
     2
@@ -851,6 +874,7 @@
   {
    "numero": 24,
    "nome": "Dragão Chifrudo Vampírico",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     2
@@ -887,6 +911,7 @@
   {
    "numero": 25,
    "nome": "Papa-Líquen Pintado",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     2
@@ -923,6 +948,7 @@
   {
    "numero": 26,
    "nome": "Pastador Barganhador",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     2
@@ -958,6 +984,7 @@
   {
    "numero": 27,
    "nome": "Cobrete de Gola",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     2
@@ -998,6 +1025,7 @@
   {
    "numero": 28,
    "nome": "Cobrete Silenciosa",
+   "traco": "agressivo",
    "tam": "filhote",
    "hab": [
     2
@@ -1034,6 +1062,7 @@
   {
    "numero": 29,
    "nome": "Rêmora Chamuscante",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     2
@@ -1067,6 +1096,7 @@
   {
    "numero": 30,
    "nome": "Dragonete Cacarejante",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     0
@@ -1102,6 +1132,7 @@
   {
    "numero": 31,
    "nome": "Dragão-Fada Guia",
+   "traco": "brincalhao",
    "tam": "filhote",
    "hab": [
     2
@@ -1138,6 +1169,7 @@
   {
    "numero": 32,
    "nome": "Dragonete Camaleão",
+   "traco": "prestativo",
    "tam": "filhote",
    "hab": [
     2
@@ -1174,6 +1206,7 @@
   {
    "numero": 33,
    "nome": "Dragão Vermelho de Gola \"Amigável\"",
+   "traco": "agressivo",
    "tam": "filhote",
    "hab": [
     0
@@ -1215,6 +1248,7 @@
   {
    "numero": 34,
    "nome": "Serpente Marinha Gentil",
+   "traco": "timido",
    "tam": "filhote",
    "hab": [
     2
@@ -1251,6 +1285,7 @@
   {
    "numero": 35,
    "nome": "Draco de Gramado",
+   "traco": "misterioso",
    "tam": "filhote",
    "hab": [
     2
@@ -1287,6 +1322,7 @@
   {
    "numero": 36,
    "nome": "Voador Sentinela",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     1
@@ -1315,6 +1351,7 @@
   {
    "numero": 37,
    "nome": "Basilisco Subterrâneo",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     2
@@ -1349,6 +1386,7 @@
   {
    "numero": 38,
    "nome": "Dragão Lung Veloz",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     0,
@@ -1376,6 +1414,7 @@
   {
    "numero": 39,
    "nome": "Grifodragão Cansado",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     0,
@@ -1403,6 +1442,7 @@
   {
    "numero": 40,
    "nome": "Serpente Marinha Anciã",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     1
@@ -1429,6 +1469,7 @@
   {
    "numero": 41,
    "nome": "Dragonete Listrado",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0,
@@ -1454,6 +1495,7 @@
   {
    "numero": 42,
    "nome": "Grande Dragão Lung Dourado",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     1
@@ -1478,6 +1520,7 @@
   {
    "numero": 43,
    "nome": "Espírito Azul da Floresta",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     2
@@ -1504,6 +1547,7 @@
   {
    "numero": 44,
    "nome": "Draco Fulvo do Norte",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     1
@@ -1528,6 +1572,7 @@
   {
    "numero": 45,
    "nome": "Wyrm Tranquila",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     2
@@ -1555,6 +1600,7 @@
   {
    "numero": 46,
    "nome": "Guardião Arco-Íris",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     0,
@@ -1580,6 +1626,7 @@
   {
    "numero": 47,
    "nome": "Anfíptero Coruja",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     1
@@ -1611,6 +1658,7 @@
   {
    "numero": 48,
    "nome": "Dragão Lung Chifrudo Ágil",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     0
@@ -1636,6 +1684,7 @@
   {
    "numero": 49,
    "nome": "Dragão Lung Chifrudo Padrão",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     0,
@@ -1664,6 +1713,7 @@
   {
    "numero": 50,
    "nome": "Anteldragão Sábio",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     1
@@ -1689,6 +1739,7 @@
   {
    "numero": 51,
    "nome": "Grifodragão Distante",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0,
@@ -1714,6 +1765,7 @@
   {
    "numero": 52,
    "nome": "Dragão Lung Azul Cromático",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     2
@@ -1739,6 +1791,7 @@
   {
    "numero": 53,
    "nome": "Wyvern Fulva das Estepes",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     0
@@ -1766,6 +1819,7 @@
   {
    "numero": 54,
    "nome": "Grifodragão Colorido",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0,
@@ -1793,6 +1847,7 @@
   {
    "numero": 55,
    "nome": "Serpente Calma do Lago",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     1,
@@ -1821,6 +1876,7 @@
   {
    "numero": 56,
    "nome": "Voador Acumulador",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     0,
@@ -1849,6 +1905,7 @@
   {
    "numero": 57,
    "nome": "Dragão-Fada Eterno",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     1
@@ -1884,6 +1941,7 @@
   {
    "numero": 58,
    "nome": "Wyrm Cáustica",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     1
@@ -1913,6 +1971,7 @@
   {
    "numero": 59,
    "nome": "Wyvern Arrogante",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0,
@@ -1938,6 +1997,7 @@
   {
    "numero": 60,
    "nome": "Cauda-de-Rufo Furtiva",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     0
@@ -1965,6 +2025,7 @@
   {
    "numero": 61,
    "nome": "Wyrm Primordial",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     0,
@@ -1995,6 +2056,7 @@
   {
    "numero": 62,
    "nome": "Firevern Descendente",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     2
@@ -2020,6 +2082,7 @@
   {
    "numero": 63,
    "nome": "Draco Chifrudo Guardião",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     1,
@@ -2063,6 +2126,7 @@
   {
    "numero": 64,
    "nome": "Dragão das Rochas Escamoso",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     1
@@ -2088,6 +2152,7 @@
   {
    "numero": 65,
    "nome": "Anteldragão Perspicaz",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     2
@@ -2117,6 +2182,7 @@
   {
    "numero": 66,
    "nome": "Fantasma Verde",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     1
@@ -2146,6 +2212,7 @@
   {
    "numero": 67,
    "nome": "O Ancião",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     1
@@ -2214,6 +2281,7 @@
   {
    "numero": 68,
    "nome": "Dragão-de-Fogo Hostil do Norte",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     0
@@ -2248,6 +2316,7 @@
   {
    "numero": 69,
    "nome": "Grifodragão Clarividente",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     1
@@ -2275,6 +2344,7 @@
   {
    "numero": 70,
    "nome": "Wyrm Vermelha Paciente",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     0,
@@ -2329,6 +2399,7 @@
   {
    "numero": 71,
    "nome": "Voador Multicolorido",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     0,
@@ -2355,6 +2426,7 @@
   {
    "numero": 72,
    "nome": "Primordiossauro",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     1
@@ -2383,6 +2455,7 @@
   {
    "numero": 73,
    "nome": "Dragão Palmípede Pantanoso",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     2
@@ -2410,6 +2483,7 @@
   {
    "numero": 74,
    "nome": "Draco Marrom Solitário",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     0
@@ -2434,6 +2508,7 @@
   {
    "numero": 75,
    "nome": "Quebra-Rochas Carbonífero",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     2
@@ -2460,6 +2535,7 @@
   {
    "numero": 76,
    "nome": "Papa-Grilos Perspicaz",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0
@@ -2488,6 +2564,7 @@
   {
    "numero": 77,
    "nome": "Firevern Intratável",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     0,
@@ -2517,6 +2594,7 @@
   {
    "numero": 78,
    "nome": "Wyvern Particularmente Arrogante",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     2
@@ -2544,6 +2622,7 @@
   {
    "numero": 79,
    "nome": "Grifodragão Azul Comum",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     2
@@ -2576,6 +2655,7 @@
   {
    "numero": 80,
    "nome": "Firevern Falcoeiro",
+   "traco": "misterioso",
    "tam": "medio",
    "hab": [
     0,
@@ -2617,6 +2697,7 @@
   {
    "numero": 81,
    "nome": "Grifodragão Estoico",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     0
@@ -2641,6 +2722,7 @@
   {
    "numero": 82,
    "nome": "Dragão-Fada Silencioso Asa-de-Carvalho",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     0
@@ -2667,6 +2749,7 @@
   {
    "numero": 83,
    "nome": "Firevern Espirituoso",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     2
@@ -2697,6 +2780,7 @@
   {
    "numero": 84,
    "nome": "Wyrm Venenosa Descontente",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     1
@@ -2725,6 +2809,7 @@
   {
    "numero": 85,
    "nome": "Koiwyrm Abastada",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     0
@@ -2762,6 +2847,7 @@
   {
    "numero": 86,
    "nome": "Wyvern Cavaleira do Norte",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     1
@@ -2797,6 +2883,7 @@
   {
    "numero": 87,
    "nome": "Wyvern Cavaleira Equatorial",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     0,
@@ -2833,6 +2920,7 @@
   {
    "numero": 88,
    "nome": "Dragão Lung Rápido",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     1
@@ -2858,6 +2946,7 @@
   {
    "numero": 89,
    "nome": "Dragão Lung Erudito",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0
@@ -2888,6 +2977,7 @@
   {
    "numero": 90,
    "nome": "Anfíptero Protetor",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     0,
@@ -2928,6 +3018,7 @@
   {
    "numero": 91,
    "nome": "Coatl Resplandecente Comum",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     0,
@@ -2955,6 +3046,7 @@
   {
    "numero": 92,
    "nome": "Cuspidor Territorial",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     2
@@ -2981,6 +3073,7 @@
   {
    "numero": 93,
    "nome": "Coatl de Crista Miniatura",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     1
@@ -3004,6 +3097,7 @@
   {
    "numero": 94,
    "nome": "Grifodragão do Norte",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0,
@@ -3037,6 +3131,7 @@
   {
    "numero": 95,
    "nome": "Serpente de Dedos Palmados Pacifista",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     2
@@ -3064,6 +3159,7 @@
   {
    "numero": 96,
    "nome": "Dragão Chifrudo Exigente",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     1,
@@ -3093,6 +3189,7 @@
   {
    "numero": 97,
    "nome": "Espírito Salpicado da Clareira",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     0,
@@ -3119,6 +3216,7 @@
   {
    "numero": 98,
    "nome": "Pequeno Anfíptero",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     0,
@@ -3141,6 +3239,7 @@
   {
    "numero": 99,
    "nome": "Anfíptero Trinado Ágil",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     0,
@@ -3173,6 +3272,7 @@
   {
    "numero": 100,
    "nome": "Wyrm Venenosa Chifruda",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     0
@@ -3208,6 +3308,7 @@
   {
    "numero": 101,
    "nome": "Anfíptero Magnífico",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     0,
@@ -3237,6 +3338,7 @@
   {
    "numero": 102,
    "nome": "Anfíptero de Bolso",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     0,
@@ -3262,6 +3364,7 @@
   {
    "numero": 103,
    "nome": "Anfíptero Avarento",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     1
@@ -3291,6 +3394,7 @@
   {
    "numero": 104,
    "nome": "Draco Planador da Taiga",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0
@@ -3332,6 +3436,7 @@
   {
    "numero": 105,
    "nome": "Australopithecus Drakus",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     2
@@ -3367,6 +3472,7 @@
   {
    "numero": 106,
    "nome": "Garra-Afiada Menor",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0,
@@ -3392,6 +3498,7 @@
   {
    "numero": 107,
    "nome": "Draco Chifrudo de Puck",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     0
@@ -3423,6 +3530,7 @@
   {
    "numero": 108,
    "nome": "Bom Draco",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     1
@@ -3464,6 +3572,7 @@
   {
    "numero": 109,
    "nome": "Firevern Belicoso",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0,
@@ -3496,6 +3605,7 @@
   {
    "numero": 110,
    "nome": "Draco Espreitador",
+   "traco": "misterioso",
    "tam": "medio",
    "hab": [
     1
@@ -3525,6 +3635,7 @@
   {
    "numero": 111,
    "nome": "Wyrm Vermelha Penuriosa",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     0
@@ -3553,6 +3664,7 @@
   {
    "numero": 112,
    "nome": "Anfíptero Variegado",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     0,
@@ -3580,6 +3692,7 @@
   {
    "numero": 113,
    "nome": "Quebra-Rochas Xistoso",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     2
@@ -3606,6 +3719,7 @@
   {
    "numero": 114,
    "nome": "Anfíptero Avarento",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     2
@@ -3638,6 +3752,7 @@
   {
    "numero": 115,
    "nome": "Koiwyrm Guardiã",
+   "traco": "misterioso",
    "tam": "medio",
    "hab": [
     0,
@@ -3672,6 +3787,7 @@
   {
    "numero": 116,
    "nome": "Hidra Dourada Divisora",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     1
@@ -3703,6 +3819,7 @@
   {
    "numero": 117,
    "nome": "Basilisco Antediluviano",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     1,
@@ -3730,6 +3847,7 @@
   {
    "numero": 118,
    "nome": "Hidráptero Espirituoso",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     1,
@@ -3757,6 +3875,7 @@
   {
    "numero": 119,
    "nome": "Coatl Camaleão",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     0,
@@ -3786,6 +3905,7 @@
   {
    "numero": 120,
    "nome": "Guardião Conhecedor",
+   "traco": "misterioso",
    "tam": "medio",
    "hab": [
     0,
@@ -3828,6 +3948,7 @@
   {
    "numero": 121,
    "nome": "Voador Noturno de Seda",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     0
@@ -3863,6 +3984,7 @@
   {
    "numero": 122,
    "nome": "Draco da Floresta Pluvial",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     2
@@ -3891,6 +4013,7 @@
   {
    "numero": 123,
    "nome": "Firevern Voraz",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     0
@@ -3924,6 +4047,7 @@
   {
    "numero": 124,
    "nome": "Dragão-Mariposa Tímido",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     1
@@ -3948,6 +4072,7 @@
   {
    "numero": 125,
    "nome": "Draco das Cavernas Escamoso",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     0,
@@ -3985,6 +4110,7 @@
   {
    "numero": 126,
    "nome": "Dragonete-das-Neves Pigmeu",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0
@@ -4018,6 +4144,7 @@
   {
    "numero": 127,
    "nome": "Dragão Lung Esmeralda Comum",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     2
@@ -4043,6 +4170,7 @@
   {
    "numero": 128,
    "nome": "Serpente Marinha de Dentes-de-Serra",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     1
@@ -4071,6 +4199,7 @@
   {
    "numero": 129,
    "nome": "Dragão-de-Fogo do Bosque",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     2
@@ -4098,6 +4227,7 @@
   {
    "numero": 130,
    "nome": "Voador Noctívago",
+   "traco": "misterioso",
    "tam": "medio",
    "hab": [
     0
@@ -4124,6 +4254,7 @@
   {
    "numero": 131,
    "nome": "Dragão Lung Sorridente",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     2
@@ -4182,6 +4313,7 @@
   {
    "numero": 132,
    "nome": "Hidráptero Cavaleiro",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     1
@@ -4212,6 +4344,7 @@
   {
    "numero": 133,
    "nome": "Draco da Tundra",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     0
@@ -4239,6 +4372,7 @@
   {
    "numero": 134,
    "nome": "Dragão Lung do Vale Negro",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0,
@@ -4268,6 +4402,7 @@
   {
    "numero": 135,
    "nome": "Anfíptero do Sol",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     1
@@ -4305,6 +4440,7 @@
   {
    "numero": 136,
    "nome": "Draco Vaga-Lume Curioso",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     0,
@@ -4331,6 +4467,7 @@
   {
    "numero": 137,
    "nome": "Cauda-de-Rufo Voraz",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     0
@@ -4358,6 +4495,7 @@
   {
    "numero": 138,
    "nome": "Anfíptero do Pântano",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     2
@@ -4386,6 +4524,7 @@
   {
    "numero": 139,
    "nome": "Anfíptero Estrelado",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0,
@@ -4413,6 +4552,7 @@
   {
    "numero": 140,
    "nome": "Dragão Lung Esmeralda Jovem",
+   "traco": "misterioso",
    "tam": "medio",
    "hab": [
     2
@@ -4438,6 +4578,7 @@
   {
    "numero": 141,
    "nome": "Anfíptero Brilhante",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     0,
@@ -4465,6 +4606,7 @@
   {
    "numero": 142,
    "nome": "Anfíptero Crepuscular",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     0,
@@ -4494,6 +4636,7 @@
   {
    "numero": 143,
    "nome": "Dragão Lung Esmeralda Filhote",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     2
@@ -4519,6 +4662,7 @@
   {
    "numero": 144,
    "nome": "Lindworm Fofoqueira",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0
@@ -4555,6 +4699,7 @@
   {
    "numero": 145,
    "nome": "Dragão-de-Fogo do Bosque da Primavera",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     0
@@ -4581,6 +4726,7 @@
   {
    "numero": 146,
    "nome": "Cobrete de Crista",
+   "traco": "brincalhao",
    "tam": "grande",
    "hab": [
     0
@@ -4610,6 +4756,7 @@
   {
    "numero": 147,
    "nome": "Grande Dragão Lung Escarlate",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     0
@@ -4634,6 +4781,7 @@
   {
    "numero": 148,
    "nome": "Draco das Florestas de Carvalho",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     0
@@ -4662,6 +4810,7 @@
   {
    "numero": 149,
    "nome": "Dragão-Mariposa Estampado",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     0
@@ -4690,6 +4839,7 @@
   {
    "numero": 150,
    "nome": "Wyvern de Plumas Roxas",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     0,
@@ -4718,6 +4868,7 @@
   {
    "numero": 151,
    "nome": "Dragão Lung Esmeralda",
+   "traco": "brincalhao",
    "tam": "medio",
    "hab": [
     2
@@ -4743,6 +4894,7 @@
   {
    "numero": 152,
    "nome": "Dragão-de-Fogo das Rochas",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     1
@@ -4769,6 +4921,7 @@
   {
    "numero": 153,
    "nome": "Draco de Plumas Rosadas",
+   "traco": "agressivo",
    "tam": "medio",
    "hab": [
     0,
@@ -4806,6 +4959,7 @@
   {
    "numero": 154,
    "nome": "Draco da Floresta Pluvial",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     0
@@ -4832,6 +4986,7 @@
   {
    "numero": 155,
    "nome": "Grande Dragão Lung Ametista",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     2
@@ -4856,6 +5011,7 @@
   {
    "numero": 156,
    "nome": "Serpente Brilhante da Caverna",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     1
@@ -4892,6 +5048,7 @@
   {
    "numero": 157,
    "nome": "Dragão-de-Fogo de Escamas Afiadas",
+   "traco": "prestativo",
    "tam": "pequeno",
    "hab": [
     0
@@ -4928,6 +5085,7 @@
   {
    "numero": 158,
    "nome": "Dragão-de-Fogo de Asas Vermelhas",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     2
@@ -4956,6 +5114,7 @@
   {
    "numero": 159,
    "nome": "Draco da Floresta Nublada",
+   "traco": "timido",
    "tam": "pequeno",
    "hab": [
     1
@@ -4984,6 +5143,7 @@
   {
    "numero": 160,
    "nome": "Dragão-de-Fogo de Barriga Dourada",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     1
@@ -5010,6 +5170,7 @@
   {
    "numero": 161,
    "nome": "Anfíptero Caçador",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0
@@ -5046,6 +5207,7 @@
   {
    "numero": 162,
    "nome": "Dragão Lung Esmeralda Ancião",
+   "traco": "prestativo",
    "tam": "medio",
    "hab": [
     2
@@ -5071,6 +5233,7 @@
   {
    "numero": 163,
    "nome": "Firevern Voraz da Floresta",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     2
@@ -5099,6 +5262,7 @@
   {
    "numero": 164,
    "nome": "Hidráptero Cavaleiro da Floresta",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     2
@@ -5129,6 +5293,7 @@
   {
    "numero": 165,
    "nome": "Draco das Cavernas Escamoso",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     2
@@ -5155,6 +5320,7 @@
   {
    "numero": 166,
    "nome": "Dragão-Fada da Aurora",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     1
@@ -5182,6 +5348,7 @@
   {
    "numero": 167,
    "nome": "Anfíptero Esguio",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     0
@@ -5209,6 +5376,7 @@
   {
    "numero": 168,
    "nome": "Dragonete Pigmeu de Cauda-Curta",
+   "traco": "agressivo",
    "tam": "pequeno",
    "hab": [
     2
@@ -5234,6 +5402,7 @@
   {
    "numero": 169,
    "nome": "Hidráptero Cavaleiro Escarlate",
+   "traco": "timido",
    "tam": "medio",
    "hab": [
     0
@@ -5264,6 +5433,7 @@
   {
    "numero": 170,
    "nome": "Wyvern de Crista",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     1
@@ -5291,6 +5461,7 @@
   {
    "numero": 171,
    "nome": "Voador Azul",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     2
@@ -5318,6 +5489,7 @@
   {
    "numero": 172,
    "nome": "Cobrete de Asas Esmeralda",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     2
@@ -5345,6 +5517,7 @@
   {
    "numero": 173,
    "nome": "Wyvern de Cauda-Afiada",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     0
@@ -5372,6 +5545,7 @@
   {
    "numero": 174,
    "nome": "Wyvern de Plumas Amarelas",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     1
@@ -5399,6 +5573,7 @@
   {
    "numero": 175,
    "nome": "Anfíptero do Sol da Floresta",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     0
@@ -5424,6 +5599,7 @@
   {
    "numero": 176,
    "nome": "Wyvern das Cavernas Escamosas",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     1
@@ -5450,6 +5626,7 @@
   {
    "numero": 177,
    "nome": "Wyrm da Savana",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     1
@@ -5477,6 +5654,7 @@
   {
    "numero": 178,
    "nome": "Draco de Plumas Roxas",
+   "traco": "agressivo",
    "tam": "grande",
    "hab": [
     2
@@ -5502,6 +5680,7 @@
   {
    "numero": 179,
    "nome": "Dragão-Mariposa de Escamas Douradas",
+   "traco": "timido",
    "tam": "grande",
    "hab": [
     1
@@ -5529,6 +5708,7 @@
   {
    "numero": 180,
    "nome": "Cauda-de-Rufo da Caverna",
+   "traco": "misterioso",
    "tam": "grande",
    "hab": [
     2
@@ -5556,6 +5736,7 @@
   {
    "numero": 181,
    "nome": "Draco das Cavernas",
+   "traco": "brincalhao",
    "tam": "pequeno",
    "hab": [
     0
@@ -5583,6 +5764,7 @@
   {
    "numero": 182,
    "nome": "Wyvern de Cauda-de-Leque",
+   "traco": "prestativo",
    "tam": "grande",
    "hab": [
     0
@@ -5608,6 +5790,7 @@
   {
    "numero": 183,
    "nome": "Voador de Plumas Roxas",
+   "traco": "misterioso",
    "tam": "pequeno",
    "hab": [
     0

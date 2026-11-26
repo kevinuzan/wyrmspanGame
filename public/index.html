@@ -2679,6 +2679,7 @@
             await promptTuckResource(player, eff.rec || "qualquer", eff.n || 1, eff.aqui ? context : null);
           }
         } else if (eff.op === "inserir") {
+          window.__lastTucked = null;
           const dragons = getVisibleDragons(player);
           if (dragons.length > 0) {
             if (eff.origem === "baralho") {
@@ -2750,7 +2751,9 @@
               });
             });
             if (!accepted) break;
-            applyPaySimple(player, eff.pague);
+            // "Insira Dragão da mão aqui para ganhar...": o próprio dragão inserido é o pagamento (não descontar duas vezes)
+            const insIsPay = eff.pague && eff.pague.dragao && Array.isArray(eff.ganhe) && eff.ganhe[0] && eff.ganhe[0].op === "inserir" && !eff.ganhe[0].origem;
+            applyPaySimple(player, insIsPay ? { ...eff.pague, dragao: 0 } : eff.pague);
             await executeEffectList(player, eff.ganhe, context);
           }
         } else if (eff.op === "ativarOutro") {
@@ -2777,6 +2780,51 @@
           await promptPlayDragon(player, eff);
         } else if (eff.op === "trocarPosicao") {
           await promptSwapPositions(player);
+        } else if (eff.op === "revelarInserir") {
+          await opRevelarInserir(player, eff, context);
+        } else if (eff.op === "condicional") {
+          const r = evalSe(player, eff.se, context);
+          if (r === null) {
+            (window.__unimpl || (window.__unimpl = [])).push("condicional:" + eff.se);
+            addLog(`Aviso: a condição "${eff.se}" não está implementada e foi ignorada.`);
+            showToast(`Condição "${eff.se}" ainda não implementada.`, "warn");
+          } else if (r) {
+            addLog(`${player.name} cumpriu a condição do efeito.`);
+            await executeEffectList(player, eff.entao, context);
+          } else {
+            addLog(`${player.name} não cumpriu a condição do efeito.`);
+            showToast("Condição do efeito não cumprida.", "warn");
+          }
+        } else if (eff.op === "ovoCadaDragaoCaverna" || eff.op === "ovoCadaDragaoColuna") {
+          const list = getVisibleDragons(player).filter(d => eff.op === "ovoCadaDragaoCaverna" ? d.cavernId === context.cavernId : d.col === context.col);
+          let placed = 0;
+          list.forEach(d => {
+            for (let k = 0; k < (eff.n || 1); k++) {
+              if (d.slot.eggs < (d.card.ninhos || 0)) { d.slot.eggs++; placed++; }
+            }
+          });
+          addLog(`${player.name} botou ${placed} Ovo(s), um em cada dragão ${eff.op === "ovoCadaDragaoCaverna" ? "da caverna" : "da coluna"}.`);
+          if (placed < list.length * (eff.n || 1)) showToast("Alguns dragões estavam sem espaço de ninho.", "warn");
+        } else if (eff.op === "comprarInserirPorTraco") {
+          await opComprarInserirPorTraco(player, eff, context);
+        } else if (eff.op === "ativarTabuleiro") {
+          await promptActivateBoard(player);
+        } else if (eff.op === "ganharDoCustoInserido") {
+          await opGanharDoCustoInserido(player, eff, context);
+        } else if (eff.op === "comprarManterDescartarInserir") {
+          await opComprarManterDescartarInserir(player, eff, context);
+        } else if (eff.op === "ganharPorTracoEstocar") {
+          const cnt = countTraitInCavern(player, context.cavernId, eff.traco);
+          addLog(`${player.name} tem ${cnt} dragão(ões) ${String(eff.traco).toUpperCase()} nesta caverna.`);
+          for (let k = 0; k < cnt; k++) await promptChooseResource(player);
+          if (cnt > 0) await promptTuckResource(player, "qualquer", Math.min(eff.maxEstocarAqui || cnt, cnt), context);
+        } else if (eff.op === "inserirPorMarcadorGuilda") {
+          const target = getVisibleDragons(player).find(d => d.cavernId === context.cavernId && d.col === context.col);
+          const n = player.guildMarkersUsed || 0;
+          let done = 0;
+          if (target) for (let k = 0; k < n; k++) { const c = drawDragonFromDeck(); if (c) { target.slot.tuckedCards.push(c); window.__lastTucked = c; done++; } }
+          addLog(`${player.name} inseriu ${done} Dragão(ões) do baralho (um por marcador na Guilda).`);
+          if (n === 0) showToast("Você ainda não colocou marcadores na Guilda.", "warn");
         } else {
           (window.__unimpl || (window.__unimpl = [])).push(eff.op);
           console.warn("Efeito ainda não implementado:", eff.op, eff);
@@ -2785,6 +2833,206 @@
         }
       }
       renderAll();
+    }
+
+    /* ---- Helpers dos efeitos de revelar/condicional/traços ---- */
+    const TAM_LABEL = { filhote: "Filhote", pequeno: "Pequeno", medio: "Médio", grande: "Grande" };
+    function normTraco(card) {
+      const t = String((card && card.traco) || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+      return ({ aggressive: "agressivo", shy: "timido", playful: "brincalhao", helpful: "prestativo", mysterious: "misterioso" })[t] || t;
+    }
+    function leftNeighbor(player) {
+      const n = gameState.players.length;
+      return gameState.players[(player.id + 1) % n];
+    }
+    function cavernCount(player, cid) {
+      return player.caverns[cid].cols.filter(c => c.dragonSlot).length;
+    }
+    function countTraitInCavern(player, cid, traco) {
+      const t = normTraco({ traco });
+      return getVisibleDragons(player).filter(d => d.cavernId === cid && normTraco(d.card) === t).length;
+    }
+    function evalSe(player, se, context) {
+      let m;
+      if ((m = /^maioriaCaverna(\d)$/.exec(se || ""))) {
+        const k = parseInt(m[1], 10);
+        return cavernCount(player, k) >= cavernCount(leftNeighbor(player), k);
+      }
+      if ((m = /^minDragoesCaverna(\d+)$/.exec(se || ""))) {
+        return cavernCount(player, context.cavernId) >= parseInt(m[1], 10);
+      }
+      return null;
+    }
+
+    async function opRevelarInserir(player, eff, context) {
+      const c = drawDragonFromDeck();
+      if (!c) { showToast("O baralho de Dragões acabou.", "warn"); return; }
+      const ok = (eff.tamanhos || []).includes(c.tam);
+      const wanted = (eff.tamanhos || []).map(t => TAM_LABEL[t] || t).join(" ou ");
+      await new Promise(resolve => {
+        openModal({
+          title: `${player.name}: Carta revelada do baralho`,
+          owner: player.id,
+          closable: false,
+          bodyHtml: `
+            <div class="p-3 rounded-xl border border-stone-300 bg-white text-center space-y-1">
+              <div class="text-sm font-bold">${c.nome} (#${c.numero})</div>
+              <div class="text-xs text-stone-600">Tamanho: <strong>${TAM_LABEL[c.tam] || c.tam}</strong></div>
+            </div>
+            <p class="text-xs text-stone-700 mt-3">${ok
+              ? `É <strong>${wanted}</strong>: será inserido neste dragão.`
+              : `Não é ${wanted}: ${eff.senao === "mao" ? "vai para a sua mão." : "é descartado e você recebe o outro benefício."}`}</p>`,
+          footerButtons: [{ text: "Continuar", className: "px-4 py-2 rounded-xl bg-emerald-800 text-white text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(); } }]
+        });
+      });
+      const target = getVisibleDragons(player).find(d => d.cavernId === context.cavernId && d.col === context.col);
+      if (ok && target) {
+        target.slot.tuckedCards.push(c);
+        window.__lastTucked = c;
+        addLog(`${player.name} revelou ${c.nome} (${TAM_LABEL[c.tam]}) e o inseriu em ${target.card.nome}.`);
+        if (target.card.tam === "filhote" && target.card.filhote && target.card.filhote.aceita === "carta") await triggerHatchlingAbility(player, target);
+      } else if (ok || eff.senao === "mao") {
+        player.hand.push(c);
+        addLog(`${player.name} revelou ${c.nome} (${TAM_LABEL[c.tam]}) e o adicionou à mão.`);
+      } else {
+        gameState.dragonDiscard.push(c);
+        addLog(`${player.name} revelou ${c.nome} (${TAM_LABEL[c.tam]}) e o descartou.`);
+        if (Array.isArray(eff.senao)) await executeEffectList(player, eff.senao, context);
+      }
+    }
+
+    async function opComprarInserirPorTraco(player, eff, context) {
+      const cnt = countTraitInCavern(player, context.cavernId, eff.traco);
+      addLog(`${player.name} tem ${cnt} dragão(ões) ${String(eff.traco).toUpperCase()} nesta caverna.`);
+      const bought = [];
+      for (let k = 0; k < cnt; k++) { const c = drawDragonFromDeck(); if (c) { player.hand.push(c); bought.push(c); } }
+      if (bought.length === 0) { showToast("Nenhum dragão comprado.", "warn"); return; }
+      const target = getVisibleDragons(player).find(d => d.cavernId === context.cavernId && d.col === context.col);
+      const max = Math.min(eff.maxInserir || bought.length, bought.length);
+      if (!target) return;
+      for (let k = 0; k < max; k++) {
+        const avail = bought.filter(b => player.hand.includes(b));
+        if (avail.length === 0) break;
+        const stop = await new Promise(resolve => {
+          openModal({
+            title: `${player.name}: Inserir dos comprados (${k + 1}/${max})`,
+            owner: player.id,
+            closable: false,
+            bodyHtml: `<p class="text-xs text-stone-700 mb-2">Você comprou ${bought.length} dragão(ões). Escolha um para inserir embaixo de <strong>${target.card.nome}</strong>:</p>
+              <div class="space-y-2">${avail.map(b => `
+                <button data-ins-card="${b.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer">${b.nome} (#${b.numero})</button>`).join("")}</div>`,
+            footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }]
+          });
+          document.querySelectorAll("[data-ins-card]").forEach(btn => {
+            btn.onclick = () => {
+              const idx = player.hand.findIndex(c => c.uid === btn.dataset.insCard);
+              const card = player.hand.splice(idx, 1)[0];
+              target.slot.tuckedCards.push(card);
+              window.__lastTucked = card;
+              addLog(`${player.name} inseriu ${card.nome} embaixo de ${target.card.nome}.`);
+              closeModal();
+              resolve(false);
+            };
+          });
+        });
+        if (stop) break;
+      }
+      if (target.card.tam === "filhote" && target.card.filhote && target.card.filhote.aceita === "carta") await triggerHatchlingAbility(player, target);
+    }
+
+    async function opGanharDoCustoInserido(player, eff, context) {
+      const c = window.__lastTucked;
+      window.__lastTucked = null;
+      if (!c) { showToast("Nenhum dragão foi inserido, então não há custo para copiar.", "warn"); return; }
+      const opts = Object.keys(RESOURCE_META).filter(r => (c.custo || {})[r] > 0);
+      if (opts.length === 0) { showToast(`O custo de ${c.nome} não tem recursos.`, "warn"); addLog(`${c.nome} não tem recurso no custo impresso.`); return; }
+      for (let k = 0; k < (eff.n || 1); k++) {
+        let pick = opts[0];
+        if (opts.length > 1) {
+          pick = await new Promise(resolve => {
+            openModal({
+              title: `${player.name}: Ganhe 1 recurso do custo de ${c.nome}`,
+              owner: player.id,
+              closable: false,
+              bodyHtml: `<div class="grid grid-cols-2 gap-2">${opts.map(r => `
+                <button data-pick-res="${r}" class="p-2.5 rounded-xl border ${RESOURCE_META[r].color} text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5">
+                  ${getIconHtml(RESOURCE_META[r].iconName, "w-4 h-4")} ${RESOURCE_META[r].label}</button>`).join("")}</div>`
+            });
+            document.querySelectorAll("[data-pick-res]").forEach(btn => { btn.onclick = () => { closeModal(); resolve(btn.dataset.pickRes); }; });
+          });
+        }
+        player.resources[pick]++;
+        addLog(`${player.name} ganhou 1 ${RESOURCE_META[pick].label} (do custo impresso de ${c.nome}).`);
+      }
+    }
+
+    async function opComprarManterDescartarInserir(player, eff, context) {
+      const drawn = [];
+      for (let k = 0; k < (eff.comprar || 3); k++) { const c = drawDragonFromDeck(); if (c) drawn.push(c); }
+      if (drawn.length === 0) { showToast("O baralho de Dragões acabou.", "warn"); return; }
+      const target = getVisibleDragons(player).find(d => d.cavernId === context.cavernId && d.col === context.col);
+      const steps = [["manter", "Fique com", "vai para a sua mão"], ["descartar", "Descarte", "será descartado"]];
+      let pool = drawn.slice();
+      const keep = [], disc = [];
+      for (const [key, verb] of steps) {
+        const times = eff[key] || 0;
+        for (let k = 0; k < times && pool.length > 0; k++) {
+          const chosen = pool.length === 1 ? pool[0] : await new Promise(resolve => {
+            openModal({
+              title: `${player.name}: ${verb} 1 dragão (${k + 1}/${times})`,
+              owner: player.id,
+              closable: false,
+              bodyHtml: `<p class="text-xs text-stone-700 mb-2">Cartas compradas. ${key === "manter" ? "Escolha a que vai para a sua mão" : "Escolha a que será descartada (a restante é inserida aqui)"}:</p>
+                <div class="space-y-2">${pool.map(b => `
+                  <button data-cmdi="${b.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer">${b.nome} (#${b.numero}, ${TAM_LABEL[b.tam] || b.tam})</button>`).join("")}</div>`
+            });
+            document.querySelectorAll("[data-cmdi]").forEach(btn => { btn.onclick = () => { closeModal(); resolve(pool.find(x => x.uid === btn.dataset.cmdi)); }; });
+          });
+          pool = pool.filter(x => x !== chosen);
+          (key === "manter" ? keep : disc).push(chosen);
+        }
+      }
+      keep.forEach(c => player.hand.push(c));
+      disc.forEach(c => gameState.dragonDiscard.push(c));
+      const ins = pool.slice(0, eff.inserirAqui || 1);
+      const extra = pool.slice(ins.length);
+      if (target) ins.forEach(c => { target.slot.tuckedCards.push(c); window.__lastTucked = c; });
+      else extra.push(...ins);
+      extra.forEach(c => gameState.dragonDiscard.push(c));
+      addLog(`${player.name} comprou ${drawn.length}: ficou com ${keep.length}, descartou ${disc.length + extra.length} e inseriu ${target ? ins.length : 0} aqui.`);
+      if (target && target.card.tam === "filhote" && target.card.filhote && target.card.filhote.aceita === "carta") await triggerHatchlingAbility(player, target);
+    }
+
+    /* ---- Ativar uma habilidade impressa no tabuleiro do jogador (trilha do Aventureiro) ---- */
+    async function runBoardStep(player, cavernId, c) {
+      const meta = CAVERNS_META[cavernId];
+      const stepInfo = meta.pathSteps[c];
+      if (stepInfo.type === "resource_any") await promptChooseResource(player, `${meta.nome} (Col. ${c + 1}): Ganhe 1 recurso`);
+      else if (stepInfo.type === "dragon_card") await promptGainCard(player, "dragon", "any");
+      else if (stepInfo.type === "cave_card") await promptGainCard(player, "cave", "any");
+      else if (stepInfo.type === "guild") await advanceDragonGuild(player, 1);
+      else if (stepInfo.type === "egg") await layEggsForPlayer(player, 1);
+    }
+    async function promptActivateBoard(player) {
+      const sel = await new Promise(resolve => {
+        openModal({
+          title: `${player.name}: Ative 1 habilidade impressa do tabuleiro`,
+          owner: player.id,
+          closable: false,
+          bodyHtml: `<div class="space-y-3">${CAVERNS_META.map(meta => `
+            <div><div class="text-[10px] font-bold uppercase text-stone-500 mb-1">${meta.nome}</div>
+            <div class="grid grid-cols-2 gap-2">${meta.pathSteps.map((st, c) => `
+              <button data-board-step="${meta.id}-${c}" class="p-2 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 text-[11px] font-bold cursor-pointer inline-flex items-center gap-1.5">
+                ${getIconHtml(st.iconName, "w-4 h-4")} <span>Col. ${c + 1}: ${st.label}</span></button>`).join("")}</div></div>`).join("")}</div>`,
+          footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(null); } }]
+        });
+        document.querySelectorAll("[data-board-step]").forEach(btn => {
+          btn.onclick = () => { closeModal(); const [a, b] = btn.dataset.boardStep.split("-").map(Number); resolve({ a, b }); };
+        });
+      });
+      if (!sel) return;
+      addLog(`${player.name} ativou a habilidade impressa: ${CAVERNS_META[sel.a].nome}, Col. ${sel.b + 1}.`);
+      await runBoardStep(player, sel.a, sel.b);
     }
 
     /* ---- Jogar um Dragão por efeito de carta (de graça ou com desconto) ---- */
@@ -3173,6 +3421,7 @@
               const removed = player.hand.splice(idx, 1)[0];
               const targetDragon = dragonsOnBoard[0];
               targetDragon.slot.tuckedCards.push(removed);
+              window.__lastTucked = removed;
               closeModal();
               addLog(`${player.name} inseriu ${removed.nome} embaixo de ${targetDragon.card.nome}.`);
 
@@ -3729,6 +3978,8 @@
 
         tiedGroup.forEach(entry => {
           entry.player.objectiveScores[rIdx] = awardedPts;
+          if (!entry.player.objectiveVals) entry.player.objectiveVals = [null, null, null, null];
+          entry.player.objectiveVals[rIdx] = entry.val;
           addLog(`Objetivo R${gameState.round} (${obj.titulo}): ${entry.player.name} (${entry.val}) ganhou ${awardedPts} PV.`);
         });
 
@@ -3770,37 +4021,108 @@
       flushSync();
     }
 
-    function computeEndGameDragonPoints(player) {
-      let total = 0;
-      const endDragons = getVisibleDragons(player).filter(d => d.card.tipo === "fim" && d.card.fim);
-      endDragons.forEach(d => {
-        const f = d.card.fim;
-        if (f.contar === "outrosDragoesCaverna") {
-          const others = player.caverns[d.cavernId].cols.filter(c => c.dragonSlot && c.col !== d.col).length;
-          total += others * (f.n || 1);
-        } else if (f.contar === "marcadoresGuilda") {
-          total += player.guildMarkersUsed * (f.n || 1);
-        } else if (f.contar === "dragoesRodada") {
-          const cnt = getVisibleDragons(player).filter(x => x.card.tipo === "rodada").length;
-          total += Math.min(f.max || 99, cnt * (f.n || 1));
-        } else if (f.contar === "medio") {
-          const cnt = getVisibleDragons(player).filter(x => x.card.tam === "medio").length;
-          total += Math.min(f.max || 99, cnt * (f.n || 1));
-        } else if (f.contar === "filhote") {
-          const cnt = getVisibleDragons(player).filter(x => x.card.tam === "filhote").length;
-          total += Math.min(f.max || 99, cnt * (f.n || 1));
-        } else if (f.contar === "cavernasEscavadas") {
-          total += Math.min(f.max || 99, countExcavatedCards(player) * (f.n || 1));
-        } else if (f.condicao === "colunaCheia") {
-          const full = [0, 1, 2].every(r => player.caverns[r].cols[d.col].dragonSlot);
-          if (full) total += (f.n || 0);
-        } else if (f.condicao === "cavernaCheia") {
-          const full = player.caverns[d.cavernId].cols.every(c => c.dragonSlot);
-          if (full) total += (f.n || 0);
+    // Pontos das habilidades de fim de partida. Retorna { pts, spent } (spent = o que as trocas "Pague X para ganhar PV" consumiram).
+    function computeEndGameDetail(player) {
+      const all = getVisibleDragons(player);
+      const trait = d => normTraco(d.card);
+      const inCav = d => all.filter(x => x.cavernId === d.cavernId);
+      const adj = d => all.filter(x => (x.cavernId === d.cavernId && Math.abs(x.col - d.col) === 1) || (x.col === d.col && Math.abs(x.cavernId - d.cavernId) === 1));
+      const cap = (v, f) => Math.min(f.max || 99, v);
+      const withFim = all.filter(d => d.card.fim);
+      let pts = 0;
+      const spent = { coins: 0, dragons: 0, caves: 0 };
+
+      // 1) trocas "pague X para ganhar PV" (escolha automática: só vale se render mais do que as cartas/moedas gastas valeriam)
+      let hd = player.hand.filter(c => c.cardType === "dragon").length;
+      let hc = player.hand.filter(c => c.cardType === "cave").length;
+      let coins = player.coins;
+      const usesHandDragons = withFim.some(d => d.card.fim.contar === "dragoes");
+      const usesHandCaves = withFim.some(d => d.card.fim.contar === "cavernas");
+      withFim.filter(d => d.card.fim.trocaFim).forEach(d => {
+        const t = d.card.fim.trocaFim;
+        const avail = t.pague === "dragao" ? hd : t.pague === "caverna" ? hc : coins;
+        const loss = t.pague === "moeda" ? 1 : 0.25 + ((t.pague === "dragao" ? usesHandDragons : usesHandCaves) ? 1 : 0);
+        let best = null;
+        (t.opcoes || []).forEach(o => {
+          if (o.qtd <= avail) { const g = o.pv - o.qtd * loss; if (g > 0 && (!best || g > best.g)) best = { ...o, g }; }
+        });
+        if (best) {
+          pts += best.pv;
+          if (t.pague === "dragao") { hd -= best.qtd; spent.dragons += best.qtd; }
+          else if (t.pague === "caverna") { hc -= best.qtd; spent.caves += best.qtd; }
+          else { coins -= best.qtd; spent.coins += best.qtd; }
         }
       });
-      return total;
+
+      // 2) demais habilidades de fim
+      withFim.forEach(d => {
+        const f = d.card.fim, n = f.n === undefined ? 0 : f.n;
+        if (f.trocaFim) return;
+        if (f.contar) {
+          let v = null;
+          switch (f.contar) {
+            case "outrosDragoesCaverna": v = (inCav(d).length - 1) * n; break;
+            case "marcadoresGuilda": v = player.guildMarkersUsed * n; break;
+            case "dragoesRodada": v = cap(all.filter(x => x.card.tipo === "rodada").length * n, f); break;
+            case "dragoesJogado": v = cap(all.filter(x => x.card.tipo === "jogado").length * n, f); break;
+            case "dragoesAtivado": v = cap(all.filter(x => x.card.tipo === "ativado").length * n, f); break;
+            case "dragoesFim": v = cap(all.filter(x => x.card.tipo === "fim").length * n, f); break;
+            case "filhote": case "pequeno": case "medio": case "grande":
+              v = cap(all.filter(x => x.card.tam === f.contar).length * n, f); break;
+            case "dragoes": v = cap(hd * n, f); break;
+            case "cavernas": v = cap(hc * n, f); break;
+            case "recursosMao": v = cap(totalResourcesCount(player) * n, f); break;
+            case "ovosTabuleiro": v = cap(countPlayerEggs(player) * n, f); break;
+            case "cavernasEscavadas": v = cap(countExcavatedCards(player) * n, f); break;
+            case "estoqueAqui": {
+              const acc = d.card.filhote && d.card.filhote.aceita;
+              v = d.slot.tuckedResources.filter(r => !acc || r === acc).length * n; break;
+            }
+            case "inseridasAqui": v = d.slot.tuckedCards.length * n; break;
+            case "objetivoMaisBaixo": {
+              const myIdx = gameState.players.indexOf(player);
+              let cnt = 0;
+              for (let r = 0; r < 4; r++) {
+                const obj = gameState.objectives && gameState.objectives[r];
+                if (!obj) continue;
+                const vals = gameState.players.map(pl => (pl.objectiveVals && pl.objectiveVals[r] != null) ? pl.objectiveVals[r] : objCount(obj, pl));
+                if (vals[myIdx] === Math.min(...vals)) cnt++;
+              }
+              v = cnt * n; break;
+            }
+            case "setsPersonalidade": {
+              const c = t => all.filter(x => trait(x) === t).length;
+              v = Math.min(c("agressivo"), c("brincalhao"), c("prestativo"), c("timido")) * n; break;
+            }
+            case "adjacentesTimidos": v = adj(d).filter(x => trait(x) === "timido").length * n; break;
+            case "dragoesAdjacentes": v = adj(d).length * n; break;
+            case "outrosTimidosCaverna": v = inCav(d).filter(x => x !== d && trait(x) === "timido").length * n; break;
+            case "outrosBrincalhoesCaverna": v = inCav(d).filter(x => x !== d && trait(x) === "brincalhao").length * n; break;
+            case "outrosAgressivosCaverna": v = inCav(d).filter(x => x !== d && trait(x) === "agressivo").length * n; break;
+            case "colunaPrestativos": v = all.filter(x => x.col === d.col && trait(x) === "prestativo").length * n; break;
+          }
+          if (v !== null) pts += v;
+        } else if (f.condicao) {
+          let ok = null;
+          switch (f.condicao) {
+            case "colunaCheia": ok = [0, 1, 2].every(r => player.caverns[r].cols[d.col].dragonSlot); break;
+            case "cavernaCheia": ok = player.caverns[d.cavernId].cols.every(c => c.dragonSlot); break;
+            case "entreDoisDragoes": ok = inCav(d).some(x => x.col === d.col - 1) && inCav(d).some(x => x.col === d.col + 1); break;
+            case "semAgressivosCaverna": ok = !inCav(d).some(x => trait(x) === "agressivo"); break;
+            case "cavernaTodaEscavada": ok = player.caverns[d.cavernId].cols.every(c => c.caveCard); break;
+            case "ultimoDragaoCaverna": ok = !inCav(d).some(x => x.col > d.col); break;
+            case "tamanhosCavernaFilhotePequenoGrande": ok = ["filhote", "pequeno", "grande"].every(t => inCav(d).some(x => x.card.tam === t)); break;
+            case "quatroDragoesCaverna1": ok = cavernCount(player, 1) >= 4; break;
+            case "outroBrincalhaoCaverna": ok = inCav(d).some(x => x !== d && trait(x) === "brincalhao"); break;
+            case "unicoCaverna": ok = inCav(d).length === 1; break;
+            case "maioriaCaverna1": ok = false; break; // carta #103: efeito imediato no campo "fim" (ver aviso no testador)
+          }
+          if (ok) pts += n;
+        }
+      });
+      return { pts, spent };
     }
+    function computeEndGameDragonPoints(player) { return computeEndGameDetail(player).pts; }
 
     function computeGuildEndPoints(player) {
       let pts = 0;
@@ -3824,13 +4146,14 @@
       const results = gameState.players.map(p => {
         const guildPts = computeGuildEndPoints(p);
         const dragonBasePts = getVisibleDragons(p).reduce((acc, d) => acc + (d.card.pv || 0), 0);
-        const endAbilityPts = computeEndGameDragonPoints(p);
+        const endDetail = computeEndGameDetail(p);
+        const endAbilityPts = endDetail.pts;
         const eggPts = countPlayerEggs(p);
         const tuckedResPts = countTuckedResources(p);
         const tuckedCardsPts = countTuckedCards(p);
         const objectivesPts = p.objectiveScores.reduce((a, b) => a + b, 0);
-        const coinsPts = p.coins;
-        const remainingItems = totalResourcesCount(p) + p.hand.length;
+        const coinsPts = p.coins - endDetail.spent.coins;
+        const remainingItems = totalResourcesCount(p) + p.hand.length - endDetail.spent.dragons - endDetail.spent.caves;
         const itemsPts = Math.floor(remainingItems / 4);
 
         const total = guildPts + dragonBasePts + endAbilityPts + eggPts + tuckedResPts + tuckedCardsPts + objectivesPts + coinsPts + itemsPts;
@@ -4567,9 +4890,12 @@
        13. TESTADOR DE CARTAS (abra o jogo com /?testador=1)
        ========================================================================= */
     // Mantenha estas listas em sincronia com o motor de efeitos (executeEffectList / computeEndGameDragonPoints)
-    const SUPPORTED_OPS = new Set(["moeda", "ganhe", "ovo", "dragao", "caverna", "guilda", "avancarGuilda", "estocar", "inserir", "oponentes", "escolha", "troca", "ativarOutro", "escavar", "jogarDragao", "trocarPosicao"]);
-    const SUPPORTED_FIM_CONTAR = new Set(["outrosDragoesCaverna", "marcadoresGuilda", "dragoesRodada", "medio", "filhote", "cavernasEscavadas"]);
-    const SUPPORTED_FIM_COND = new Set(["colunaCheia", "cavernaCheia"]);
+    const SUPPORTED_OPS = new Set(["moeda", "ganhe", "ovo", "dragao", "caverna", "guilda", "avancarGuilda", "estocar", "inserir", "oponentes", "escolha", "troca", "ativarOutro", "escavar", "jogarDragao", "trocarPosicao", "revelarInserir", "condicional", "ovoCadaDragaoCaverna", "ovoCadaDragaoColuna", "comprarInserirPorTraco", "ativarTabuleiro", "ganharDoCustoInserido", "comprarManterDescartarInserir", "ganharPorTracoEstocar", "inserirPorMarcadorGuilda"]);
+    const SUPPORTED_FIM_CONTAR = new Set(["outrosDragoesCaverna", "marcadoresGuilda", "dragoesRodada", "dragoesJogado", "dragoesAtivado", "dragoesFim", "filhote", "pequeno", "medio", "grande", "dragoes", "cavernas", "recursosMao", "ovosTabuleiro", "cavernasEscavadas", "estoqueAqui", "inseridasAqui", "objetivoMaisBaixo", "setsPersonalidade", "adjacentesTimidos", "dragoesAdjacentes", "outrosTimidosCaverna", "outrosBrincalhoesCaverna", "outrosAgressivosCaverna", "colunaPrestativos"]);
+    const SUPPORTED_FIM_COND = new Set(["colunaCheia", "cavernaCheia", "entreDoisDragoes", "semAgressivosCaverna", "cavernaTodaEscavada", "ultimoDragaoCaverna", "tamanhosCavernaFilhotePequenoGrande", "quatroDragoesCaverna1", "outroBrincalhaoCaverna", "unicoCaverna", "maioriaCaverna1"]);
+    const TRACO_DEP_FIM = new Set(["setsPersonalidade", "adjacentesTimidos", "outrosTimidosCaverna", "outrosBrincalhoesCaverna", "outrosAgressivosCaverna", "colunaPrestativos", "semAgressivosCaverna", "outroBrincalhaoCaverna"]);
+    const TRACO_DEP_OPS = new Set(["comprarInserirPorTraco", "ganharPorTracoEstocar"]);
+    function isSeKnown(se) { return /^maioriaCaverna\d$/.test(se || "") || /^minDragoesCaverna\d+$/.test(se || ""); }
 
     const SB = { results: {}, tab: "dragon", filter: "", onlyBad: false, busy: false, stop: false, modals: 0, errors: [], info: "", last: null };
 
@@ -4587,12 +4913,20 @@
       const ops = sbCollectOps(card.efeito || [], new Set());
       if (card.filhote) { sbCollectOps(card.filhote.ganha || [], ops); sbCollectOps(card.filhote.bonus || [], ops); }
       ops.forEach(o => { if (!SUPPORTED_OPS.has(o)) issues.push(`efeito "${o}" não implementado`); });
-      if (kind === "dragon" && card.tipo === "fim") {
+      if (kind === "dragon") {
         const f = card.fim;
-        if (!f) issues.push('tipo "fim" sem o campo fim');
-        else if (f.contar) { if (!SUPPORTED_FIM_CONTAR.has(f.contar)) issues.push(`fim "contar: ${f.contar}" não implementado`); }
-        else if (f.condicao) { if (!SUPPORTED_FIM_COND.has(f.condicao)) issues.push(`fim "condicao: ${f.condicao}" não implementado`); }
-        else issues.push("fim sem contar/condicao");
+        if (card.tipo === "fim" && !f) issues.push('tipo "fim" sem o campo fim');
+        if (f) {
+          if (f.trocaFim) { /* ok */ }
+          else if (f.contar) { if (!SUPPORTED_FIM_CONTAR.has(f.contar)) issues.push(`fim "contar: ${f.contar}" não implementado`); }
+          else if (f.condicao) { if (!SUPPORTED_FIM_COND.has(f.condicao)) issues.push(`fim "condicao: ${f.condicao}" não implementado`); }
+          else issues.push("fim sem contar/condicao/trocaFim");
+          if (f.condicao === "maioriaCaverna1") issues.push('fim "maioriaCaverna1" com efeito imediato (ganhe) num dragão de fim de partida: parece erro nos dados; conta 0 PV');
+        }
+        const se = []; (function walk(x) { if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === "object") { if (x.op === "condicional") se.push(x.se); Object.values(x).forEach(walk); } })(card.efeito || []);
+        se.forEach(q => { if (!isSeKnown(q)) issues.push(`condição "${q}" não implementada`); });
+        const usesTraco = (f && TRACO_DEP_FIM.has(f.contar || f.condicao)) || [...ops].some(o => TRACO_DEP_OPS.has(o));
+        if (usesTraco && !(cardDatabase.dragoes || []).some(c => c.traco)) issues.push('depende do traço dos dragões, mas nenhuma carta do cartas.json tem o campo "traco" (agressivo, timido, brincalhao, prestativo)');
       }
       return issues;
     }
@@ -4619,6 +4953,7 @@
         guildPos: 0, guildMarkersUsed: 0, passed: false, draftDone: true, objectiveScores: [0, 0, 0, 0]
       });
       const players = [mk(0, "Testador"), mk(1, "Oponente")];
+      players[0].guildMarkersUsed = 2; // para testar cartas que contam marcadores da Guilda
       let f = 0;
       players.forEach(p => p.caverns.forEach(cav => cav.cols.forEach(col => {
         col.dragonSlot = { card: sbFiller(f++), eggs: 0, tuckedResources: [], tuckedCards: [] };
@@ -4672,6 +5007,8 @@
       const cavernId = card.hab && card.hab.length ? card.hab[0] : 0;
       p.caverns[cavernId].cols[1].dragonSlot = { card, eggs: 0, tuckedResources: [], tuckedCards: [] };
       const ctx = { cavernId, col: 1 };
+      // cartas que contam um traço: garante pelo menos 1 figurante desse traço na caverna (a carta ocupa o lugar de um deles)
+      (function wantTrait(x) { if (Array.isArray(x)) x.forEach(wantTrait); else if (x && typeof x === "object") { if (typeof x.traco === "string" && x.op) { const f = p.caverns[cavernId].cols[3].dragonSlot; if (f) f.card = { ...f.card, traco: x.traco }; } Object.values(x).forEach(wantTrait); } })(card.efeito || []);
       if (sbCollectOps(card.efeito || [], new Set()).has("jogarDragao")) {
         p.caverns.forEach(cav => { cav.cols[2].dragonSlot = null; });
       }
@@ -4699,8 +5036,9 @@
         } else await runEffect();
       } else if (card.tipo === "rodada") {
         await runEffect();
-      } else if (card.tipo === "fim") {
-        SB.info = `Pontos de fim de partida deste dragão neste cenário de teste: ${computeEndGameDragonPoints(p)} PV (cavernas cheias de figurantes de traços variados).`;
+      }
+      if (card.fim) {
+        SB.info = (SB.info ? SB.info + " " : "") + `Pontos de fim de partida neste cenário de teste: ${computeEndGameDragonPoints(p)} PV (cavernas cheias de figurantes de traços variados).`;
       }
     }
 
@@ -4708,7 +5046,7 @@
       if (byId("modal-backdrop").classList.contains("hidden")) return false;
       const box = byId("modal-box");
       const sels = ["[data-pd-slot]:not([disabled])", "[data-pd-disc]:not([data-pd-dsel])", "[data-pd-dragon]:not([data-pd-sel])", "[data-exc-target]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]", "[data-choice-idx]:not([disabled])",
-        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-hd]", "[data-disc-c]"];
+        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-hd]", "[data-disc-c]", "[data-ins-card]", "[data-cmdi]", "[data-board-step]"];
       const swapBtns = box.querySelectorAll("[data-swap-pos]");
       if (swapBtns.length) {
         const picked = box.querySelectorAll("[data-swap-pos][data-sel]").length;
