@@ -214,6 +214,9 @@
     }
 
     .hand-panel-floating {
+      background: #f6ecd7 !important;
+      opacity: 1 !important;
+      backdrop-filter: none !important;
       position: fixed;
       bottom: 14px;
       left: 14px;
@@ -2688,8 +2691,9 @@
           await gainGuildStep(player, eff.n || 1);
         } else if (eff.op === "estocar") {
           const dragons = getVisibleDragons(player);
-          if (dragons.length > 0 && totalResourcesCount(player) > 0) {
-            await promptTuckResource(player, eff.rec || "qualquer", eff.n || 1, eff.aqui ? context : null);
+          const fromGeneral = eff.origem === "suprimentoGeral";
+          if (dragons.length > 0 && (fromGeneral || totalResourcesCount(player) > 0)) {
+            await promptTuckResource(player, eff.rec || "qualquer", eff.n || 1, eff.aqui ? context : null, fromGeneral);
           }
         } else if (eff.op === "inserir") {
           window.__lastTucked = null;
@@ -3352,52 +3356,79 @@
       }
     }
 
-    async function promptTuckResource(player, recType, maxCount, targetContext = null) {
+    async function promptTuckResource(player, recType, maxCount, targetContext = null, fromGeneral = false) {
       const dragons = targetContext
         ? [getVisibleDragons(player).find(d => d.cavernId === targetContext.cavernId && d.col === targetContext.col)].filter(Boolean)
         : getVisibleDragons(player);
       if (dragons.length === 0) return;
 
       for (let i = 0; i < maxCount; i++) {
-        const availTypes = recType === "qualquer"
-          ? Object.keys(RESOURCE_META).filter(r => player.resources[r] > 0)
-          : (player.resources[recType] > 0 ? [recType] : []);
+        const allTypes = recType === "qualquer" ? Object.keys(RESOURCE_META) : [recType];
+        const availTypes = fromGeneral ? allTypes : allTypes.filter(r => player.resources[r] > 0);
         if (availTypes.length === 0) break;
+        const stepLabel = `(${i + 1}/${maxCount})`;
+        window.__tuckGeneral = fromGeneral;
+        const srcLabel = fromGeneral ? "do suprimento geral" : "do seu suprimento";
 
-        await new Promise(resolve => {
+        // 1) qual recurso
+        const r = await new Promise(resolve => {
           openModal({
-            title: `${player.name}: Estocar recurso em Dragão (${i + 1}/${maxCount})`,
+            title: `${player.name}: Estocar recurso em Dragão ${stepLabel}`,
             owner: player.id,
             closable: false,
             bodyHtml: `
-              <p class="text-xs text-stone-700 mb-2">Escolha qual recurso do seu suprimento deseja estocar (vale 1 PV no fim da partida):</p>
+              <p class="text-xs text-stone-700 mb-2">Escolha qual recurso ${srcLabel} deseja estocar (vale 1 PV no fim da partida):</p>
               <div class="grid grid-cols-2 gap-2">
-                ${availTypes.map(r => `
-                  <button data-tuck-r="${r}" class="p-2.5 rounded-xl border ${RESOURCE_META[r].color} text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5">
-                    ${getIconHtml(RESOURCE_META[r].iconName, "w-4 h-4")} Estocar ${RESOURCE_META[r].label}
+                ${availTypes.map(rr => `
+                  <button data-tuck-r="${rr}" class="p-2.5 rounded-xl border ${RESOURCE_META[rr].color} text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5">
+                    ${getIconHtml(RESOURCE_META[rr].iconName, "w-4 h-4")} Estocar ${RESOURCE_META[rr].label}
                   </button>
                 `).join("")}
               </div>
             `,
-            footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(); } }]
+            footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(null); } }]
           });
-
           document.querySelectorAll("[data-tuck-r]").forEach(btn => {
-            btn.onclick = async () => {
-              const r = btn.dataset.tuckR;
-              player.resources[r]--;
-              const targetDragon = dragons[0];
-              targetDragon.slot.tuckedResources.push(r);
-              closeModal();
-              addLog(`${player.name} estocou 1 ${RESOURCE_META[r].label} em ${targetDragon.card.nome}.`);
-
-              if (targetDragon.card.tam === "filhote" && targetDragon.card.filhote && targetDragon.card.filhote.aceita === r) {
-                await triggerHatchlingAbility(player, targetDragon);
-              }
-              resolve();
-            };
+            btn.onclick = () => { closeModal(); resolve(btn.dataset.tuckR); };
           });
         });
+        if (!r) break;
+
+        // 2) em qual dragão (se houver mais de um possível)
+        let targetDragon = dragons[0];
+        if (dragons.length > 1) {
+          window.__tuckRes = r;
+          const idx = await new Promise(resolve => {
+            openModal({
+              title: `${player.name}: Em qual dragão estocar ${RESOURCE_META[r].label}? ${stepLabel}`,
+              owner: player.id,
+              closable: false,
+              bodyHtml: `
+                <p class="text-xs text-stone-700 mb-2">Escolha o dragão que vai receber o recurso:</p>
+                <div class="space-y-2">
+                  ${dragons.map((d, k) => {
+                    const acc = d.card.tam === "filhote" && d.card.filhote && d.card.filhote.aceita === r;
+                    return `<button data-tuck-d="${k}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-emerald-50 text-xs font-bold cursor-pointer">
+                      ${d.card.nome} <span class="font-normal text-stone-600">(${CAVERNS_META[d.cavernId].nome}, Col. ${d.col + 1}; estoque: ${d.slot.tuckedResources.length})</span>
+                      ${acc ? `<span class="ml-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 text-[10px]">aciona a habilidade</span>` : ""}
+                    </button>`;
+                  }).join("")}
+                </div>`,
+              footerButtons: []
+            });
+            document.querySelectorAll("[data-tuck-d]").forEach(btn => {
+              btn.onclick = () => { closeModal(); resolve(parseInt(btn.dataset.tuckD, 10)); };
+            });
+          });
+          targetDragon = dragons[idx] || dragons[0];
+        }
+
+        if (!fromGeneral) player.resources[r]--;
+        targetDragon.slot.tuckedResources.push(r);
+        addLog(`${player.name} estocou 1 ${RESOURCE_META[r].label} (${srcLabel}) em ${targetDragon.card.nome}.`);
+        if (targetDragon.card.tam === "filhote" && targetDragon.card.filhote && targetDragon.card.filhote.aceita === r) {
+          await triggerHatchlingAbility(player, targetDragon);
+        }
       }
     }
 
@@ -4898,6 +4929,11 @@
         const data = await res.json();
         cardDatabase.dragoes = data.dragoes || [];
         cardDatabase.cavernas = data.cavernas || [];
+        // cartas cujo texto diz "do suprimento geral" estocam do banco, não do seu suprimento
+        [...cardDatabase.dragoes, ...cardDatabase.cavernas].forEach(c => {
+          if (!/suprimento geral/i.test(c.texto || "")) return;
+          (function fix(x) { if (Array.isArray(x)) x.forEach(fix); else if (x && typeof x === "object") { if (x.op === "estocar" && !x.origem) x.origem = "suprimentoGeral"; Object.values(x).forEach(fix); } })(c.efeito);
+        });
         cardsLoaded = true;
         updateDeckStatsBadge();
         renderLobby();
@@ -5188,7 +5224,7 @@
         return botClick(botFooter(/^(pular|cancelar|não|nao|fechar|não descartar)/i)) || botClick([...byId("modal-footer").querySelectorAll("button")].pop());
       }
       const sels = ["[data-pd-slot]:not([disabled])", "[data-exc-target]:not([disabled])", "[data-ent-slot]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]",
-        "[data-choice-idx]:not([disabled])", "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-board-step]", "[data-ins-card]", "[data-cmdi]"];
+        "[data-choice-idx]:not([disabled])", "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-d]", "[data-board-step]", "[data-ins-card]", "[data-cmdi]"];
       for (const s of sels) { const el = box.querySelector(s); if (el) { el.click(); return true; } }
       return botClick(botFooter(/^(sim|confirmar|continuar|entendi|ok)/i)) || botClick(botFooter(/^(pular|cancelar|não|nao|fechar)/i)) || botClick([...byId("modal-footer").querySelectorAll("button")][0]);
     }
@@ -5309,12 +5345,29 @@
         if (deck && (bi < 0 || bs < expect)) return botClick(deck);
         return botClick(els[bi] || deck);
       }
+      // Em qual dragão estocar
+      if (q("[data-tuck-d]")) {
+        const r = window.__tuckRes;
+        const ds = getVisibleDragons(p);
+        let best = null, bs = -99;
+        qa("[data-tuck-d]").forEach(b => {
+          const d = ds.find(x => x.card.nome && b.textContent.includes(x.card.nome) && b.textContent.includes(`Col. ${x.col + 1}`)) || null;
+          let sc = Math.random() * 0.2;
+          if (d) {
+            if (d.card.tam === "filhote" && d.card.filhote && d.card.filhote.aceita === r) sc += 3;
+            if (d.card.fim && d.card.fim.contar === "estoqueAqui") sc += 2;
+          }
+          if (sc > bs) { bs = sc; best = b; }
+        });
+        return botClick(best);
+      }
       // Estocar recurso
       if (q("[data-tuck-r]")) {
         const need = botNeedRes(p);
         let best = null, bs = -99;
-        qa("[data-tuck-r]").forEach(b => { const r = b.dataset.tuckR; const s = p.resources[r] - need[r] * 1.5 + botNoise(0.2); if (s > bs) { bs = s; best = b; } });
-        if (bs <= 0 && gameState.round < 3) return botClick(botFooter(/^pular/i)) || botClick(best);
+        const accepted = new Set(getVisibleDragons(p).filter(d => d.card.tam === "filhote" && d.card.filhote && d.card.filhote.aceita).map(d => d.card.filhote.aceita));
+        qa("[data-tuck-r]").forEach(b => { const r = b.dataset.tuckR; const s = (window.__tuckGeneral ? 1 : p.resources[r]) - need[r] * 1.5 + (accepted.has(r) ? 2.5 : 0) + botNoise(0.2); if (s > bs) { bs = s; best = b; } });
+        if (!window.__tuckGeneral && bs <= 0 && gameState.round < 3) return botClick(botFooter(/^pular/i)) || botClick(best);
         return botClick(best);
       }
       // Inserir dragão da mão
@@ -5583,7 +5636,7 @@
       if (byId("modal-backdrop").classList.contains("hidden")) return false;
       const box = byId("modal-box");
       const sels = ["[data-pd-slot]:not([disabled])", "[data-pd-disc]:not([data-pd-dsel])", "[data-pd-dragon]:not([data-pd-sel])", "[data-exc-target]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]", "[data-choice-idx]:not([disabled])",
-        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-hd]", "[data-disc-c]", "[data-ins-card]", "[data-cmdi]", "[data-board-step]"];
+        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-d]", "[data-tuck-hd]", "[data-disc-c]", "[data-ins-card]", "[data-cmdi]", "[data-board-step]"];
       const swapBtns = box.querySelectorAll("[data-swap-pos]");
       if (swapBtns.length) {
         const picked = box.querySelectorAll("[data-swap-pos][data-sel]").length;
