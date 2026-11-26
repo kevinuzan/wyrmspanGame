@@ -2772,7 +2772,7 @@
             if (!accepted) break;
             // "Insira Dragão da mão aqui para ganhar...": o próprio dragão inserido é o pagamento (não descontar duas vezes)
             const insIsPay = eff.pague && eff.pague.dragao && Array.isArray(eff.ganhe) && eff.ganhe[0] && eff.ganhe[0].op === "inserir" && !eff.ganhe[0].origem;
-            applyPaySimple(player, insIsPay ? { ...eff.pague, dragao: 0 } : eff.pague);
+            await applyPayChoose(player, insIsPay ? { ...eff.pague, dragao: 0 } : eff.pague);
             await executeEffectList(player, eff.ganhe, context);
           }
         } else if (eff.op === "ativarOutro") {
@@ -3353,6 +3353,72 @@
       }
       for (const r of ["carne", "ouro", "cristal", "leite"]) {
         if (pague[r]) player.resources[r] -= pague[r];
+      }
+    }
+
+    // Pagamento com escolha do jogador: qual carta descartar (dragão/caverna) e quais recursos ("qualquer")
+    async function applyPayChoose(player, pague) {
+      if (!pague) return;
+      const rest = { ...pague };
+      const cardPay = { dragao: rest.dragao || 0, caverna: rest.caverna || 0 };
+      const qual = rest.qualquer || 0;
+      delete rest.dragao; delete rest.caverna; delete rest.qualquer;
+      applyPaySimple(player, rest);
+      for (const kind of ["dragao", "caverna"]) {
+        const type = kind === "dragao" ? "dragon" : "cave";
+        for (let i = 0; i < cardPay[kind]; i++) {
+          const cards = player.hand.filter(c => c.cardType === type);
+          if (cards.length === 0) break;
+          let chosen = cards[0];
+          if (cards.length > 1) {
+            const uid = await new Promise(resolve => {
+              openModal({
+                title: `${player.name}: escolha a carta para pagar (${i + 1}/${cardPay[kind]})`,
+                owner: player.id,
+                closable: false,
+                bodyHtml: `
+                  <p class="text-xs text-stone-700 mb-2">Qual ${kind === "dragao" ? "Carta de Dragão" : "Carta de Caverna"} da sua mão você quer descartar?</p>
+                  <div class="space-y-1.5">
+                    ${cards.map(c => `
+                      <button data-pay-c="${c.uid}" class="w-full text-left p-2 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
+                        ${getIconHtml(kind, 'w-4 h-4')}
+                        <span>${type === "dragon" ? c.nome : `Caverna #${c.numero}`}</span>
+                      </button>`).join("")}
+                  </div>`,
+                footerButtons: []
+              });
+              document.querySelectorAll("[data-pay-c]").forEach(btn => { btn.onclick = () => { closeModal(); resolve(btn.dataset.payC); }; });
+            });
+            chosen = cards.find(c => c.uid === uid) || cards[0];
+          }
+          const idx = player.hand.findIndex(x => x.uid === chosen.uid);
+          if (idx >= 0) (type === "dragon" ? gameState.dragonDiscard : gameState.caveDiscard).push(player.hand.splice(idx, 1)[0]);
+        }
+      }
+      if (qual) {
+        const types = ["carne", "ouro", "cristal", "leite"];
+        for (let i = 0; i < qual; i++) {
+          const avail = types.filter(r => player.resources[r] > 0);
+          if (avail.length === 0) break;
+          let r = avail[0];
+          if (avail.length > 1) {
+            const labels = { carne: "Carne", ouro: "Ouro", cristal: "Cristal", leite: "Leite" };
+            r = await new Promise(resolve => {
+              openModal({
+                title: `${player.name}: escolha o recurso para pagar (${i + 1}/${qual})`,
+                owner: player.id,
+                closable: false,
+                bodyHtml: `<div class="grid grid-cols-2 gap-2">${avail.map(x => `
+                  <button data-pay-r="${x}" class="p-2 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-2">
+                    ${getIconHtml(x, 'w-4 h-4')}<span>${labels[x]} (${player.resources[x]})</span>
+                  </button>`).join("")}</div>`,
+                footerButtons: []
+              });
+              document.querySelectorAll("[data-pay-r]").forEach(btn => { btn.onclick = () => { closeModal(); resolve(btn.dataset.payR); }; });
+            });
+          }
+          player.resources[r]--;
+        }
       }
     }
 
@@ -5377,6 +5443,21 @@
         if (bs > 2.0 && gameState.round < 4) return botClick(botFooter(/^pular/i)) || botClick(best);
         return botClick(best);
       }
+      // Pagamento: escolher carta / recurso a pagar
+      if (q("[data-pay-c]")) {
+        let best = null, bs = 99;
+        qa("[data-pay-c]").forEach(b => {
+          const c = p.hand.find(x => x.uid === b.dataset.payC);
+          const sc = !c ? 0 : c.cardType === "dragon" ? botHandDragonScore(p, c) : botCaveScore(p, c);
+          if (sc < bs) { bs = sc; best = b; }
+        });
+        return botClick(best);
+      }
+      if (q("[data-pay-r]")) {
+        let best = null, bn = -1;
+        qa("[data-pay-r]").forEach(b => { const n = p.resources[b.dataset.payR] || 0; if (n > bn) { bn = n; best = b; } });
+        return botClick(best);
+      }
       // Descartar carta para botar ovo (fim do Abismo)
       if (q("[data-disc-c]")) {
         let best = null, bs = 99;
@@ -5636,7 +5717,7 @@
       if (byId("modal-backdrop").classList.contains("hidden")) return false;
       const box = byId("modal-box");
       const sels = ["[data-pd-slot]:not([disabled])", "[data-pd-disc]:not([data-pd-dsel])", "[data-pd-dragon]:not([data-pd-sel])", "[data-exc-target]:not([disabled])", "[data-pick-res]", "[data-egg-target]", "[data-guild-slot]", "[data-choice-idx]:not([disabled])",
-        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-d]", "[data-tuck-hd]", "[data-disc-c]", "[data-ins-card]", "[data-cmdi]", "[data-board-step]"];
+        "#btn-draw-from-deck", "#modal-display-cards > *", "[data-tuck-r]", "[data-tuck-d]", "[data-tuck-hd]", "[data-disc-c]", "[data-pay-c]", "[data-pay-r]", "[data-ins-card]", "[data-cmdi]", "[data-board-step]"];
       const swapBtns = box.querySelectorAll("[data-swap-pos]");
       if (swapBtns.length) {
         const picked = box.querySelectorAll("[data-swap-pos][data-sel]").length;
