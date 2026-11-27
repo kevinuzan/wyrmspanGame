@@ -256,25 +256,38 @@
     }
 
     .hand-panel-floating {
-      background: #f6ecd7 !important;
+      background: #f3e8cf !important;
       opacity: 1 !important;
       backdrop-filter: none !important;
       position: fixed;
-      bottom: 14px;
-      left: 14px;
+      bottom: 10px;
+      left: 10px;
       z-index: 45;
-      width: min(94vw, 680px);
-      box-shadow: 0 16px 40px rgba(24, 18, 12, 0.35);
-      border: 2px solid #9c7c4c;
+      width: min(94vw, 640px);
+      padding: 6px 12px !important;
+      box-shadow: 0 10px 28px rgba(24, 18, 12, 0.4);
+      border: 2px solid #8a6a3c;
     }
-    .hand-panel-floating .hand-fan-item {
-      width: 190px;
-      min-width: 190px;
-      margin-left: -82px;
-    }
-    .hand-panel-floating .hand-fan-item:first-child {
-      margin-left: 0;
-    }
+    .hand-panel-floating .hand-hint { display: none; }
+    .hand-panel-floating > div:first-child { margin-bottom: 0 !important; cursor: pointer; }
+    .hand-panel-floating #player-hand-container { max-height: 0; overflow: hidden; padding: 0; transition: max-height .25s ease, padding .25s ease; }
+    .hand-panel-floating:hover #player-hand-container,
+    .hand-panel-floating.open #player-hand-container { max-height: 380px; overflow-x: auto; overflow-y: hidden; padding: 44px 14px 8px; }
+    .hand-panel-floating .hand-fan-item { width: 170px; min-width: 170px; margin-left: -60px; }
+    .hand-panel-floating .hand-fan-item:first-child { margin-left: 0; }
+
+    /* Exibição de cartas compacta: 3 por linha; ao passar o mouse a carta aumenta para leitura */
+    #display-dragons .physical-dragon-card, #display-caves .physical-cave-card { transform-origin: center top; }
+    #display-dragons .physical-dragon-card:hover, #display-caves .physical-cave-card:hover { transform: scale(1.75); z-index: 60; }
+    #display-caves .physical-cave-card:hover { transform-origin: center bottom; }
+
+    /* Modo "ajustar à tela": painel esquerdo estreito e textos do tabuleiro maiores */
+    body.fit-board #board-grid { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: .6rem; }
+    body.fit-board #board-grid > * { grid-column: auto !important; }
+    body.fit-board #caverns-board [class*="text-[8"], body.fit-board #caverns-board [class*="text-[9"], body.fit-board #caverns-board [class*="text-[10"] { font-size: 11.5px !important; line-height: 1.2 !important; }
+    body.fit-board #caverns-board [class*="text-[11px]"] { font-size: 12.5px !important; }
+    body.fit-board #caverns-board [data-board-slot] { min-height: 0 !important; }
+    body.fit-board #board-left .font-display { font-size: 11px; }
 
     ::-webkit-scrollbar {
       width: 6px;
@@ -604,9 +617,9 @@
           </div>
 
           <!-- Corpo do Tabuleiro Individual (Coluna Naturalista de Regras & Ninhos à Esquerda + 3 Cavernas) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
+          <div id="board-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-3">
             <!-- Painel Esquerdo do Tabuleiro Físico -->
-            <div class="lg:col-span-2 rounded-xl bg-gradient-to-b from-[#ede0c9] via-[#e5d4b6] to-[#dcc7a4] border-2 border-[#9e835c] p-2.5 flex flex-col justify-between text-xs shadow-inner">
+            <div id="board-left" class="lg:col-span-2 rounded-xl bg-gradient-to-b from-[#ede0c9] via-[#e5d4b6] to-[#dcc7a4] border-2 border-[#9e835c] p-2.5 flex flex-col justify-between text-xs shadow-inner">
               <div class="space-y-2">
                 <div class="fit-hide p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
                   <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Escavar</div>
@@ -664,7 +677,7 @@
               </button>
             </div>
           </div>
-          <div class="text-[11px] text-stone-600 mb-1">Passe o cursor sobre uma carta para erguê-la e ler; clique para jogar no santuário.</div>
+          <div class="hand-hint text-[11px] text-stone-600 mb-1">Passe o cursor sobre uma carta para erguê-la e ler; clique para jogar no santuário.</div>
           <div id="player-hand-container" class="hand-fan-container"></div>
         </div>
       </div>
@@ -698,7 +711,7 @@
           <div class="space-y-3">
             <div>
               <div class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">Dragões Disponíveis</div>
-              <div id="display-dragons" class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-2.5"></div>
+              <div id="display-dragons" class="grid grid-cols-3 gap-2"></div>
             </div>
             <div>
               <div class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">Cartas de Caverna Disponíveis</div>
@@ -1182,7 +1195,8 @@
       const btnTop = document.getElementById("btn-hand-pos-top");
       const btnFloat = document.getElementById("btn-hand-pos-floating");
 
-      handPanel.classList.remove("hand-panel-floating", "order-1", "order-2");
+      handPanel.classList.remove("hand-panel-floating", "open", "order-1", "order-2");
+      handPanel.onclick = null;
       boardPanel.classList.remove("order-1", "order-2");
 
       [btnBottom, btnTop, btnFloat].forEach(b => {
@@ -1195,6 +1209,7 @@
         btnTop.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
       } else if (mode === "floating") {
         handPanel.classList.add("hand-panel-floating");
+        handPanel.onclick = (e) => { if (e.target.closest("button") || e.target.closest(".hand-fan-item")) return; handPanel.classList.toggle("open"); };
         btnFloat.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
       } else {
         boardPanel.classList.add("order-1");
@@ -1731,12 +1746,12 @@
       if (!on || window.innerWidth < 1024) return;
       const header = document.querySelector("#game-screen header");
       const hh = header ? header.getBoundingClientRect().height : 0;
-      const avail = window.innerHeight - hh - 28;
+      const avail = (window.innerHeight - hh - 28) * 1.12;
       let z = 1;
       for (let i = 0; i < 3; i++) {
         const h = panel.getBoundingClientRect().height;
         if (h <= 0) break;
-        const nz = Math.max(0.45, Math.min(1, z * avail / h));
+        const nz = Math.max(0.8, Math.min(1, z * avail / h));
         if (Math.abs(nz - z) < 0.01) break;
         z = nz; panel.style.zoom = String(z);
       }
