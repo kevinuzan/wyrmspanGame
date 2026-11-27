@@ -256,7 +256,7 @@
     }
 
     .hand-panel-floating {
-      background: rgba(243, 232, 207, 0.62) !important;
+      background: rgba(243, 232, 207, 0.42) !important;
       -webkit-backdrop-filter: blur(6px);
       backdrop-filter: blur(6px) !important;
       position: fixed;
@@ -269,10 +269,9 @@
       border: 2px solid #8a6a3c;
     }
     .hand-panel-floating .hand-hint { display: none; }
-    .hand-panel-floating > div:first-child { margin-bottom: 0 !important; cursor: pointer; }
-    .hand-panel-floating #player-hand-container { max-height: 0; overflow: hidden; padding: 0; transition: max-height .25s ease, padding .25s ease; }
-    .hand-panel-floating:hover #player-hand-container,
-    .hand-panel-floating.open #player-hand-container { max-height: 380px; overflow-x: auto; overflow-y: hidden; padding: 44px 14px 8px; }
+    .hand-panel-floating > div:first-child { margin-bottom: 0 !important; }
+    .hand-panel-floating #player-hand-container { padding: 40px 14px 8px; overflow-x: auto; overflow-y: hidden; max-height: 380px; transition: max-height .25s ease, padding .25s ease; }
+    .hand-panel-floating.minimized #player-hand-container { max-height: 0; padding: 0; overflow: hidden; }
     .hand-panel-floating .hand-fan-item { width: 170px; min-width: 170px; margin-left: -60px; }
     .hand-panel-floating .hand-fan-item:first-child { margin-left: 0; }
 
@@ -672,6 +671,7 @@
               <button id="btn-hand-pos-top" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Exibir mão acima do tabuleiro">
                 Acima
               </button>
+              <button id="btn-hand-minimize" class="hidden px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-amber-100 text-amber-950 border-amber-500 hover:bg-amber-200" title="Minimizar / abrir a mão suspensa">▼ Minimizar</button>
               <button id="btn-hand-pos-floating" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Deixar mão suspensa no canto inferior esquerdo">
                 Suspensa
               </button>
@@ -684,16 +684,20 @@
 
       <!-- COLUNA DIREITA (4 cols): Exibição de Cartas, Guilda do Dragão e Log -->
       <div class="xl:col-span-4 space-y-4">
-        <!-- Vitrine Pública da Última Jogada -->
-        <div id="public-last-play-panel" class="parchment-panel rounded-2xl p-4 border-2 border-amber-600/60">
-          <div class="flex items-center justify-between mb-2">
-            <h2 class="font-display text-sm font-extrabold text-amber-950 uppercase tracking-wider">
-              Última Jogada na Mesa
-            </h2>
-            <span class="px-2 py-0.5 rounded-full bg-amber-200/90 border border-amber-400 text-amber-950 text-[10px] font-bold uppercase">Público</span>
+        <!-- Tabuleiro da Guilda do Dragão (Anel Circular Físico) -->
+        <div class="parchment-panel rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-1">
+            <h2 id="guild-title" class="font-display text-base font-bold text-stone-900">Guilda do Dragão</h2>
+            <span class="text-[11px] text-stone-600 font-semibold">Trilha Circular (12)</span>
           </div>
-          <div id="public-last-play-content" class="text-xs text-stone-600">
-            Aguardando a primeira ação da partida...
+          <p id="guild-subtitle" class="text-xs text-stone-700 mb-3"></p>
+
+          <!-- Trilha Circular de 12 Casas ao redor do Emblema -->
+          <div id="guild-track-ring" class="guild-ring mb-3"></div>
+
+          <div class="rounded-xl bg-[#2c1f18]/5 border border-[#9e835c]/50 p-2.5">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-[#3b281e] mb-1.5">Medalhão Central (ao parar nos marcos marrons):</div>
+            <div id="guild-center-slots" class="space-y-1.5"></div>
           </div>
         </div>
 
@@ -720,23 +724,18 @@
           </div>
         </div>
 
-        <!-- Tabuleiro da Guilda do Dragão (Anel Circular Físico) -->
-        <div class="parchment-panel rounded-2xl p-4">
-          <div class="flex items-center justify-between mb-1">
-            <h2 id="guild-title" class="font-display text-base font-bold text-stone-900">Guilda do Dragão</h2>
-            <span class="text-[11px] text-stone-600 font-semibold">Trilha Circular (12)</span>
+        <!-- Vitrine Pública da Última Jogada -->
+        <div id="public-last-play-panel" class="parchment-panel rounded-2xl p-4 border-2 border-amber-600/60">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="font-display text-sm font-extrabold text-amber-950 uppercase tracking-wider">
+              Última Jogada na Mesa
+            </h2>
+            <span class="px-2 py-0.5 rounded-full bg-amber-200/90 border border-amber-400 text-amber-950 text-[10px] font-bold uppercase">Público</span>
           </div>
-          <p id="guild-subtitle" class="text-xs text-stone-700 mb-3"></p>
-
-          <!-- Trilha Circular de 12 Casas ao redor do Emblema -->
-          <div id="guild-track-ring" class="guild-ring mb-3"></div>
-
-          <div class="rounded-xl bg-[#2c1f18]/5 border border-[#9e835c]/50 p-2.5">
-            <div class="text-[11px] font-bold uppercase tracking-wider text-[#3b281e] mb-1.5">Medalhão Central (ao parar nos marcos marrons):</div>
-            <div id="guild-center-slots" class="space-y-1.5"></div>
+          <div id="public-last-play-content" class="text-xs text-stone-600">
+            Aguardando a primeira ação da partida...
           </div>
         </div>
-
       </div>
     </div>
 
@@ -1188,6 +1187,13 @@
       renderAll();
     }
 
+    let handMinimized = false;
+    function toggleHandMinimized() {
+      handMinimized = !handMinimized;
+      const hp = document.getElementById("player-hand-panel");
+      hp.classList.toggle("minimized", handMinimized);
+      document.getElementById("btn-hand-minimize").textContent = handMinimized ? "▲ Abrir" : "▼ Minimizar";
+    }
     function setHandLayoutMode(mode) {
       handLayoutMode = mode;
       const handPanel = document.getElementById("player-hand-panel");
@@ -1196,8 +1202,9 @@
       const btnTop = document.getElementById("btn-hand-pos-top");
       const btnFloat = document.getElementById("btn-hand-pos-floating");
 
-      handPanel.classList.remove("hand-panel-floating", "open", "order-1", "order-2");
-      handPanel.onclick = null;
+      handPanel.classList.remove("hand-panel-floating", "minimized", "order-1", "order-2");
+      document.getElementById("btn-hand-minimize").classList.toggle("hidden", mode !== "floating");
+      document.getElementById("btn-hand-minimize").textContent = handMinimized ? "▲ Abrir" : "▼ Minimizar";
       boardPanel.classList.remove("order-1", "order-2");
 
       [btnBottom, btnTop, btnFloat].forEach(b => {
@@ -1210,7 +1217,7 @@
         btnTop.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
       } else if (mode === "floating") {
         handPanel.classList.add("hand-panel-floating");
-        handPanel.onclick = (e) => { if (e.target.closest("button") || e.target.closest(".hand-fan-item")) return; handPanel.classList.toggle("open"); };
+        handPanel.classList.toggle("minimized", handMinimized);
         btnFloat.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
       } else {
         boardPanel.classList.add("order-1");
@@ -2258,6 +2265,7 @@
       document.getElementById("btn-hand-pos-bottom").onclick = () => setHandLayoutMode("bottom");
       document.getElementById("btn-hand-pos-top").onclick = () => setHandLayoutMode("top");
       document.getElementById("btn-hand-pos-floating").onclick = () => setHandLayoutMode("floating");
+      document.getElementById("btn-hand-minimize").onclick = toggleHandMinimized;
 
       container.innerHTML = "";
       if (gameState.viewingPlayerIdx !== myIdx) {
