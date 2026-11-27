@@ -123,6 +123,48 @@
       box-shadow: 0 12px 22px rgba(23, 18, 15, 0.34);
     }
 
+    /* Botão de escolha com a carta inteira dentro (modais) */
+    .pick-card { width: 100%; max-width: 215px; text-align: left; padding: 0; background: none; border: 0; border-radius: .85rem; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+    .pick-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 3px #059669, 0 10px 20px rgba(0,0,0,.25); }
+    .pick-card > * { pointer-events: none; }
+    .pick-card .physical-dragon-card:hover, .pick-card .physical-cave-card:hover { transform: none; }
+    .pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .75rem; justify-items: center; }
+
+    /* ===== Guilda do Dragão (anel visual) ===== */
+    .guild-ring { position: relative; width: 100%; max-width: 380px; aspect-ratio: 1 / 1; margin-left: auto; margin-right: auto; }
+    .guild-ring-line { position: absolute; left: 11%; top: 11%; width: 78%; height: 78%; border-radius: 50%; border: 3px dashed #9e835c; opacity: .75; }
+    .guild-center { position: absolute; left: 50%; top: 50%; width: 40%; height: 40%; transform: translate(-50%, -50%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fde68a; background: radial-gradient(circle at 35% 30%, #6a4632, #38251c 70%); border: 3px solid #d4a24c; box-shadow: inset 0 0 18px rgba(0,0,0,.5), 0 4px 14px rgba(0,0,0,.3); }
+    .guild-node { position: absolute; width: 17%; aspect-ratio: 1 / 1; transform: translate(-50%, -50%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at 35% 30%, #fffdf6, #f1e4c8); border: 2.5px solid #b79b6c; box-shadow: 0 3px 8px rgba(40,26,16,.25); transition: transform .2s ease, box-shadow .2s ease; }
+    .guild-node-brown { width: 19%; background: radial-gradient(circle at 35% 30%, #6a4632, #3a251a); border-color: #d4a24c; color: #fde68a; }
+    .guild-node-label { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; margin-top: 1px; color: inherit; }
+    .guild-node-occupied { box-shadow: 0 0 0 3px #f59e0b, 0 6px 14px rgba(245,158,11,.45); transform: translate(-50%, -50%) scale(1.1); z-index: 5; }
+    .guild-tokens { position: absolute; bottom: -7px; display: flex; gap: 2px; }
+    .guild-token { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.55); }
+    .guild-slot { position: relative; display: flex; align-items: center; gap: 8px; padding: 7px 8px 7px 6px; border-radius: 12px; font-size: 11.5px; line-height: 1.25; border: 1.5px solid #cbb591; background: #fcf8ef; }
+    .guild-slot-now { border-left: 5px solid #059669; }
+    .guild-slot-end { border-left: 5px solid #b45309; }
+    .guild-slot-badge { flex-shrink: 0; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; padding: 2px 6px; border-radius: 999px; color: #fff; background: #059669; }
+    .guild-slot-end .guild-slot-badge { background: #b45309; }
+    .guild-slot-text { flex: 1; color: #292524; font-weight: 600; }
+    .guild-slot-sockets { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+    .guild-socket { width: 17px; height: 17px; border-radius: 50%; border: 2px dashed #a8946f; background: rgba(255,255,255,.6); }
+    .guild-socket-full { border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+
+    /* ===== Animação de recursos ===== */
+    @keyframes statPopGain { 0% { transform: scale(1); } 30% { transform: scale(1.28); box-shadow: 0 0 0 4px rgba(16,185,129,.55), 0 0 18px rgba(16,185,129,.7); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
+    @keyframes statPopLoss { 0% { transform: scale(1); } 25% { transform: scale(.88) rotate(-3deg); box-shadow: 0 0 0 4px rgba(220,38,38,.5); } 50% { transform: scale(.94) rotate(3deg); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220,38,38,0); } }
+    .stat-pop-gain { animation: statPopGain .85s ease-out; }
+    .stat-pop-loss { animation: statPopLoss .7s ease-out; }
+    @keyframes statFloat { 0% { opacity: 0; transform: translate(0, 4px) scale(.6); } 15% { opacity: 1; transform: translate(calc(var(--dx) * .3), -8px) scale(1.15); } 100% { opacity: 0; transform: translate(var(--dx), -46px) scale(1); } }
+    @keyframes statFall { 0% { opacity: 0; transform: translate(var(--dx), -26px) scale(1.1); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), 22px) scale(.7); } }
+    .stat-float { position: absolute; left: 50%; top: 0; margin-left: -14px; display: inline-flex; align-items: center; gap: 1px; font-size: 12px; pointer-events: none; z-index: 60; opacity: 0; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+    .stat-float b { font-weight: 900; }
+    .stat-float-gain { color: #047857; animation: statFloat 1.2s ease-out forwards; }
+    .stat-float-loss { color: #b91c1c; animation: statFall 1.1s ease-in forwards; }
+
+    /* ===== Ajustar tabuleiro à tela ===== */
+    body.fit-board .fit-hide { display: none !important; }
+
     /* Espaço de Caverna Não Escavado (Rocha texturizada) */
     .unexcavated-rock-slot {
       background:
@@ -516,6 +558,9 @@
           <button id="btn-close-room-hud" class="hidden px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-300 text-red-800 text-xs font-bold transition cursor-pointer" title="Fecha a sala para todos">
             Encerrar Sala
           </button>
+          <button id="btn-fit-board" class="px-3 py-2 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 text-xs font-bold transition cursor-pointer" title="Reduz o tabuleiro para caber inteiro na tela">
+            ⛶ Ajustar à tela
+          </button>
           <button id="btn-open-rules" class="px-3 py-2 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 text-xs font-bold transition cursor-pointer">
             Regras
           </button>
@@ -563,15 +608,15 @@
             <!-- Painel Esquerdo do Tabuleiro Físico -->
             <div class="lg:col-span-2 rounded-xl bg-gradient-to-b from-[#ede0c9] via-[#e5d4b6] to-[#dcc7a4] border-2 border-[#9e835c] p-2.5 flex flex-col justify-between text-xs shadow-inner">
               <div class="space-y-2">
-                <div class="p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
+                <div class="fit-hide p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
                   <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Escavar</div>
                   <div class="text-[10px] text-stone-700 leading-tight mt-0.5">Pague 1 Moeda + custo da coluna. Jogue uma Carta de Caverna mais à esquerda.</div>
                 </div>
-                <div class="p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
+                <div class="fit-hide p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
                   <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Atrair</div>
                   <div class="text-[10px] text-stone-700 leading-tight mt-0.5">Pague 1 Moeda + custo do Dragão no espaço escavado mais à esquerda.</div>
                 </div>
-                <div class="p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
+                <div class="fit-hide p-2 rounded-lg bg-[#fcf8ef]/90 border border-[#bfa780]">
                   <div class="font-display font-extrabold text-[11px] text-[#2c1f18] uppercase tracking-wide">Explorar</div>
                   <div class="text-[10px] text-stone-700 leading-tight mt-0.5">Mova seu Aventureiro da esq. p/ dir. até encontrar uma placa de PARE.</div>
                 </div>
@@ -671,7 +716,7 @@
           <p id="guild-subtitle" class="text-xs text-stone-700 mb-3"></p>
 
           <!-- Trilha Circular de 12 Casas ao redor do Emblema -->
-          <div id="guild-track-ring" class="grid grid-cols-4 gap-1.5 mb-3"></div>
+          <div id="guild-track-ring" class="guild-ring mb-3"></div>
 
           <div class="rounded-xl bg-[#2c1f18]/5 border border-[#9e835c]/50 p-2.5">
             <div class="text-[11px] font-bold uppercase tracking-wider text-[#3b281e] mb-1.5">Medalhão Central (ao parar nos marcos marrons):</div>
@@ -722,7 +767,7 @@
   <!-- MODAL GENÉRICO PARA INTERAÇÕES, ESCOLHAS E REGRAS         -->
   <!-- ========================================================= -->
   <div id="modal-backdrop" class="hidden fixed inset-0 z-50 bg-stone-950/65 backdrop-blur-xs flex items-center justify-center p-4">
-    <div id="modal-box" class="parchment-panel rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border-2 border-[#7c603e]">
+    <div id="modal-box" class="parchment-panel rounded-2xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl border-2 border-[#7c603e]">
       <div class="flex items-center justify-between px-5 py-4 border-b border-stone-300">
         <h3 id="modal-title" class="font-display text-lg font-bold text-stone-900">Título</h3>
         <button id="modal-close-btn" class="w-8 h-8 rounded-full hover:bg-stone-200/80 flex items-center justify-center text-stone-700 font-bold cursor-pointer">✕</button>
@@ -1557,6 +1602,10 @@
     /* =========================================================================
        8. RENDERIZAÇÃO DAS CARTAS FÍSICAS E DO TABULEIRO INDIVIDUAL
        ========================================================================= */
+    function cardPickBtn(card, attr, disabled = false) {
+      return `<button ${attr}="${card.uid}" ${disabled ? "disabled" : ""} class="pick-card">${createCardElement(card).outerHTML}</button>`;
+    }
+
     function createCardElement(card, options = {}) {
       const el = document.createElement("div");
       const isDragon = card.cardType === "dragon";
@@ -1665,6 +1714,35 @@
       return el;
     }
 
+    /* ---- Ajustar o tabuleiro inteiro à tela ---- */
+    function fitEnabled() { try { return localStorage.getItem("wyr_fit") !== "0"; } catch (e) { return true; } }
+    function fitBoardToScreen() {
+      const panel = document.getElementById("individual-board-panel");
+      const btn = document.getElementById("btn-fit-board");
+      if (!panel) return;
+      const on = fitEnabled();
+      document.body.classList.toggle("fit-board", on);
+      if (btn) {
+        btn.classList.toggle("bg-emerald-100", on);
+        btn.classList.toggle("border-emerald-600", on);
+        btn.onclick = () => { try { localStorage.setItem("wyr_fit", on ? "0" : "1"); } catch (e) {} fitBoardToScreen(); };
+      }
+      panel.style.zoom = "";
+      if (!on || window.innerWidth < 1024) return;
+      const header = document.querySelector("#game-screen header");
+      const hh = header ? header.getBoundingClientRect().height : 0;
+      const avail = window.innerHeight - hh - 28;
+      let z = 1;
+      for (let i = 0; i < 3; i++) {
+        const h = panel.getBoundingClientRect().height;
+        if (h <= 0) break;
+        const nz = Math.max(0.45, Math.min(1, z * avail / h));
+        if (Math.abs(nz - z) < 0.01) break;
+        z = nz; panel.style.zoom = String(z);
+      }
+    }
+    window.addEventListener("resize", () => { clearTimeout(window.__fitT); window.__fitT = setTimeout(fitBoardToScreen, 120); });
+
     function renderAll() {
       if (!gameState) return;
       renderHUD();
@@ -1676,6 +1754,7 @@
       renderDisplayMarket();
       renderGuildBoard();
       renderLog();
+      fitBoardToScreen();
       if (engineOwner) scheduleSync();
     }
 
@@ -1814,6 +1893,38 @@
       document.getElementById("viewing-opponent-banner").classList.toggle("hidden", !isObserving);
     }
 
+    /* ---- Animação ao ganhar/perder recursos ---- */
+    const __prevStats = {};
+    function animateStatChanges(player) {
+      const cur = { coins: player.coins, carne: player.resources.carne, ouro: player.resources.ouro, cristal: player.resources.cristal, leite: player.resources.leite, ovo: countPlayerEggs(player) };
+      const prev = __prevStats[player.id];
+      __prevStats[player.id] = cur;
+      if (!prev) return;
+      let delay = 0;
+      Object.keys(cur).forEach(k => {
+        const d = cur[k] - prev[k];
+        if (!d) return;
+        const chip = document.querySelector(`#player-resources-bar [data-stat="${k}"]`);
+        if (!chip) return;
+        const gain = d > 0;
+        setTimeout(() => {
+          chip.classList.add(gain ? "stat-pop-gain" : "stat-pop-loss");
+          setTimeout(() => chip.classList.remove("stat-pop-gain", "stat-pop-loss"), 900);
+          const n = Math.min(Math.abs(d), 4);
+          for (let i = 0; i < n; i++) {
+            const f = document.createElement("span");
+            f.className = "stat-float " + (gain ? "stat-float-gain" : "stat-float-loss");
+            f.style.setProperty("--dx", `${(i - (n - 1) / 2) * 16}px`);
+            f.style.animationDelay = `${i * 90}ms`;
+            f.innerHTML = `${getIconHtml(k === "coins" ? "moeda" : k, "w-4 h-4")}<b>${gain ? "+" : "−"}${i === 0 ? Math.abs(d) : ""}</b>`;
+            chip.appendChild(f);
+            setTimeout(() => f.remove(), 1400 + i * 90);
+          }
+        }, delay);
+        delay += 140;
+      });
+    }
+
     function renderResourcesAndActions() {
       const player = gameState.players[gameState.viewingPlayerIdx];
       const myTurn = gameState.activePlayerIdx === myIdx && engineOwner;
@@ -1823,25 +1934,27 @@
 
       const resBar = document.getElementById("player-resources-bar");
       resBar.innerHTML = `
-        <div class="px-3 py-1.5 rounded-xl bg-amber-200/90 border border-amber-500 text-amber-950 text-xs font-extrabold flex items-center gap-1.5" title="Moedas (máx. 9)">
+        <div data-stat="coins" class="relative px-3 py-1.5 rounded-xl bg-amber-200/90 border border-amber-500 text-amber-950 text-xs font-extrabold flex items-center gap-1.5" title="Moedas (máx. 9)">
           ${getIconHtml("moeda", "w-4 h-4")}<span class="text-sm">${player.coins}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-rose-100 border border-rose-300 text-rose-950 text-xs font-bold flex items-center gap-1.5" title="Carne">
+        <div data-stat="carne" class="relative px-2.5 py-1.5 rounded-xl bg-rose-100 border border-rose-300 text-rose-950 text-xs font-bold flex items-center gap-1.5" title="Carne">
           ${getIconHtml("carne", "w-4 h-4")}<span>${player.resources.carne}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 text-xs font-bold flex items-center gap-1.5" title="Ouro">
+        <div data-stat="ouro" class="relative px-2.5 py-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 text-xs font-bold flex items-center gap-1.5" title="Ouro">
           ${getIconHtml("ouro", "w-4 h-4")}<span>${player.resources.ouro}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-purple-100 border border-purple-300 text-purple-950 text-xs font-bold flex items-center gap-1.5" title="Cristal">
+        <div data-stat="cristal" class="relative px-2.5 py-1.5 rounded-xl bg-purple-100 border border-purple-300 text-purple-950 text-xs font-bold flex items-center gap-1.5" title="Cristal">
           ${getIconHtml("cristal", "w-4 h-4")}<span>${player.resources.cristal}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-sky-100 border border-sky-300 text-sky-950 text-xs font-bold flex items-center gap-1.5" title="Leite">
+        <div data-stat="leite" class="relative px-2.5 py-1.5 rounded-xl bg-sky-100 border border-sky-300 text-sky-950 text-xs font-bold flex items-center gap-1.5" title="Leite">
           ${getIconHtml("leite", "w-4 h-4")}<span>${player.resources.leite}</span>
         </div>
-        <div class="px-2.5 py-1.5 rounded-xl bg-stone-100 border border-stone-300 text-stone-900 text-xs font-bold flex items-center gap-1.5" title="Ovos Totais no Tabuleiro">
+        <div data-stat="ovo" class="relative px-2.5 py-1.5 rounded-xl bg-stone-100 border border-stone-300 text-stone-900 text-xs font-bold flex items-center gap-1.5" title="Ovos Totais no Tabuleiro">
           ${getIconHtml("ovo", "w-4 h-4")}<span>${countPlayerEggs(player)}</span>
         </div>
       `;
+
+      animateStatChanges(player);
 
       const actionBar = document.getElementById("action-buttons-bar");
       actionBar.classList.toggle("opacity-40", !canPerformMainAction);
@@ -2000,7 +2113,7 @@
                 
                 <div>
                   <div class="px-2 pt-1.5 pb-1 text-center border-b border-[#cbb591]">
-                    <span class="font-display text-[10px] font-extrabold text-stone-900 uppercase leading-tight line-clamp-1 block" title="${d.nome}">${d.nome}</span>
+                    <span class="font-display text-[10px] font-extrabold text-stone-900 uppercase leading-tight block" title="${d.nome}">${d.nome}</span>
                   </div>
 
                   <div class="flex items-center justify-between px-1.5 py-0.5 bg-gradient-to-r from-[#38251c] to-[#52382b] text-white">
@@ -2038,7 +2151,7 @@
                   <div class="bg-[#efe2c6] border-t border-[#7c603e] p-1.5">
                     <div class="flex items-start gap-1">
                       <span class="px-1 py-0.2 rounded shrink-0 ${habMeta.badgeBg} inline-flex items-center">${getIconHtml(habMeta.iconName, "w-2.5 h-2.5")}</span>
-                      <p class="text-[9.5px] text-stone-900 leading-tight line-clamp-2 font-medium">${formatCardText(d.texto)}</p>
+                      <p class="text-[9.5px] text-stone-900 leading-tight font-medium">${formatCardText(d.texto)}</p>
                     </div>
                   </div>
 
@@ -2061,7 +2174,7 @@
                       <span class="absolute top-1 right-1.5 px-1.5 py-0.2 rounded bg-black/75 text-amber-100 text-[9px] font-bold">#${col.caveCard.numero}</span>
                     </div>
                     <div class="p-1.5 bg-[#1a1411] text-amber-50 border-t border-[#7c603e]">
-                      <p class="text-[9.5px] leading-tight text-stone-200 line-clamp-2">${formatCardText(col.caveCard.texto)}</p>
+                      <p class="text-[9.5px] leading-tight text-stone-200">${formatCardText(col.caveCard.texto)}</p>
                     </div>
                   </div>
                 ` : `
@@ -2174,60 +2287,56 @@
 
     function renderGuildBoard() {
       const sheet = getGuild();
-      document.getElementById("guild-title").innerHTML = `<span class="inline-flex items-center gap-1.5">${getIconHtml("guilda", "w-4 h-4")} ${sheet.nome}</span>`;
+      document.getElementById("guild-title").innerHTML = `<span class="inline-flex items-center gap-1.5">${getIconHtml("guilda", "w-5 h-5")} ${sheet.nome}</span>`;
       document.getElementById("guild-subtitle").textContent = sheet.subtitulo;
 
-      // Posiciona os 12 passos formando um anel ao redor do emblema central
-      const ringOrder = [0, 1, 2, 3, 11, -1, -2, 4, 10, 9, 8, 7, 6, 5];
-      const grid = document.getElementById("guild-track-ring");
-      grid.innerHTML = "";
-
-      ringOrder.forEach(idx => {
-        if (idx === -1) {
-          grid.innerHTML += `
-            <div class="col-span-2 rounded-xl bg-gradient-to-br from-[#38251c] to-[#593a2b] border-2 border-amber-500/70 text-amber-100 flex flex-col items-center justify-center p-1.5 text-center shadow-inner">
-              ${getIconHtml("guilda", "w-5 h-5 mb-0.5")}
-              <span class="font-display text-[9px] font-extrabold uppercase tracking-wider leading-tight">Guilda do Dragão</span>
-            </div>
-          `;
-          return;
-        }
-        if (idx === -2) return;
-
-        const step = GUILD_TRACK_STEPS[idx];
-        const playersHere = gameState.players.filter(p => p.guildPos === step.idx);
-        const markersHtml = playersHere.map(p =>
-          `<span class="w-3 h-3 rounded-full border border-white shadow-xs" style="background:${p.color.hex}" title="${p.name}"></span>`
-        ).join("");
-
-        grid.innerHTML += `
-          <div class="p-1.5 rounded-xl border text-center ${step.isBrown ? 'bg-[#4a2f20] text-amber-50 border-[#29180f] shadow-xs' : 'bg-[#fcf8ef] border-[#bfa780] text-stone-900'}">
-            <div class="text-[8.5px] font-bold opacity-75">#${step.idx}</div>
-            <div class="text-[11px] font-bold leading-tight flex items-center justify-center gap-1 my-0.5">
-              ${getIconHtml(step.iconName, "w-3.5 h-3.5")}
-              <span>${step.label}</span>
-            </div>
-            <div class="flex justify-center gap-0.5 mt-0.5 min-h-[12px]">${markersHtml}</div>
-          </div>
-        `;
-      });
+      // Anel circular: 12 casas em sentido horário a partir do topo
+      const ring = document.getElementById("guild-track-ring");
+      ring.className = "guild-ring mb-3";
+      const R = 41; // raio em % do container
+      const nodes = GUILD_TRACK_STEPS.map(step => {
+        const ang = (-90 + step.idx * 30) * Math.PI / 180;
+        const x = 50 + R * Math.cos(ang), y = 50 + R * Math.sin(ang);
+        const here = gameState.players.filter(p => p.guildPos === step.idx);
+        const tokens = here.map(p => `<span class="guild-token" style="background:${p.color.hex}" title="${p.name}"></span>`).join("");
+        const rewardCls = step.isBrown ? "guild-node guild-node-brown" : "guild-node";
+        return `
+          <div class="${rewardCls} ${here.length ? 'guild-node-occupied' : ''}" style="left:${x}%;top:${y}%" title="${step.label}">
+            ${getIconHtml(step.iconName, step.isBrown ? "w-5 h-5" : "w-6 h-6")}
+            <span class="guild-node-label">${step.isBrown ? (step.idx === 0 ? "Início" : "Marco") : step.label}</span>
+            <div class="guild-tokens">${tokens}</div>
+          </div>`;
+      }).join("");
+      ring.innerHTML = `
+        <div class="guild-ring-line"></div>
+        ${nodes}
+        <div class="guild-center">
+          ${getIconHtml("guilda", "w-8 h-8")}
+          <span class="font-display text-[10px] font-extrabold uppercase tracking-wider leading-tight mt-1">Guilda<br>do Dragão</span>
+        </div>`;
 
       const slotsContainer = document.getElementById("guild-center-slots");
-      slotsContainer.innerHTML = "";
-      sheet.slots.forEach(slot => {
+      slotsContainer.innerHTML = sheet.slots.map(slot => {
         const occupants = gameState.guildSlotOccupants[slot.id] || [];
-        const occHtml = occupants.map(pid => {
-          const p = gameState.players[pid];
-          return `<span class="w-3.5 h-3.5 rounded-xs inline-block border border-white shadow-2xs" style="background:${p.color.hex}" title="${p.name}"></span>`;
-        }).join(" ");
-
-        slotsContainer.innerHTML += `
-          <div class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-[#fcf8ef] border border-[#cbb591] text-xs">
-            <span class="text-stone-800 leading-tight font-medium">${slot.label}</span>
-            <div class="flex items-center gap-1 shrink-0">${occHtml || `<span class="text-[10px] font-bold text-stone-500">(${slot.cap === 99 ? '∞' : slot.cap}v)</span>`}</div>
-          </div>
-        `;
-      });
+        const isEnd = slot.type === "fim";
+        const sockets = [];
+        const shown = slot.cap === 99 ? Math.max(occupants.length, 0) : slot.cap;
+        for (let k = 0; k < shown; k++) {
+          const pid = occupants[k];
+          if (pid !== undefined) {
+            const pl = gameState.players[pid];
+            sockets.push(`<span class="guild-socket guild-socket-full" style="background:${pl.color.hex}" title="${pl.name}"></span>`);
+          } else sockets.push(`<span class="guild-socket"></span>`);
+        }
+        if (slot.cap === 99) sockets.push(`<span class="text-[11px] font-extrabold text-stone-600 ml-0.5">∞</span>`);
+        const clean = slot.label.replace(/^FIM:\s*/i, "");
+        return `
+          <div class="guild-slot ${isEnd ? 'guild-slot-end' : 'guild-slot-now'}">
+            <span class="guild-slot-badge">${isEnd ? "Fim" : "Agora"}</span>
+            <span class="guild-slot-text">${clean}</span>
+            <div class="guild-slot-sockets">${sockets.join("")}</div>
+          </div>`;
+      }).join("");
     }
 
     function renderLog() {
@@ -2938,8 +3047,7 @@
             owner: player.id,
             closable: false,
             bodyHtml: `<p class="text-xs text-stone-700 mb-2">Você comprou ${bought.length} dragão(ões). Escolha um para inserir embaixo de <strong>${target.card.nome}</strong>:</p>
-              <div class="space-y-2">${avail.map(b => `
-                <button data-ins-card="${b.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer">${b.nome} (#${b.numero})</button>`).join("")}</div>`,
+              <div class="pick-grid">${avail.map(b => cardPickBtn(b, "data-ins-card")).join("")}</div>`,
             footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(true); } }]
           });
           document.querySelectorAll("[data-ins-card]").forEach(btn => {
@@ -3002,8 +3110,7 @@
               owner: player.id,
               closable: false,
               bodyHtml: `<p class="text-xs text-stone-700 mb-2">Cartas compradas. ${key === "manter" ? "Escolha a que vai para a sua mão" : "Escolha a que será descartada (a restante é inserida aqui)"}:</p>
-                <div class="space-y-2">${pool.map(b => `
-                  <button data-cmdi="${b.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer">${b.nome} (#${b.numero}, ${TAM_LABEL[b.tam] || b.tam})</button>`).join("")}</div>`
+                <div class="pick-grid">${pool.map(b => cardPickBtn(b, "data-cmdi")).join("")}</div>`
             });
             document.querySelectorAll("[data-cmdi]").forEach(btn => { btn.onclick = () => { closeModal(); resolve(pool.find(x => x.uid === btn.dataset.cmdi)); }; });
           });
@@ -3378,13 +3485,7 @@
                 closable: false,
                 bodyHtml: `
                   <p class="text-xs text-stone-700 mb-2">Qual ${kind === "dragao" ? "Carta de Dragão" : "Carta de Caverna"} da sua mão você quer descartar?</p>
-                  <div class="space-y-1.5">
-                    ${cards.map(c => `
-                      <button data-pay-c="${c.uid}" class="w-full text-left p-2 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
-                        ${getIconHtml(kind, 'w-4 h-4')}
-                        <span>${type === "dragon" ? c.nome : `Caverna #${c.numero}`}</span>
-                      </button>`).join("")}
-                  </div>`,
+                  <div class="pick-grid">${cards.map(c => cardPickBtn(c, "data-pay-c")).join("")}</div>`,
                 footerButtons: []
               });
               document.querySelectorAll("[data-pay-c]").forEach(btn => { btn.onclick = () => { closeModal(); resolve(btn.dataset.payC); }; });
@@ -3515,13 +3616,7 @@
             closable: false,
             bodyHtml: `
               <p class="text-xs text-stone-700 mb-2">Escolha um Dragão da sua mão para inserir embaixo de <strong>${dragonsOnBoard[0].card.nome}</strong> (vale 1 PV):</p>
-              <div class="space-y-2">
-                ${handDragons.map(hd => `
-                  <button data-tuck-hd="${hd.uid}" class="w-full text-left p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-indigo-50 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
-                    ${getIconHtml("dragao", "w-4 h-4")} <span>${hd.nome} (#${hd.numero})</span>
-                  </button>
-                `).join("")}
-              </div>
+              <div class="pick-grid">${handDragons.map(hd => cardPickBtn(hd, "data-tuck-hd")).join("")}</div>
             `,
             footerButtons: [{ text: "Pular", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(); } }]
           });
@@ -3959,14 +4054,7 @@
               closable: false,
               bodyHtml: `
                 <p class="text-xs text-stone-700 mb-2">Descarte 1 carta da sua mão para botar 1 Ovo:</p>
-                <div class="space-y-1.5">
-                  ${player.hand.map(c => `
-                    <button data-disc-c="${c.uid}" class="w-full text-left p-2 rounded-xl border border-stone-300 bg-white hover:bg-purple-50 text-xs font-bold cursor-pointer inline-flex items-center gap-2">
-                      ${getIconHtml(c.cardType === 'dragon' ? 'dragao' : 'caverna', 'w-4 h-4')}
-                      <span>${c.cardType === 'dragon' ? c.nome : `Caverna #${c.numero}`}</span>
-                    </button>
-                  `).join("")}
-                </div>
+                <div class="pick-grid">${player.hand.map(c => cardPickBtn(c, "data-disc-c")).join("")}</div>
               `,
               footerButtons: [{ text: "Não descartar", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } }]
             });
