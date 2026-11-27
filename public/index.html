@@ -123,6 +123,17 @@
       box-shadow: 0 12px 22px rgba(23, 18, 15, 0.34);
     }
 
+    /* ===== Modal acoplado ao topo (escolha de recursos / alvos) ===== */
+    #modal-backdrop.modal-docked { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; align-items: flex-start !important; padding: 8px 12px !important; pointer-events: none; }
+    #modal-backdrop.modal-docked #modal-box { pointer-events: auto; max-width: 720px; max-height: 42vh; box-shadow: 0 10px 30px rgba(24,18,12,.45); border-color: #b45309; }
+    #modal-backdrop.modal-docked #modal-box > div:first-child { padding: 8px 14px; }
+    #modal-backdrop.modal-docked #modal-title { font-size: 1rem; }
+    #modal-backdrop.modal-docked #modal-body { padding: 10px 14px; }
+    #modal-backdrop.modal-docked #modal-footer { padding: 8px 14px; }
+    #modal-backdrop.modal-docked #modal-body .grid-cols-2 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+    #modal-backdrop.modal-docked #modal-body button { padding-top: .45rem; padding-bottom: .45rem; }
+    body.modal-docked-open #action-buttons-bar, body.modal-docked-open #btn-pass-round, body.modal-docked-open #btn-open-trade-2to1 { pointer-events: none; opacity: .45; }
+
     /* Botão de escolha com a carta inteira dentro (modais) */
     .pick-card { width: 100%; max-width: 215px; text-align: left; padding: 0; background: none; border: 0; border-radius: .85rem; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
     .pick-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 3px #059669, 0 10px 20px rgba(0,0,0,.25); }
@@ -2281,7 +2292,7 @@
         const el = createCardElement(card, {
           selectable: isMyTurn,
           onClick: () => {
-            if (!isMyTurn) return;
+            if (!isMyTurn || document.body.classList.contains("modal-docked-open")) return;
             if (card.cardType === "dragon") openEnticeModal(card.uid);
             else openExcavateModal(card.uid);
           }
@@ -2377,6 +2388,7 @@
        ========================================================================= */
     function openModal({ title, bodyHtml, footerButtons = [], closable = true, owner = null }) {
       endMirror();
+      document.body.classList.remove("modal-docked-open");
       const backdrop = document.getElementById("modal-backdrop");
       const closeBtn = document.getElementById("modal-close-btn");
       document.getElementById("modal-title").textContent = title;
@@ -2394,6 +2406,11 @@
 
       closeBtn.classList.toggle("hidden", !closable);
       closeBtn.onclick = closeModal;
+
+      // Escolhas de recurso/alvo: barra fixa no topo, sem escurecer a tela (dá para ver tabuleiro e mão)
+      const docked = /data-pick-res|data-pay-r|data-tuck-r|data-tuck-d|data-egg-target|data-guild-slot/.test(bodyHtml);
+      backdrop.classList.toggle("modal-docked", docked);
+      window.__modalDocked = docked;
 
       const ownerIdx = (owner === null || owner === undefined) ? myIdx : owner;
       if (SOLO && gameState && gameState.players[ownerIdx] && gameState.players[ownerIdx].isBot) {
@@ -2414,16 +2431,20 @@
         });
       } else {
         backdrop.classList.remove("hidden");
+        document.body.classList.toggle("modal-docked-open", docked);
       }
     }
 
     function closeModal() {
       if (typeof BOT !== "undefined") BOT.modalOpen = false;
       document.getElementById("modal-backdrop").classList.add("hidden");
+      document.getElementById("modal-backdrop").classList.remove("modal-docked");
+      document.body.classList.remove("modal-docked-open");
       endMirror();
     }
 
     window.inspectPlacedDragon = function(cavernId, colIdx) {
+      if (document.body.classList.contains("modal-docked-open")) return;
       const player = gameState.players[gameState.viewingPlayerIdx];
       const slot = player.caverns[cavernId].cols[colIdx].dragonSlot;
       if (!slot) return;
@@ -4960,6 +4981,9 @@
       const closeBtn = byId("modal-close-btn");
       closeBtn.classList.toggle("hidden", !p.closable);
       closeBtn.onclick = null;
+      const dk = /data-pick-res|data-pay-r|data-tuck-r|data-tuck-d|data-egg-target|data-guild-slot/.test(p.body || "");
+      byId("modal-backdrop").classList.toggle("modal-docked", dk);
+      document.body.classList.toggle("modal-docked-open", dk);
       byId("modal-backdrop").classList.remove("hidden");
       if (document.hidden) notifyMyTurn();
     }
@@ -4968,6 +4992,8 @@
       if (!remoteModal || (id !== undefined && remoteModal.id !== id)) return;
       remoteModal = null;
       byId("modal-backdrop").classList.add("hidden");
+      byId("modal-backdrop").classList.remove("modal-docked");
+      document.body.classList.remove("modal-docked-open");
     }
 
     function onMirrorClick(msg) {
