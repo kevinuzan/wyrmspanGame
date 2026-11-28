@@ -123,6 +123,34 @@
       box-shadow: 0 12px 22px rgba(23, 18, 15, 0.34);
     }
 
+    .hand-pos-btn { min-width: 30px; height: 28px; padding: 0 8px; border-radius: 8px; border: 1px solid #d6d3d1; background: #fff; color: #44403c; font-weight: 800; font-size: 15px; line-height: 1; cursor: pointer; transition: background .15s; }
+    .hand-pos-btn:hover { background: #f5f5f4; }
+    .hand-pos-btn.active { background: #1c1917; color: #fff; border-color: #1c1917; }
+    #btn-hand-minimize { background: #fef3c7; border-color: #f59e0b; color: #78350f; }
+
+    /* ===== Modo de posicionamento (Escavar / Atrair) ===== */
+    .hand-fan-item.pm-eligible { box-shadow: 0 0 0 4px #10b981, 0 0 22px rgba(16,185,129,.75) !important; transform: translateY(-16px); z-index: 30; animation: pmGlow 1.1s ease-in-out infinite alternate; }
+    .hand-fan-item.pm-selected { box-shadow: 0 0 0 5px #f59e0b, 0 0 26px rgba(245,158,11,.9) !important; transform: translateY(-26px) scale(1.05); z-index: 40; animation: none; }
+    .hand-fan-item.pm-dim { opacity: .38; filter: grayscale(.85); }
+    @keyframes pmGlow { from { box-shadow: 0 0 0 3px #10b981, 0 0 10px rgba(16,185,129,.5); } to { box-shadow: 0 0 0 5px #34d399, 0 0 26px rgba(52,211,153,.95); } }
+    body.pm-slot-step [data-board-slot]:not(.pm-target) { opacity: .5; filter: saturate(.6); }
+    [data-board-slot].pm-target { position: relative; z-index: 20; cursor: pointer !important; outline: 4px solid #f59e0b; outline-offset: 2px; animation: pmPulse 1s ease-in-out infinite; box-shadow: 0 0 24px rgba(245,158,11,.8) !important; }
+    [data-board-slot].pm-target::after { content: attr(data-pm-label); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 5px 10px; border-radius: 999px; background: #b45309; color: #fff; font-size: 12px; font-weight: 800; white-space: nowrap; pointer-events: none; box-shadow: 0 4px 10px rgba(0,0,0,.4); }
+    @keyframes pmPulse { 0%,100% { outline-color: #f59e0b; } 50% { outline-color: #fde047; transform: scale(1.015); } }
+    #pm-bar { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 56; display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 14px; background: #fff7e0; border: 2px solid #b45309; box-shadow: 0 10px 28px rgba(24,18,12,.45); font-size: 13px; font-weight: 700; color: #292524; max-width: 92vw; }
+    #pm-bar.hidden { display: none; }
+
+    /* ===== Pagar ovos: fontes destacadas + ovo voando ===== */
+    .ep-source { position: relative; z-index: 20; cursor: pointer !important; outline: 4px solid #dc2626; outline-offset: 2px; animation: epPulse 1s ease-in-out infinite; box-shadow: 0 0 22px rgba(220,38,38,.65) !important; }
+    .ep-source::after { content: attr(data-ep-label); position: absolute; left: 50%; top: 6px; transform: translateX(-50%); padding: 3px 9px; border-radius: 999px; background: #b91c1c; color: #fff; font-size: 12px; font-weight: 800; white-space: nowrap; pointer-events: none; z-index: 30; box-shadow: 0 3px 8px rgba(0,0,0,.4); }
+    #base-nests-container > .ep-source { border-radius: 9999px; }
+    #base-nests-container > .ep-source::after { top: -22px; }
+    @keyframes epPulse { 0%,100% { outline-color: #dc2626; } 50% { outline-color: #fca5a5; transform: scale(1.03); } }
+    body.egg-pay-mode [data-board-slot]:not(.ep-source) { opacity: .55; }
+    .egg-fly { position: fixed; z-index: 9999; width: 28px; height: 28px; pointer-events: none; animation: eggFly 1.1s ease-out forwards; filter: drop-shadow(0 3px 5px rgba(0,0,0,.4)); }
+    @keyframes eggFly { 0% { opacity: 1; transform: translate(0,0) scale(.9) rotate(0); } 25% { opacity: 1; transform: translate(calc(var(--ex) * .4), -26px) scale(1.5) rotate(-14deg); } 100% { opacity: 0; transform: translate(var(--ex), -150px) scale(.5) rotate(24deg); } }
+    .pick-card.pm-selected-card { box-shadow: 0 0 0 4px #f59e0b, 0 0 16px rgba(245,158,11,.8); transform: translateY(-3px); }
+
     /* ===== Modal acoplado ao topo (escolha de recursos / alvos) ===== */
     #modal-backdrop.modal-docked { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; align-items: flex-start !important; padding: 8px 12px !important; pointer-events: none; }
     #modal-backdrop.modal-docked #modal-box { pointer-events: auto; max-width: 720px; max-height: 42vh; box-shadow: 0 10px 30px rgba(24,18,12,.45); border-color: #b45309; }
@@ -149,8 +177,8 @@
     .guild-node-brown { width: 19%; background: radial-gradient(circle at 35% 30%, #6a4632, #3a251a); border-color: #d4a24c; color: #fde68a; }
     .guild-node-label { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; margin-top: 1px; color: inherit; }
     .guild-node-occupied { box-shadow: 0 0 0 3px #f59e0b, 0 6px 14px rgba(245,158,11,.45); transform: translate(-50%, -50%) scale(1.1); z-index: 5; }
-    .guild-tokens { position: absolute; bottom: -7px; display: flex; gap: 2px; }
-    .guild-token { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.55); }
+    .guild-tokens { position: absolute; bottom: -12px; display: flex; gap: 1px; }
+    .guild-token { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.6); }
     .guild-slot { position: relative; display: flex; align-items: center; gap: 8px; padding: 7px 8px 7px 6px; border-radius: 12px; font-size: 11.5px; line-height: 1.25; border: 1.5px solid #cbb591; background: #fcf8ef; }
     .guild-slot-now { border-left: 5px solid #059669; }
     .guild-slot-end { border-left: 5px solid #b45309; }
@@ -158,7 +186,7 @@
     .guild-slot-end .guild-slot-badge { background: #b45309; }
     .guild-slot-text { flex: 1; color: #292524; font-weight: 600; }
     .guild-slot-sockets { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
-    .guild-socket { width: 17px; height: 17px; border-radius: 50%; border: 2px dashed #a8946f; background: rgba(255,255,255,.6); }
+    .guild-socket { width: 24px; height: 24px; border-radius: 50%; border: 2px dashed #a8946f; background: rgba(255,255,255,.6); }
     .guild-socket-full { border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
 
     /* ===== Animação de recursos ===== */
@@ -669,23 +697,16 @@
 
         <!-- Mão do Jogador (Com Leque Interativo e 3 Posições) -->
         <div id="player-hand-panel" class="parchment-panel rounded-2xl p-3 sm:p-4 order-2 transition-all">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
-            <div class="flex items-center gap-2">
-              <h2 class="font-display text-base font-bold text-stone-900">Mão do Dracologista</h2>
+          <div class="flex flex-nowrap items-center justify-between gap-2 mb-1">
+            <div class="flex items-center gap-2 min-w-0">
+              <h2 class="font-display text-base font-bold text-stone-900 whitespace-nowrap">Mão do Dracologista</h2>
               <span id="hand-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-stone-200 text-stone-900">0 / 9</span>
             </div>
-            <div class="flex items-center gap-1.5">
-              <span class="text-[11px] text-stone-600 hidden sm:inline mr-1">Posição da mão:</span>
-              <button id="btn-hand-pos-bottom" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900" title="Exibir mão abaixo do tabuleiro">
-                Abaixo
-              </button>
-              <button id="btn-hand-pos-top" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Exibir mão acima do tabuleiro">
-                Acima
-              </button>
-              <button id="btn-hand-minimize" class="hidden px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-amber-100 text-amber-950 border-amber-500 hover:bg-amber-200" title="Minimizar / abrir a mão suspensa">▼ Minimizar</button>
-              <button id="btn-hand-pos-floating" class="px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100" title="Deixar mão suspensa no canto inferior esquerdo">
-                Suspensa
-              </button>
+            <div class="flex items-center gap-1 shrink-0">
+              <button id="btn-hand-pos-top" class="hand-pos-btn" title="Mão acima do tabuleiro">↑</button>
+              <button id="btn-hand-pos-bottom" class="hand-pos-btn" title="Mão abaixo do tabuleiro">↓</button>
+              <button id="btn-hand-pos-floating" class="hand-pos-btn" title="Mão suspensa (canto inferior esquerdo)">↙</button>
+              <button id="btn-hand-minimize" class="hand-pos-btn hidden" title="Minimizar / abrir a mão suspensa">_</button>
             </div>
           </div>
           <div class="hand-hint text-[11px] text-stone-600 mb-1">Passe o cursor sobre uma carta para erguê-la e ler; clique para jogar no santuário.</div>
@@ -800,6 +821,8 @@
       <div id="modal-footer" class="px-5 py-3 border-t border-stone-300 flex justify-end gap-2 bg-[#f4e8d1] rounded-b-2xl"></div>
     </div>
   </div>
+
+  <div id="pm-bar" class="hidden"><span id="pm-text"></span><button id="pm-cancel" class="px-3 py-1 rounded-lg border border-stone-400 bg-white text-xs font-bold cursor-pointer">Cancelar (Esc)</button></div>
 
   <div id="reconnect-banner" class="hidden fixed top-0 inset-x-0 z-[60] bg-amber-500 text-stone-950 text-center text-xs font-extrabold py-1.5">
     Conexão perdida — tentando reconectar… (a partida continua de onde parou)
@@ -1203,7 +1226,7 @@
       handMinimized = !handMinimized;
       const hp = document.getElementById("player-hand-panel");
       hp.classList.toggle("minimized", handMinimized);
-      document.getElementById("btn-hand-minimize").textContent = handMinimized ? "▲ Abrir" : "▼ Minimizar";
+      document.getElementById("btn-hand-minimize").textContent = handMinimized ? "□" : "_";
     }
     function setHandLayoutMode(mode) {
       handLayoutMode = mode;
@@ -1215,25 +1238,25 @@
 
       handPanel.classList.remove("hand-panel-floating", "minimized", "order-1", "order-2");
       document.getElementById("btn-hand-minimize").classList.toggle("hidden", mode !== "floating");
-      document.getElementById("btn-hand-minimize").textContent = handMinimized ? "▲ Abrir" : "▼ Minimizar";
+      document.getElementById("btn-hand-minimize").textContent = handMinimized ? "□" : "_";
       boardPanel.classList.remove("order-1", "order-2");
 
       [btnBottom, btnTop, btnFloat].forEach(b => {
-        b.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-white text-stone-700 border-stone-300 hover:bg-stone-100";
+        b.className = "hand-pos-btn";
       });
 
       if (mode === "top") {
         handPanel.classList.add("order-1");
         boardPanel.classList.add("order-2");
-        btnTop.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
+        btnTop.className = "hand-pos-btn active";
       } else if (mode === "floating") {
         handPanel.classList.add("hand-panel-floating");
         handPanel.classList.toggle("minimized", handMinimized);
-        btnFloat.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
+        btnFloat.className = "hand-pos-btn active";
       } else {
         boardPanel.classList.add("order-1");
         handPanel.classList.add("order-2");
-        btnBottom.className = "px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer bg-stone-900 text-white border-stone-900";
+        btnBottom.className = "hand-pos-btn active";
       }
     }
 
@@ -1789,6 +1812,8 @@
       renderGuildBoard();
       renderLog();
       fitBoardToScreen();
+      pmDecorate();
+      epDecorate();
       if (engineOwner) scheduleSync();
     }
 
@@ -2022,8 +2047,8 @@
 
       floatingUndoBtn.onclick = () => undoCurrentTurn();
       floatingConfirmBtn.onclick = () => confirmPlayerTurn();
-      document.getElementById("btn-action-excavate").onclick = () => openExcavateModal();
-      document.getElementById("btn-action-entice").onclick = () => openEnticeModal();
+      document.getElementById("btn-action-excavate").onclick = () => pmStart("excavate");
+      document.getElementById("btn-action-entice").onclick = () => pmStart("entice");
       document.getElementById("btn-open-trade-2to1").onclick = () => openTrade2To1Modal();
       document.getElementById("btn-open-trade-2to1").disabled = !isActivePlayerView;
       document.getElementById("btn-open-trade-2to1").classList.toggle("opacity-50", !isActivePlayerView);
@@ -2288,13 +2313,12 @@
         return;
       }
 
-      player.hand.forEach(card => {
+      [...player.hand].sort((a, b) => (a.cardType === b.cardType ? 0 : a.cardType === "dragon" ? -1 : 1)).forEach(card => {
         const el = createCardElement(card, {
           selectable: isMyTurn,
           onClick: () => {
             if (!isMyTurn || document.body.classList.contains("modal-docked-open")) return;
-            if (card.cardType === "dragon") openEnticeModal(card.uid);
-            else openExcavateModal(card.uid);
+            pmCardClick(card);
           }
         });
         el.dataset.handUid = card.uid;
@@ -2432,6 +2456,7 @@
       } else {
         backdrop.classList.remove("hidden");
         document.body.classList.toggle("modal-docked-open", docked);
+        if (window.__silentModal) backdrop.classList.add("hidden");
       }
     }
 
@@ -2444,7 +2469,7 @@
     }
 
     window.inspectPlacedDragon = function(cavernId, colIdx) {
-      if (document.body.classList.contains("modal-docked-open")) return;
+      if (document.body.classList.contains("modal-docked-open") || PM) return;
       const player = gameState.players[gameState.viewingPlayerIdx];
       const slot = player.caverns[cavernId].cols[colIdx].dragonSlot;
       if (!slot) return;
@@ -3351,7 +3376,7 @@
               }
 
               player.coins -= (cost.moeda || 0);
-              if (cost.ovo) payPlayerEggs(player, cost.ovo);
+              if (cost.ovo) await payEggs(player, cost.ovo);
               ["carne", "ouro", "cristal", "leite"].forEach(r => { if (cost[r]) player.resources[r] -= cost[r]; });
 
               player.caverns[slot.cavernId].cols[slot.col].dragonSlot = { card: sel, eggs: 0, tuckedResources: [], tuckedCards: [] };
@@ -3514,8 +3539,10 @@
       const rest = { ...pague };
       const cardPay = { dragao: rest.dragao || 0, caverna: rest.caverna || 0 };
       const qual = rest.qualquer || 0;
-      delete rest.dragao; delete rest.caverna; delete rest.qualquer;
+      const eggsDue = rest.ovo || 0;
+      delete rest.dragao; delete rest.caverna; delete rest.qualquer; delete rest.ovo;
       applyPaySimple(player, rest);
+      if (eggsDue) await payEggs(player, eggsDue);
       for (const kind of ["dragao", "caverna"]) {
         const type = kind === "dragao" ? "dragon" : "cave";
         for (let i = 0; i < cardPay[kind]; i++) {
@@ -3707,6 +3734,342 @@
     /* =========================================================================
        10. AS 5 AÇÕES DO TURNO: ESCAVAR, ATRAIR, EXPLORAR (3 CAVERNAS) E PASSAR
        ========================================================================= */
+    /* =========================================================================
+       MODO DE POSICIONAMENTO: Escavar / Atrair direto no tabuleiro
+       1) destaca as cartas da mão que servem; 2) circula os espaços onde dá para jogar
+       ========================================================================= */
+    let PM = null, pmPrevHand = null, pmPrevMin = false;
+
+    function pmPlayer() { return gameState.players[gameState.activePlayerIdx]; }
+
+    function pmEnticeInfo(player, card) {
+      const cost = card.custo || {};
+      const coins = 1 + (cost.moeda || 0);
+      const can = player.coins >= coins && countPlayerEggs(player) >= (cost.ovo || 0) &&
+        player.resources.carne >= (cost.carne || 0) && player.resources.ouro >= (cost.ouro || 0) &&
+        player.resources.cristal >= (cost.cristal || 0) && player.resources.leite >= (cost.leite || 0);
+      const slots = [];
+      player.caverns.forEach(cav => {
+        if ((card.hab || []).includes(cav.id)) {
+          const c = cav.cols.find(x => x.excavated && !x.dragonSlot);
+          if (c) slots.push({ cavernId: cav.id, col: c.col });
+        }
+      });
+      return { can, slots };
+    }
+
+    function pmExcavateTargets(player) {
+      const list = [];
+      player.caverns.forEach(cav => {
+        const nextCol = cav.cols.find(c => !c.excavated);
+        if (nextCol) {
+          const eggCost = nextCol.col === 2 ? 1 : nextCol.col === 3 ? 2 : 0;
+          list.push({ cavernId: cav.id, col: nextCol.col, affordable: player.coins >= 1 && countPlayerEggs(player) >= eggCost });
+        }
+      });
+      return list;
+    }
+
+    function pmCardReason(player, card, kind) {
+      if (kind === "excavate") {
+        if (card.cardType !== "cave") return "Para escavar, escolha uma Carta de Caverna.";
+        const t = pmExcavateTargets(player);
+        if (t.length === 0) return "Todas as casas do seu tabuleiro já foram escavadas.";
+        if (!t.some(x => x.affordable)) return "Moedas ou Ovos insuficientes para escavar.";
+        return null;
+      }
+      if (card.cardType !== "dragon") return "Para atrair, escolha uma Carta de Dragão.";
+      const info = pmEnticeInfo(player, card);
+      if (!info.can) return "Recursos ou Moedas insuficientes para atrair este Dragão.";
+      if (info.slots.length === 0) return "Sem espaço escavado vazio nas cavernas deste dragão. Escave primeiro!";
+      return null;
+    }
+
+    function pmTargets() {
+      if (!PM || !PM.uid) return [];
+      const player = pmPlayer();
+      const card = player.hand.find(c => c.uid === PM.uid);
+      if (!card) return [];
+      if (PM.kind === "excavate") return pmExcavateTargets(player).filter(t => t.affordable);
+      const info = pmEnticeInfo(player, card);
+      return info.can ? info.slots : [];
+    }
+
+    function pmStart(kind, uid = null) {
+      if (!gameState) return;
+      const player = pmPlayer();
+      const typ = kind === "excavate" ? "cave" : "dragon";
+      const cards = player.hand.filter(c => c.cardType === typ);
+      if (cards.length === 0) { showToast(kind === "excavate" ? "Você não tem Cartas de Caverna na mão para escavar." : "Você não tem Cartas de Dragão na mão para atrair.", "warn"); return; }
+      const okCards = cards.filter(c => !pmCardReason(player, c, kind));
+      if (okCards.length === 0) { showToast(pmCardReason(player, cards[0], kind), "warn"); return; }
+      if (uid) {
+        const c = player.hand.find(x => x.uid === uid);
+        const why = c && pmCardReason(player, c, kind);
+        if (why) { showToast(why, "warn"); return; }
+      }
+      if (!PM) {
+        pmPrevHand = handLayoutMode; pmPrevMin = handMinimized;
+        if (handLayoutMode !== "floating") setHandLayoutMode("floating");
+        if (handMinimized) toggleHandMinimized();
+      }
+      PM = { kind, uid: uid || (okCards.length === 1 ? okCards[0].uid : null) };
+      renderAll();
+    }
+
+    function pmEnd() {
+      if (!PM) return;
+      PM = null;
+      if (pmPrevHand && pmPrevHand !== "floating") setHandLayoutMode(pmPrevHand);
+      else if (pmPrevHand === "floating" && pmPrevMin && !handMinimized) toggleHandMinimized();
+      pmPrevHand = null;
+      document.body.classList.remove("pm-slot-step");
+      document.getElementById("pm-bar").classList.add("hidden");
+      document.querySelectorAll(".pm-target").forEach(e => { e.classList.remove("pm-target"); e.removeAttribute("data-pm-label"); });
+      document.querySelectorAll(".hand-fan-item").forEach(e => e.classList.remove("pm-eligible", "pm-selected", "pm-dim"));
+    }
+
+    function pmCardClick(card) {
+      const player = pmPlayer();
+      const kind = PM ? PM.kind : (card.cardType === "dragon" ? "entice" : "excavate");
+      if (!PM) { pmStart(kind, card.uid); return; }
+      const why = pmCardReason(player, card, PM.kind);
+      if (why) {
+        // clicou numa carta do outro tipo: troca de ação se possível
+        if (card.cardType !== (PM.kind === "excavate" ? "cave" : "dragon")) { pmStart(card.cardType === "dragon" ? "entice" : "excavate", card.uid); return; }
+        showToast(why, "warn"); return;
+      }
+      PM.uid = (PM.uid === card.uid) ? null : card.uid;
+      renderAll();
+    }
+
+    function pmDecorate() {
+      const bar = document.getElementById("pm-bar");
+      if (!PM) return;
+      const player = pmPlayer();
+      const myTurn = gameState.activePlayerIdx === myIdx && engineOwner && !player.passed && !gameState.pendingTurnConfirmation;
+      if (!myTurn || document.body.classList.contains("modal-docked-open") || !document.getElementById("modal-backdrop").classList.contains("hidden")) { pmEnd(); return; }
+      const typ = PM.kind === "excavate" ? "cave" : "dragon";
+      document.querySelectorAll(".hand-fan-item").forEach(el => {
+        const c = player.hand.find(x => x.uid === el.dataset.handUid);
+        el.classList.remove("pm-eligible", "pm-selected", "pm-dim");
+        if (!c || pmCardReason(player, c, PM.kind)) el.classList.add("pm-dim");
+        else el.classList.add(c.uid === PM.uid ? "pm-selected" : "pm-eligible");
+      });
+      document.querySelectorAll(".pm-target").forEach(e => { e.classList.remove("pm-target"); e.removeAttribute("data-pm-label"); });
+      const targets = pmTargets();
+      document.body.classList.toggle("pm-slot-step", !!PM.uid && targets.length > 0);
+      targets.forEach(t => {
+        const el = document.querySelector(`[data-board-slot="${t.cavernId}-${t.col}"]`);
+        if (el) { el.classList.add("pm-target"); el.setAttribute("data-pm-label", PM.kind === "excavate" ? "⛏ Escavar aqui" : "🐉 Atrair aqui"); }
+      });
+      const txt = PM.kind === "excavate"
+        ? (PM.uid ? "Clique no espaço de caverna destacado onde quer escavar" : "Escolha uma Carta de Caverna da sua mão (destacadas em verde)")
+        : (PM.uid ? "Clique no espaço destacado onde quer atrair o dragão" : "Escolha uma Carta de Dragão da sua mão (destacadas em verde)");
+      document.getElementById("pm-text").textContent = (PM.kind === "excavate" ? "⛏ Escavar — " : "🐉 Atrair — ") + txt;
+      bar.classList.remove("hidden");
+      document.getElementById("pm-cancel").onclick = pmEnd;
+    }
+
+    function pmExecute(t) {
+      const kind = PM.kind, uid = PM.uid;
+      const player = pmPlayer();
+      pmEnd();
+      window.__silentModal = true;
+      try {
+        if (kind === "excavate") {
+          openExcavateModal(uid);
+          const idx = pmExcavateTargets(player).findIndex(x => x.cavernId === t.cavernId);
+          const btn = document.querySelector(`[data-exc-target="${idx}"]`);
+          if (btn) btn.click();
+        } else {
+          openEnticeModal(uid);
+          const idx = pmEnticeInfo(player, player.hand.find(c => c.uid === uid)).slots.findIndex(x => x.cavernId === t.cavernId);
+          const btn = document.querySelector(`[data-ent-slot="${idx}"]`);
+          if (btn) btn.click();
+        }
+      } finally { window.__silentModal = false; }
+    }
+
+    document.addEventListener("click", (e) => {
+      if (!PM) return;
+      const slotEl = e.target.closest && e.target.closest("[data-board-slot]");
+      if (!slotEl) return;
+      e.stopPropagation(); e.preventDefault();
+      if (!PM.uid) { showToast("Primeiro escolha a carta na sua mão.", "info"); return; }
+      const [cv, cl] = slotEl.dataset.boardSlot.split("-").map(Number);
+      const t = pmTargets().find(x => x.cavernId === cv && x.col === cl);
+      if (!t) { showToast("Esse espaço não está disponível. Escolha um dos destacados.", "warn"); return; }
+      pmExecute(t);
+    }, true);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && PM) pmEnd(); });
+
+    /* =========================================================================
+       PAGAR OVOS ESCOLHENDO DE ONDE TIRAR (clicando nas cartas / ninhos base)
+       ========================================================================= */
+    let EP = null;
+
+    function flyEggFrom(el, delay = 0) {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const e = document.createElement("div");
+      e.className = "egg-fly";
+      e.style.left = (r.left + r.width / 2 - 14) + "px";
+      e.style.top = (r.top + r.height / 2 - 14) + "px";
+      e.style.setProperty("--ex", `${Math.round((Math.random() - 0.5) * 70)}px`);
+      e.style.animationDelay = `${delay}ms`;
+      e.innerHTML = getIconHtml("ovo", "w-7 h-7");
+      document.body.appendChild(e);
+      setTimeout(() => e.remove(), 1300 + delay);
+    }
+
+    function epSourceEls(player) {
+      const list = [];
+      document.querySelectorAll("#base-nests-container > div").forEach((el, i) => { if (i < player.baseEggs) list.push({ el, kind: "base" }); });
+      getVisibleDragons(player).forEach(d => {
+        if (d.slot.eggs > 0) {
+          const el = document.querySelector(`[data-board-slot="${d.cavernId}-${d.col}"]`);
+          if (el) list.push({ el, kind: "dragon", d });
+        }
+      });
+      return list;
+    }
+
+    async function payEggs(player, n) {
+      if (!n || n <= 0) return;
+      const total = countPlayerEggs(player);
+      const auto = !player || player.isBot || player.id !== myIdx || (SANDBOX && SB.autoOn) || total <= n;
+      if (auto) {
+        if (player && player.id === myIdx) {
+          const srcs = epSourceEls(player);
+          srcs.slice(0, n).forEach((x, i) => flyEggFrom(x.el, i * 140));
+        }
+        payPlayerEggs(player, n);
+        return;
+      }
+      gameState.viewingPlayerIdx = myIdx;
+      await new Promise(resolve => {
+        EP = { player, remaining: n, total: n, resolve };
+        document.body.classList.add("modal-docked-open", "egg-pay-mode");
+        renderAll();
+      });
+    }
+
+    function epDecorate() {
+      const bar = document.getElementById("pm-bar");
+      document.querySelectorAll(".ep-source").forEach(e => { e.classList.remove("ep-source"); e.removeAttribute("data-ep-label"); });
+      if (!EP) { document.getElementById("pm-cancel").style.display = ""; return; }
+      const player = EP.player;
+      epSourceEls(player).forEach(x => {
+        x.el.classList.add("ep-source");
+        x.el.setAttribute("data-ep-label", "−1 🥚");
+      });
+      document.getElementById("pm-cancel").style.display = "none";
+      document.getElementById("pm-text").textContent = `🥚 Pague ${EP.remaining} ovo(s): clique nas cartas ou ninhos que têm ovos (${EP.total - EP.remaining}/${EP.total})`;
+      bar.classList.remove("hidden");
+    }
+
+    function epFinish() {
+      const r = EP && EP.resolve;
+      EP = null;
+      document.body.classList.remove("modal-docked-open", "egg-pay-mode");
+      document.getElementById("pm-bar").classList.add("hidden");
+      document.getElementById("pm-cancel").style.display = "";
+      document.querySelectorAll(".ep-source").forEach(e => { e.classList.remove("ep-source"); e.removeAttribute("data-ep-label"); });
+      renderAll();
+      if (r) r();
+    }
+
+    document.addEventListener("click", (e) => {
+      if (!EP) return;
+      const inBoard = e.target.closest && e.target.closest("#caverns-board, #base-nests-container, #board-left");
+      if (!inBoard) return;
+      e.stopPropagation(); e.preventDefault();
+      const player = EP.player;
+      const srcs = epSourceEls(player);
+      const hit = srcs.find(x => x.el === e.target || x.el.contains(e.target));
+      if (!hit) { showToast("Clique numa carta ou ninho que tenha ovo (destacados).", "info"); return; }
+      flyEggFrom(hit.el);
+      if (hit.kind === "base") player.baseEggs--; else hit.d.slot.eggs--;
+      EP.remaining--;
+      if (EP.remaining > 0 && countPlayerEggs(player) <= EP.remaining) {
+        // só sobram exatamente os ovos que faltam pagar: tira o restante automaticamente
+        epSourceEls(player).forEach((x, i) => flyEggFrom(x.el, 160 + i * 140));
+        payPlayerEggs(player, EP.remaining);
+        EP.remaining = 0;
+      }
+      addLog(`${player.name} pagou 1 ovo${hit.kind === "base" ? " do Ninho Base" : ` de ${hit.d.card.nome}`}.`);
+      if (EP.remaining <= 0) epFinish(); else renderAll();
+    }, true);
+
+    /* ---- Bônus da 4ª coluna: escolher exatamente quais 3 itens pagar ---- */
+    async function promptCoverBonus(player) {
+      const RES = ["carne", "ouro", "cristal", "leite"];
+      const names = { carne: "Carne", ouro: "Ouro", cristal: "Cristal", leite: "Leite" };
+      const selRes = { carne: 0, ouro: 0, cristal: 0, leite: 0 };
+      const selCards = new Set();
+      const count = () => RES.reduce((a, r) => a + selRes[r], 0) + selCards.size;
+      const hand = [...player.hand].sort((a, b) => (a.cardType === b.cardType ? 0 : a.cardType === "dragon" ? -1 : 1));
+      return new Promise(resolve => {
+        const draw = () => {
+          const k = count();
+          document.getElementById("modal-body").innerHTML = `
+            <p class="text-xs text-stone-700">Você cobriu a 4ª coluna! Escolha <strong>exatamente 3 itens</strong> (recursos e/ou cartas da mão) para pagar e ganhar <strong>1 Moeda</strong>.</p>
+            <div class="text-sm font-extrabold ${k === 3 ? 'text-emerald-700' : 'text-stone-800'}">Selecionados: ${k} / 3</div>
+            <div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">Recursos</div>
+              <div class="grid grid-cols-4 gap-2">
+                ${RES.map(r => `
+                  <div class="rounded-xl border ${selRes[r] ? 'border-amber-600 bg-amber-50 ring-2 ring-amber-400' : 'border-stone-300 bg-white'} p-2 text-center ${player.resources[r] === 0 ? 'opacity-40' : ''}">
+                    <div class="flex items-center justify-center gap-1 text-xs font-bold">${getIconHtml(r, "w-5 h-5")} ${names[r]}</div>
+                    <div class="text-[11px] text-stone-600">tem ${player.resources[r]} · pagar <b>${selRes[r]}</b></div>
+                    <div class="flex justify-center gap-1 mt-1">
+                      <button data-cover-res="${r}" data-d="-1" ${selRes[r] === 0 ? 'disabled' : ''} class="w-7 h-7 rounded-lg border border-stone-300 bg-white font-black disabled:opacity-30 cursor-pointer">−</button>
+                      <button data-cover-res="${r}" data-d="1" ${(selRes[r] >= player.resources[r] || k >= 3) ? 'disabled' : ''} class="w-7 h-7 rounded-lg border border-emerald-600 bg-emerald-50 font-black disabled:opacity-30 cursor-pointer">+</button>
+                    </div>
+                  </div>`).join("")}
+              </div>
+            </div>
+            <div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">Cartas da mão (clique para marcar)</div>
+              ${hand.length === 0 ? '<div class="text-xs text-stone-500">Sem cartas na mão.</div>' : `<div class="pick-grid" style="zoom:.85">
+                ${hand.map(c => {
+                  const on = selCards.has(c.uid);
+                  const dis = !on && k >= 3;
+                  return `<button data-cover-card="${c.uid}" ${dis ? 'disabled' : ''} class="pick-card ${on ? 'pm-selected-card' : ''} ${dis ? 'opacity-40' : ''}">${createCardElement(c).outerHTML}</button>`;
+                }).join("")}
+              </div>`}
+            </div>`;
+          const ok = document.getElementById("cover-ok");
+          if (ok) { ok.disabled = k !== 3; ok.classList.toggle("opacity-40", k !== 3); ok.textContent = `Pagar ${k}/3 → +1 Moeda`; }
+          document.querySelectorAll("[data-cover-res]").forEach(b => b.onclick = () => { selRes[b.dataset.coverRes] += parseInt(b.dataset.d, 10); draw(); });
+          document.querySelectorAll("[data-cover-card]").forEach(b => b.onclick = () => { const u = b.dataset.coverCard; if (selCards.has(u)) selCards.delete(u); else if (count() < 3) selCards.add(u); draw(); });
+        };
+        openModal({
+          title: `Bônus da 4ª Coluna Coberta`,
+          owner: player.id,
+          closable: false,
+          bodyHtml: "<div></div>",
+          footerButtons: [
+            { text: "Não pagar", className: "px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } },
+            { text: "Pagar 0/3 → +1 Moeda", className: "px-4 py-2 rounded-xl bg-amber-800 text-white text-xs font-bold cursor-pointer", onClick: () => {
+                if (count() !== 3) return;
+                RES.forEach(r => { player.resources[r] -= selRes[r]; });
+                selCards.forEach(u => {
+                  const i = player.hand.findIndex(c => c.uid === u);
+                  if (i >= 0) { const d = player.hand.splice(i, 1)[0]; (d.cardType === "dragon" ? gameState.dragonDiscard : gameState.caveDiscard).push(d); }
+                });
+                player.coins++;
+                addLog(`${player.name} ativou o bônus da 4ª coluna: pagou 3 itens e ganhou 1 Moeda.`);
+                closeModal(); renderAll(); resolve(true);
+              } }
+          ]
+        });
+        document.querySelector("#modal-footer button:last-child").id = "cover-ok";
+        draw();
+      });
+    }
+
     function openExcavateModal(preselectedCardUid = null, isFree = false, forPlayerIdx = null, onlyUid = null) {
       return new Promise(resolve => _openExcavate(preselectedCardUid, isFree, forPlayerIdx, resolve, onlyUid));
     }
@@ -3798,7 +4161,7 @@
 
           const playedCard = player.hand.splice(cardIdx, 1)[0];
           player.coins -= t.coinCost;
-          if (t.eggCost > 0) payPlayerEggs(player, t.eggCost);
+          if (t.eggCost > 0) await payEggs(player, t.eggCost);
 
           const colObj = player.caverns[t.cavernId].cols[t.col];
           colObj.excavated = true;
@@ -3825,6 +4188,9 @@
           if (t.col === 3) {
             const totalItems = totalResourcesCount(player) + player.hand.length;
             if (totalItems >= 3) {
+              if (player.id === myIdx && !player.isBot && !(SANDBOX && SB.autoOn)) {
+                await promptCoverBonus(player);
+              } else {
               const wantCoverBonus = await new Promise(resolve => {
                 openModal({
                   title: `Bônus da 4ª Coluna Coberta`,
@@ -3855,6 +4221,7 @@
                 player.coins++;
                 addLog(`${player.name} ativou o bônus da 4ª coluna: pagou 3 itens e ganhou 1 Moeda.`);
                 renderAll();
+              }
               }
             }
           }
@@ -3966,7 +4333,7 @@
           const card = player.hand.splice(idx, 1)[0];
 
           player.coins -= totalCoinsNeeded;
-          if (totalEggsNeeded > 0) payPlayerEggs(player, totalEggsNeeded);
+          if (totalEggsNeeded > 0) await payEggs(player, totalEggsNeeded);
           for (const r of ["carne", "ouro", "cristal", "leite"]) {
             if (cost[r]) player.resources[r] -= cost[r];
           }
@@ -4017,7 +4384,7 @@
       }
 
       player.coins -= 1;
-      if (eggCost > 0) payPlayerEggs(player, eggCost);
+      if (eggCost > 0) await payEggs(player, eggCost);
       cav.explorationsThisRound++;
 
       gameState.lastActionShowcase = {
@@ -4099,7 +4466,7 @@
               closable: false,
               bodyHtml: `
                 <p class="text-xs text-stone-700 mb-2">Descarte 1 carta da sua mão para botar 1 Ovo:</p>
-                <div class="pick-grid">${player.hand.map(c => cardPickBtn(c, "data-disc-c")).join("")}</div>
+                <div class="pick-grid">${[...player.hand].sort((a, b) => (a.cardType === b.cardType ? 0 : a.cardType === "dragon" ? -1 : 1)).map(c => cardPickBtn(c, "data-disc-c")).join("")}</div>
               `,
               footerButtons: [{ text: "Não descartar", className: "px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer", onClick: () => { closeModal(); resolve(false); } }]
             });
@@ -5890,7 +6257,7 @@
       let before = sbMetrics(st);
       SB.rebase = () => { before = sbMetrics(st); };
       const logsBefore = st.logs.length;
-      SB.errors = []; SB.modals = 0; SB.info = ""; window.__unimpl = [];
+      SB.errors = []; SB.modals = 0; SB.info = ""; window.__unimpl = []; SB.autoOn = !!auto;
       let thrown = null, timedOut = false;
 
       const work = (async () => {
