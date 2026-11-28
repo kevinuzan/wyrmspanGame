@@ -1105,7 +1105,396 @@
     /* =========================================================================
        3. ILUSTRAÇÕES EM AQUARELA NATURALISTA (SVG) PARA CARTAS FÍSICAS
        ========================================================================= */
+/* Gerador procedural de ilustrações de dragões (SVG original) */
+(function (root) {
+  const strip = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  function rng(seed) { let a = (seed * 2654435761 + 12345) >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const f1 = n => (Math.round(n * 10) / 10);
+  const hsl = (h, s, l, a = 1) => `hsla(${Math.round(((h % 360) + 360) % 360)},${Math.round(s)}%,${Math.round(Math.max(3, Math.min(97, l)))}%,${a})`;
+
+  function catmull(pts, per = 10) {
+    const out = [];
+    const P = [pts[0], ...pts, pts[pts.length - 1]];
+    for (let i = 1; i < P.length - 2; i++) {
+      for (let k = 0; k < per; k++) {
+        const t = k / per, t2 = t * t, t3 = t2 * t;
+        const f = (a, b, c, d) => 0.5 * ((2 * b) + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
+        out.push([f(P[i - 1][0], P[i][0], P[i + 1][0], P[i + 2][0]), f(P[i - 1][1], P[i][1], P[i + 1][1], P[i + 2][1])]);
+      }
+    }
+    out.push(pts[pts.length - 1]);
+    return out;
+  }
+  function widthAt(profile, t) {
+    for (let i = 1; i < profile.length; i++) {
+      if (t <= profile[i][0]) { const [t0, w0] = profile[i - 1], [t1, w1] = profile[i]; const u = (t - t0) / ((t1 - t0) || 1); const s = u * u * (3 - 2 * u); return w0 + (w1 - w0) * s; }
+    }
+    return profile[profile.length - 1][1];
+  }
+  function frame(c, i) {
+    const a = c[Math.max(0, i - 1)], b = c[Math.min(c.length - 1, i + 1)];
+    let dx = b[0] - a[0], dy = b[1] - a[1]; const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l;
+    let nx = dy, ny = -dx; if (ny > 0) { nx = -nx; ny = -ny; } // normal "para cima"
+    return { dx, dy, nx, ny };
+  }
+  function tubeData(center, profile) {
+    const n = center.length;
+    return center.map((p, i) => { const t = i / (n - 1), w = widthAt(profile, t), fr = frame(center, i); return { x: p[0], y: p[1], w, t, ...fr }; });
+  }
+  function tubePath(D) {
+    const up = D.map(d => [d.x + d.nx * d.w, d.y + d.ny * d.w]);
+    const dn = D.map(d => [d.x - d.nx * d.w, d.y - d.ny * d.w]).reverse();
+    const pts = [...up, ...dn];
+    return "M" + pts.map(p => f1(p[0]) + " " + f1(p[1])).join("L") + "Z";
+  }
+  function bellyPath(D, a, b, amt = 0.55) {
+    const seg = D.filter(d => d.t >= a && d.t <= b);
+    if (seg.length < 3) return "";
+    const lo = seg.map(d => [d.x - d.nx * d.w, d.y - d.ny * d.w]);
+    const inn = seg.map(d => [d.x - d.nx * d.w * (1 - amt), d.y - d.ny * d.w * (1 - amt)]).reverse();
+    return "M" + [...lo, ...inn].map(p => f1(p[0]) + " " + f1(p[1])).join("L") + "Z";
+  }
+  function at(D, t) { return D[Math.max(0, Math.min(D.length - 1, Math.round(t * (D.length - 1))))]; }
+
+  function spines(D, a, b, step, size, col, flip) {
+    let s = "", k = 0;
+    for (let i = 0; i < D.length; i++) {
+      const d = D[i]; if (d.t < a || d.t > b) continue;
+      if ((k++) % step) continue;
+      const sz = size * (0.55 + 0.45 * Math.min(1, d.w / 8));
+      const bx = d.x + d.nx * (d.w - 0.5), by = d.y + d.ny * (d.w - 0.5);
+      const hx = d.x + d.nx * (d.w + sz) + d.dx * sz * 0.5, hy = d.y + d.ny * (d.w + sz) + d.dy * sz * 0.5;
+      const w2 = sz * 0.55;
+      s += `<path d="M${f1(bx - d.dx * w2)} ${f1(by - d.dy * w2)}L${f1(hx)} ${f1(hy)}L${f1(bx + d.dx * w2)} ${f1(by + d.dy * w2)}Z" fill="${col}"/>`;
+    }
+    return s;
+  }
+
+  function claw(x, y, dir, col) { return `<path d="M${f1(x)} ${f1(y)}l${f1(dir * 2.4)} 3.2l${f1(-dir * 0.4)} -3.4z" fill="${col}"/>`; }
+  function leg(D, t, len, dx, C, thick = 4.4, id = 0) {
+    const d = at(D, t);
+    const sx = d.x - d.nx * d.w * 0.4, sy = d.y - d.ny * d.w * 0.4;
+    const mid = [sx + dx * 0.3, sy + len * 0.55], ft = [sx + dx, sy + len];
+    const T = tubeData(catmull([[sx, sy], mid, ft], 6), [[0, thick], [0.6, thick * 0.62], [1, thick * 0.5]]);
+    const dir = dx >= 0 ? 1 : -1;
+    return `<path d="${tubePath(T)}" fill="${C.body}" stroke="${C.line}" stroke-width="0.7"/>` +
+      `<ellipse cx="${f1(ft[0] + dir * 1.4)}" cy="${f1(ft[1])}" rx="3.1" ry="1.7" fill="${C.body}" stroke="${C.line}" stroke-width="0.6"/>` +
+      claw(ft[0] + dir * 3, ft[1] - 0.3, dir, C.horn) + claw(ft[0] + dir * 1.4, ft[1] + 0.7, dir, C.horn) + claw(ft[0] - dir * 0.2, ft[1] + 0.7, dir, C.horn);
+  }
+
+  /* ---------- asas ---------- */
+  function batWing(sx, sy, k, C, far, spread = 1, ribs = 3) {
+    const wr = [sx - 5 * k, sy - 26 * k * spread];
+    const tips = [];
+    for (let i = 0; i < ribs; i++) { const u = i / (ribs - 1); tips.push([wr[0] - (14 + 22 * (1 - Math.abs(u - 0.35))) * k * (0.9 + 0.2 * (1 - u)), wr[1] + (4 + u * 28) * k * (1.1 - 0.35 * spread * 0.2)]); }
+    let d = `M${f1(sx)} ${f1(sy)}Q${f1(sx - 7 * k)} ${f1(sy - 14 * k)} ${f1(wr[0])} ${f1(wr[1])}`;
+    let prev = wr;
+    tips.forEach(tp => { d += `Q${f1((prev[0] + tp[0]) / 2 + 2.5 * k)} ${f1((prev[1] + tp[1]) / 2 - 4.5 * k)} ${f1(tp[0])} ${f1(tp[1])}`; prev = tp; });
+    d += `Q${f1(sx - 12 * k)} ${f1(sy + 4 * k)} ${f1(sx)} ${f1(sy)}Z`;
+    const col = far ? C.wingFar : C.wing;
+    let ribsSvg = tips.map(tp => `<path d="M${f1(wr[0])} ${f1(wr[1])}L${f1(tp[0])} ${f1(tp[1])}" stroke="${C.wingLine}" stroke-width="0.9" fill="none"/>`).join("");
+    return `<path d="${d}" fill="${col}" stroke="${C.line}" stroke-width="0.7" stroke-linejoin="round"/>${ribsSvg}<path d="M${f1(sx)} ${f1(sy)}L${f1(wr[0])} ${f1(wr[1])}" stroke="${C.wingLine}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
+  }
+  function featherWing(sx, sy, k, C, far) {
+    let s = ""; const n = 7;
+    for (let i = 0; i < n; i++) {
+      const a = (-110 - i * 15) * Math.PI / 180, L = (22 - i * 1.2) * k;
+      const ex = sx + Math.cos(a) * L, ey = sy + Math.sin(a) * L;
+      const col = far ? C.wingFar : (i % 2 ? C.wing : C.wing2);
+      s += `<path d="M${f1(sx)} ${f1(sy)}Q${f1((sx + ex) / 2 + 3 * k)} ${f1((sy + ey) / 2 - 3 * k)} ${f1(ex)} ${f1(ey)}Q${f1((sx + ex) / 2 - 4 * k)} ${f1((sy + ey) / 2 + 2 * k)} ${f1(sx)} ${f1(sy)}Z" fill="${col}" stroke="${C.line}" stroke-width="0.5"/>`;
+    }
+    return s;
+  }
+  function mothWings(sx, sy, k, C, pat) {
+    const lobe = (cx, cy, rx, ry, rot, col) => `<ellipse cx="${f1(cx)}" cy="${f1(cy)}" rx="${f1(rx)}" ry="${f1(ry)}" transform="rotate(${rot} ${f1(cx)} ${f1(cy)})" fill="${col}" stroke="${C.line}" stroke-width="0.6"/>`;
+    let s = lobe(sx - 12 * k, sy - 14 * k, 15 * k, 8 * k, -35, C.wing) + lobe(sx - 10 * k, sy - 3 * k, 11 * k, 6.5 * k, 12, C.wing2);
+    s += `<circle cx="${f1(sx - 15 * k)}" cy="${f1(sy - 16 * k)}" r="${f1(3 * k)}" fill="${C.eye}" opacity="0.85"/><circle cx="${f1(sx - 11 * k)}" cy="${f1(sy - 3 * k)}" r="${f1(2 * k)}" fill="${C.eye}" opacity="0.8"/>`;
+    return s;
+  }
+  function finSail(D, a, b, C) {
+    const seg = D.filter(d => d.t >= a && d.t <= b); if (seg.length < 3) return "";
+    const top = seg.map((d, i) => { const h = (6 + 5 * Math.sin(i / 2.2)) * (0.6 + 0.4 * Math.min(1, d.w / 6)); return [d.x + d.nx * (d.w + h), d.y + d.ny * (d.w + h)]; });
+    const base = seg.map(d => [d.x + d.nx * (d.w - 0.5), d.y + d.ny * (d.w - 0.5)]).reverse();
+    return `<path d="M${[...top, ...base].map(p => f1(p[0]) + " " + f1(p[1])).join("L")}Z" fill="${C.wing}" stroke="${C.line}" stroke-width="0.6" opacity="0.92"/>`;
+  }
+
+  /* ---------- cabeças ---------- */
+  function head(type, x, y, ang, sc, C, trait, rnd) {
+    const eyeCol = C.eye;
+    const aggr = trait === "agressivo", shy = trait === "timido", play = trait === "brincalhao", help = trait === "prestativo", myst = trait === "misterioso";
+    let g = "";
+    const horn = (len, curve, col) => `<path d="M-1 -4.5Q${f1(-5 - len * 0.3)} ${f1(-9 - curve)} ${f1(-9 - len)} ${f1(-8 - len * 0.6)}Q${f1(-5)} ${f1(-5)} 2 -3Z" fill="${col}" stroke="${C.line}" stroke-width="0.5"/>`;
+    const eye = (ex, ey, r) => {
+      const open = shy ? r * 1.25 : r;
+      return `<ellipse cx="${ex}" cy="${ey}" rx="${f1(open)}" ry="${f1(open * (aggr ? 0.7 : 0.95))}" fill="#fffdf5" stroke="${C.line}" stroke-width="0.4"/>` +
+        `<ellipse cx="${f1(ex + 0.3)}" cy="${ey}" rx="${f1(open * 0.62)}" ry="${f1(open * (aggr ? 0.55 : 0.8))}" fill="${eyeCol}"/><circle cx="${f1(ex + 0.5)}" cy="${f1(ey)}" r="${f1(open * 0.28)}" fill="#14100c"/><circle cx="${f1(ex + 0.1)}" cy="${f1(ey - open * 0.3)}" r="${f1(open * 0.18)}" fill="#fff"/>` +
+        (aggr ? `<path d="M${f1(ex - open * 1.3)} ${f1(ey - open * 1.6)}L${f1(ex + open * 1.2)} ${f1(ey - open * 0.5)}" stroke="${C.line}" stroke-width="1" stroke-linecap="round"/>` : "");
+    };
+    const teeth = aggr ? `<path d="M7 1.8l1 2l1 -2l1 2l1 -2l1 2" fill="#fffdf5" stroke="${C.line}" stroke-width="0.3"/>` : "";
+    const smile = play ? `<path d="M5 2.3Q9 5.2 13 1.6" stroke="${C.line}" stroke-width="0.7" fill="none" stroke-linecap="round"/><path d="M9 3.6q1 3 2.3 -0.4z" fill="#ef7a8c"/>` : `<path d="M5 2.4Q9 3.2 12.6 2" stroke="${C.line}" stroke-width="0.6" fill="none" stroke-linecap="round"/>`;
+    if (type === "baby") {
+      g += horn(2, 1, C.horn) + `<ellipse cx="0" cy="0" rx="10" ry="9" fill="${C.body}" stroke="${C.line}" stroke-width="0.8"/>`;
+      g += `<ellipse cx="6.5" cy="3" rx="6.5" ry="5" fill="${C.belly}" stroke="${C.line}" stroke-width="0.6"/><circle cx="9.6" cy="1.8" r="0.8" fill="${C.line}"/><circle cx="12" cy="2.2" r="0.8" fill="${C.line}"/>`;
+      g += eye(1.2, -2.6, 3.3) + `<path d="M5.5 5.6Q9 8 12 5.4" stroke="${C.line}" stroke-width="0.7" fill="none" stroke-linecap="round"/>`;
+      g += `<circle cx="-1.5" cy="3" r="2" fill="#ff9aa8" opacity="0.5"/>`;
+    } else if (type === "snake") {
+      g += `<path d="M-6 -3.5Q0 -6 8 -2.4Q13 0 14 1.6Q12 4.8 6 4.6Q-2 5 -6 3.2Z" fill="${C.body}" stroke="${C.line}" stroke-width="0.8"/>` +
+        `<path d="M-2 3.6Q6 5.8 13 2.6Q9 5.2 -2 4.4Z" fill="${C.belly}"/>` + eye(3, -1.4, 2.1) + smile +
+        `<path d="M14 1.8l5 -1.5m-5 1.5l5 2" stroke="#d63d57" stroke-width="0.7" stroke-linecap="round"/>`;
+    } else if (type === "cobra") {
+      g += `<path d="M-9 -1Q-2 -14 4 -1Q-2 11 -9 -1Z" fill="${C.wing}" stroke="${C.line}" stroke-width="0.8"/><circle cx="-4.5" cy="-2" r="2" fill="${C.eye}" opacity=".7"/><circle cx="-4.5" cy="3.4" r="1.4" fill="${C.eye}" opacity=".7"/>` +
+        `<path d="M-3 -4Q4 -6 9 -2.5Q12 0 12 2.2Q8 5.2 1 4.8Q-3 3 -3 -4Z" fill="${C.body}" stroke="${C.line}" stroke-width="0.8"/>` + eye(4.5, -1.2, 2.2) + `<path d="M12 2.2l4 -1.2m-4 1.2l4 1.8" stroke="#d63d57" stroke-width="0.7" stroke-linecap="round"/>`;
+    } else if (type === "cat") {
+      g += `<path d="M-8 -6L-6 -14L0 -8Z M2 -8L7 -14L8 -6Z" fill="${C.body}" stroke="${C.line}" stroke-width="0.7"/><ellipse cx="0" cy="0" rx="11" ry="8.5" fill="${C.body}" stroke="${C.line}" stroke-width="0.8"/>` +
+        `<path d="M-6 -7l1 3m4 -4l0.5 3.5m4 -3l-0.3 3" stroke="${C.line}" stroke-width="0.8"/>` + eye(-3, -1.6, 2.8) + eye(5, -1.6, 2.8) +
+        `<path d="M-8 3Q0 11 9 3Q4 8.4 -8 3Z" fill="#fffdf5" stroke="${C.line}" stroke-width="0.7"/><path d="M-7 3.2l1.2 2.2l1.2 -2m3 2.4l1.2 -2l1.2 2.2m3 -2.2l1 2l1.2 -2" stroke="${C.line}" stroke-width="0.5" fill="none"/>`;
+    } else {
+      const long = type === "rex" ? 16 : type === "beak" ? 11 : 14;
+      if (type === "beak") {
+        g += horn(1.5, 1, C.horn) + `<path d="M-6 -5Q2 -8 8 -4L16 -0.5Q17 3 11 3.4L7 6Q-2 7 -7 3Z" fill="${C.body}" stroke="${C.line}" stroke-width="0.8"/>` +
+          `<path d="M8 -4.4Q18 -4 17.6 3Q15 0 9 0.4Z" fill="${C.horn}" stroke="${C.line}" stroke-width="0.6"/>` + eye(2.4, -1.4, 2.2);
+      } else {
+        g += horn(3 + (aggr ? 2 : 0), 1.5, C.horn) + (type === "lung" ? `<path d="M0 -6Q-3 -15 -10 -17M2 -6Q4 -14 0 -19" stroke="${C.horn}" stroke-width="1.2" fill="none" stroke-linecap="round"/>` : "") +
+          `<path d="M-7 -4.4Q0 -7 8 -4.2Q${long + 6} -1.6 ${long + 7} 1.4Q${long + 5} 4 ${long - 4} 4.2Q6 8 -1 7Q-7 5.4 -7 -4.4Z" fill="${C.body}" stroke="${C.line}" stroke-width="0.8"/>` +
+          `<path d="M-2 5.6Q8 7 ${long + 3} 3.4Q${long - 4} 5 -2 5.6Z" fill="${C.belly}"/>` +
+          `<circle cx="${long + 3.4}" cy="-0.6" r="0.8" fill="${C.line}"/>` + eye(3.6, -1.6, 2.4) + teeth + smile.replace(/5 2/g, "6 2");
+        if (type === "lung") g += `<path d="M${long + 4} 2Q${long + 12} 4 ${long + 14} 11M${long + 3} 0Q${long + 14} -3 ${long + 17} -9" stroke="${C.horn}" stroke-width="0.9" fill="none" stroke-linecap="round"/>`;
+      }
+    }
+    if (myst) g += `<circle cx="2" cy="-1.5" r="5.5" fill="${C.eye}" opacity="0.18"/>`;
+    return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(ang)}) scale(${f1(sc)})">${g}</g>`;
+  }
+
+  /* ---------- identificação de espécie / cor ---------- */
+  function species(card, ignoreBaby) {
+    const n = strip(card.nome);
+    const has = (...w) => w.some(x => n.includes(x));
+    if (card.tam === "filhote" && !ignoreBaby) return "baby";
+    if (has("lung")) return "lung";
+    if (has("hidra") && !has("hidraptero")) return "hydra";
+    if (has("coatl", "hidraptero")) return "feathered";
+    if (has("koiwyrm")) return "sea";
+    if (has("serpente marinha")) return "sea";
+    if (has("lindworm")) return "lindworm";
+    if (has("cobrete")) return "cobra";
+    if (has("wyrm")) return "wyrm";
+    if (has("wyvern")) return "wyvern";
+    if (has("fada", "mariposa", "tamarim")) return "fairy";
+    if (has("anfiptero")) return "feathered";
+    if (has("grifo")) return "griffin";
+    if (has("cheshire")) return "cheshire";
+    if (has("rex")) return "rex";
+    if (has("basilisco")) return "basilisk";
+    if (has("remora")) return "sea";
+    if (has("espirito")) return "spirit";
+    if (has("papa-", "pastador", "dragonete")) return "drake";
+    return "western";
+  }
+  function paletteFor(card, rnd) {
+    const n = strip(card.nome);
+    const has = (...w) => w.some(x => n.includes(x));
+    let h, s = 52, l = 42, rainbow = false;
+    if (has("azul")) { h = 214; s = 60; l = 46; }
+    else if (has("vermelh", "carmim", "escarlate", "chamusc", "fogo")) { h = 4; s = 66; l = 44; }
+    else if (has("dourad", "ouro", "amarel", "fulv", "melifer")) { h = has("fulv") ? 32 : 44; s = 68; l = 50; }
+    else if (has("verde", "bambu", "grama", "algas", "folha", "floresta", "sequoia", "savana", "gramado")) { h = 128 + rnd() * 30; s = 46; l = 38; }
+    else if (has("branc", "alvo", "neve")) { h = 40; s = 12; l = 78; }
+    else if (has("cinza", "granito", "pedra", "estepes")) { h = 25; s = 7; l = 48; }
+    else if (has("arco", "cromatic", "colorido")) { h = 200; s = 60; l = 50; rainbow = true; }
+    else if (has("causticas", "caustica", "acid", "venen")) { h = 82; s = 70; l = 42; }
+    else if (has("roxo", "violet", "ametista", "vampir", "noite", "sombr")) { h = 275; s = 40; l = 34; }
+    else if (has("rosa", "mel")) { h = 335; s = 58; l = 62; }
+    else if (has("lago", "mar", "marinha", "agua", "turquesa")) { h = 184; s = 52; l = 42; }
+    else { h = Math.floor(rnd() * 360); s = 38 + rnd() * 24; l = 36 + rnd() * 14; }
+    if (card.traco === "misterioso") { l -= 6; s -= 6; }
+    if (card.traco === "brincalhao") { s += 8; l += 4; }
+    const bodyGrad = rainbow;
+    const C = {
+      h, body: hsl(h, s, l), bodyDark: hsl(h, s, l - 16), belly: hsl(h + 14, s - 12, l + 30), line: hsl(h, s, Math.max(10, l - 32)),
+      wing: hsl(h + 24, s + 4, l + 8, 0.94), wing2: hsl(h + 44, s + 6, l + 18, 0.94), wingFar: hsl(h + 24, s, l - 6, 0.9), wingLine: hsl(h, s, Math.max(10, l - 24)),
+      horn: hsl(36, 40, 80), spine: hsl(h + 30, s + 10, l + 14), rainbow: bodyGrad
+    };
+    const eyes = { agressivo: "#e8431c", brincalhao: "#f5c518", prestativo: "#3ca66b", timido: "#4a90d9", misterioso: "#b259e8" };
+    C.eye = eyes[card.traco] || "#f5c518";
+    return C;
+  }
+
+  /* ---------- montagem ---------- */
+  function dragonArt(card) {
+    const rnd = rng((card.numero || 1) * 977 + 31);
+    const sp = species(card);
+    const C = paletteFor(card, rnd);
+    const tam = card.tam || "pequeno";
+    const k = { filhote: 0.75, pequeno: 0.88, medio: 0.98, grande: 1.06 }[tam] || 0.9;
+    const flip = rnd() < 0.5;
+    const id = "dg" + card.numero;
+    const traco = card.traco;
+    const hab = card.hab || [];
+    const habCols = ["#e05a47", "#e3b341", "#9a6bd1"];
+    const aura = hab.length ? hab.map(i => habCols[i]) : ["#d8c9a8"];
+    const auraStops = aura.length === 1 ? `<stop offset="0" stop-color="${aura[0]}" stop-opacity=".55"/><stop offset="1" stop-color="${aura[0]}" stop-opacity="0"/>` :
+      `<stop offset="0" stop-color="${aura[0]}" stop-opacity=".5"/><stop offset=".55" stop-color="${aura[1]}" stop-opacity=".32"/><stop offset="1" stop-color="${aura[aura.length - 1]}" stop-opacity="0"/>`;
+    const bodyFill = C.rainbow ? `url(#${id}r)` : `url(#${id}b)`;
+    let defs = `<radialGradient id="${id}a" cx="50%" cy="52%" r="55%">${auraStops}</radialGradient>` +
+      `<linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.body}"/><stop offset="1" stop-color="${C.bodyDark}"/></linearGradient>` +
+      `<linearGradient id="${id}r" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8554a"/><stop offset=".25" stop-color="#f0b429"/><stop offset=".5" stop-color="#4fb477"/><stop offset=".75" stop-color="#3f8fd9"/><stop offset="1" stop-color="#9a5fd1"/></linearGradient>`;
+    const baseC = { ...C };
+    const bf = { ...C, body: bodyFill };
+    let out = "", back = "", front = "";
+    const ground = `<ellipse cx="58" cy="67" rx="${f1(34 * k)}" ry="3" fill="#000" opacity=".14"/>`;
+    const jit = (a) => a + (rnd() - 0.5) * 4;
+    const mk = (pts, prof) => { const D = tubeData(catmull(pts, 9), prof); return D; };
+    const nm = strip(card.nome);
+    const patKind = /listrad|tigr|zebr/.test(nm) ? "stripes" : /pintad|salpic|varieg|malhad|leopard|mancha/.test(nm) ? "spots" : (rnd() < 0.3 ? (rnd() < 0.5 ? "stripes" : "spots") : "none");
+    const patCol = hsl(C.h + 180, 30, 22, 0.32);
+    const body = (D, strokeW = 0.9) => {
+      const bp = tubePath(D);
+      let pat = "";
+      if (patKind === "stripes") D.forEach((d, i) => { if (d.t < 0.12 || d.t > 0.9 || i % 4) return; pat += `<path d="M${f1(d.x - d.nx * d.w * 1.2 - d.dx * 1.5)} ${f1(d.y - d.ny * d.w * 1.2 - d.dy * 1.5)}L${f1(d.x + d.nx * d.w * 1.2 + d.dx * 1.5)} ${f1(d.y + d.ny * d.w * 1.2 + d.dy * 1.5)}" stroke="${patCol}" stroke-width="${f1(1.2 + d.w * 0.16)}"/>`; });
+      else if (patKind === "spots") D.forEach((d, i) => { if (d.t < 0.12 || d.t > 0.9 || i % 3) return; const o = ((i * 37) % 7 - 3) / 3 * d.w * 0.55; pat += `<circle cx="${f1(d.x + d.nx * o)}" cy="${f1(d.y + d.ny * o)}" r="${f1(0.9 + d.w * 0.14)}" fill="${patCol}"/>`; });
+      return `<path d="${bp}" fill="${bodyFill}" stroke="${C.line}" stroke-width="${strokeW}" stroke-linejoin="round"/>` + (pat ? `<clipPath id="${id}c${D.length}"><path d="${bp}"/></clipPath><g clip-path="url(#${id}c${D.length})">${pat}</g>` : "");
+    };
+    const scaleDots = (D, a, b, step = 3) => { let s = ""; D.forEach((d, i) => { if (d.t < a || d.t > b || i % step) return; s += `<path d="M${f1(d.x - 1.4)} ${f1(d.y + 0.8)}q1.4 -2 2.8 0" stroke="${C.line}" stroke-width="0.45" fill="none" opacity=".45"/>`; }); return s; };
+
+    if (sp === "baby") {
+      const s0 = species(card, true);
+      const cx = 60 + (rnd() - 0.5) * 10, cy = 46;
+      const side = rnd() < 0.5 ? 1 : -1;
+      const tailStyle = Math.floor(rnd() * 3);
+      const longTail = ["lung", "sea", "lindworm", "wyrm", "cobra", "feathered", "basilisk"].includes(s0);
+      const tl = longTail ? 1.5 : 1;
+      let tail;
+      if (tailStyle === 0) tail = `M${cx + 14} ${cy + 8}Q${cx + 34 * tl} ${cy + 12} ${cx + 34 * tl} ${cy - 6 * tl}`;
+      else if (tailStyle === 1) tail = `M${cx + 14} ${cy + 10}Q${cx + 30 * tl} ${cy + 20} ${cx + 38 * tl} ${cy + 8}Q${cx + 44 * tl} ${cy + 0} ${cx + 38 * tl} ${cy - 4}`;
+      else tail = `M${cx + 14} ${cy + 8}C${cx + 26 * tl} ${cy + 6} ${cx + 30 * tl} ${cy + 18} ${cx + 38 * tl} ${cy + 14}`;
+      back += `<path d="${tail}" stroke="${C.line}" stroke-width="6.4" fill="none" stroke-linecap="round"/><path d="${tail}" stroke="${C.body}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+      if (s0 === "fairy") back += mothWings(cx + 2, cy - 4, 0.62 * k, C);
+      else if (s0 === "feathered" || s0 === "griffin" || s0 === "spirit") back += featherWing(cx - 2, cy - 2, 0.62 * k, C, true) + featherWing(cx + 3, cy - 2, 0.66 * k, C, false);
+      else if (["lung", "sea", "lindworm", "wyrm", "cobra", "rex", "basilisk", "cheshire"].includes(s0)) { back += spines(tubeData(catmull([[cx - 6, cy - 4], [cx + 2, cy - 10], [cx + 12, cy - 4]], 6), [[0, 8], [1, 8]]), 0.1, 0.9, 3, 4, C.spine); }
+      else back += batWing(cx - 4, cy - 8, 0.55 * k, C, true) + batWing(cx + 2, cy - 8, 0.6 * k, C, false);
+      if (s0 === "cobra") back += `<path d="M${cx - 12} ${cy - 10}Q${cx + 4} ${cy - 30} ${cx + 20} ${cy - 10}Q${cx + 4} ${cy + 2} ${cx - 12} ${cy - 10}Z" fill="${C.wing}" stroke="${C.line}" stroke-width="0.7"/>`;
+      if (s0 === "sea") back += finSail(tubeData(catmull([[cx - 14, cy - 2], [cx, cy - 12], [cx + 14, cy - 2]], 6), [[0, 8], [1, 8]]), 0.05, 0.95, C);
+      front += `<ellipse cx="${cx}" cy="${cy + 6}" rx="${f1(17 * k)}" ry="${f1(14 * k)}" fill="${bodyFill}" stroke="${C.line}" stroke-width="0.9"/><ellipse cx="${cx + 3 * side}" cy="${cy + 10}" rx="${f1(10 * k)}" ry="${f1(8 * k)}" fill="${C.belly}"/>`;
+      front += `<ellipse cx="${cx - 8}" cy="${cy + 19}" rx="5" ry="3" fill="${bodyFill}" stroke="${C.line}" stroke-width="0.7"/><ellipse cx="${cx + 9}" cy="${cy + 19}" rx="5" ry="3" fill="${bodyFill}" stroke="${C.line}" stroke-width="0.7"/>`;
+      if (s0 === "rex") front += `<path d="M${cx - 14} ${cy + 4}q-6 2 -6 -3M${cx + 14} ${cy + 4}q6 2 6 -3" stroke="${C.body}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+      const hdType = s0 === "cheshire" ? "cat" : (s0 === "feathered" || s0 === "griffin") ? "beak" : "baby";
+      const hs = hdType === "baby" ? 1.35 : 1.0;
+      front += head(hdType, cx + 4, cy - 10, (rnd() - 0.5) * 14, hs * k, { ...C, body: bodyFill }, traco, rnd);
+      if (s0 === "lung") front += `<path d="M${cx + 8} ${cy - 17}Q${cx + 12} ${cy - 26} ${cx + 20} ${cy - 24}M${cx + 12} ${cy - 5}Q${cx + 26} ${cy - 4} ${cx + 28} ${cy + 4}M${cx + 12} ${cy - 2}Q${cx + 24} ${cy + 6} ${cx + 22} ${cy + 12}" stroke="${C.horn}" stroke-width="1" fill="none" stroke-linecap="round"/>`;
+      if (s0 === "fairy") front += `<path d="M${cx + 2} ${cy - 20}Q${cx - 2} ${cy - 30} ${cx - 8} ${cy - 29}M${cx + 8} ${cy - 20}Q${cx + 10} ${cy - 31} ${cx + 16} ${cy - 31}" stroke="${C.line}" stroke-width="0.8" fill="none"/><circle cx="${cx - 8}" cy="${cy - 29}" r="1.5" fill="${C.eye}"/><circle cx="${cx + 16}" cy="${cy - 31}" r="1.5" fill="${C.eye}"/>`;
+      if (rnd() < 0.7) front += `<path d="M${cx - 22} ${cy + 20}l4 -6l4 4l4 -6l4 6l4 -5l4 5l4 -4l4 5l4 -5l4 5l4 -4l3 5Z" fill="#f6efe0" stroke="${C.line}" stroke-width="0.7"/>`;
+    } else if (sp === "lung" || sp === "sea" || sp === "lindworm" || sp === "wyrm" || sp === "cobra") {
+      let pts, prof, hd = "dragon";
+      const wob = jit(0);
+      if (sp === "lung") { pts = [[6, 52], [22, 36 + wob], [40, 54], [58, 36 - wob], [76, 54], [94, 34], [106, 22]]; prof = [[0, 1.2], [0.35, 5.2], [0.7, 6.4], [0.92, 4.8], [1, 4]]; hd = "lung"; }
+      else if (sp === "sea") { pts = [[6, 56], [24, 46], [40, 58], [58, 44], [78, 56], [94, 42], [104, 28]]; prof = [[0, 1], [0.3, 5], [0.65, 6.6], [0.9, 5], [1, 4]]; hd = "dragon"; }
+      else if (sp === "lindworm") { pts = [[6, 58], [26, 52], [44, 58], [64, 48], [82, 44], [94, 34], [104, 28]]; prof = [[0, 1.4], [0.4, 6], [0.7, 7], [0.9, 5], [1, 4.4]]; hd = "dragon"; }
+      else if (sp === "wyrm") { pts = [[6, 58], [24, 62], [42, 54], [62, 56], [80, 46], [92, 36], [102, 30]]; prof = [[0, 2], [0.4, 8.5], [0.75, 9.5], [0.92, 7.4], [1, 6.2]]; hd = "dragon"; }
+      else { pts = [[10, 62], [30, 64], [48, 62], [62, 52], [68, 38], [72, 24], [76, 16]]; prof = [[0, 1.4], [0.5, 5.4], [0.85, 6.2], [1, 4.6]]; hd = "cobra"; }
+      const D = mk(pts, prof);
+      back += spines(D, 0.12, 0.92, sp === "lung" ? 2 : 3, sp === "lung" ? 6 : 5, C.spine);
+      if (sp === "sea") back += finSail(D, 0.18, 0.9, C);
+      if (sp === "lung") {
+        [0.3, 0.52].forEach((t, i) => { back += leg(D, t, 10, 3, bf, 3.6); });
+        [0.62, 0.8].forEach(t => { front += leg(D, t, 9, -3, bf, 3.6); });
+      }
+      if (sp === "lindworm") { front += leg(D, 0.72, 11, 4, bf, 4.2); front += leg(D, 0.62, 11, -3, bf, 4.2); }
+      front += body(D) + `<path d="${bellyPath(D, 0.12, 0.93, 0.5)}" fill="${C.belly}" opacity=".95"/>` + scaleDots(D, 0.1, 0.9, 3);
+      if (sp === "sea") { const d = at(D, 0.5); front += `<path d="M${f1(d.x)} ${f1(d.y + d.w)}q-6 9 -14 7q6 -2 8 -8z" fill="${C.wing}" stroke="${C.line}" stroke-width="0.6"/>`; }
+      const e = D[D.length - 1], a = Math.atan2(e.dy, e.dx) * 180 / Math.PI;
+      front += head(hd, e.x, e.y, sp === "cobra" ? -20 : Math.max(-35, Math.min(20, a * 0.5)), 0.9 * k, bf, traco, rnd);
+    } else if (sp === "fairy" || sp === "drake" || sp === "western" || sp === "wyvern" || sp === "feathered" || sp === "griffin" || sp === "cheshire" || sp === "spirit") {
+      let pts, prof, hd = "dragon", wing = "bat", legs = 2, wk = 1;
+      const j = jit(0);
+      const big = sp === "wyvern" || sp === "western" || sp === "griffin";
+      if (sp === "western" || sp === "wyvern") { pts = [[6, 60], [24, 64 + j], [42, 58], [56, 50], [72, 47], [86, 42], [92, 30], [104, 24]]; prof = [[0, 1.2], [0.3, 4.4], [0.55, 10], [0.74, 9], [0.88, 5], [1, 4.4]]; legs = sp === "wyvern" ? 1 : 2; wk = sp === "wyvern" ? 1.3 : 1.1; }
+      else if (sp === "griffin") { pts = [[8, 58], [24, 62], [42, 56], [58, 48], [74, 46], [88, 40], [94, 28], [102, 24]]; prof = [[0, 1.4], [0.3, 4.4], [0.56, 9.5], [0.74, 8.5], [0.88, 5.2], [1, 4.4]]; hd = "beak"; wing = "feather"; wk = 1.1; }
+      else if (sp === "feathered") { pts = [[6, 56], [22, 48], [38, 58], [56, 46], [74, 52], [90, 40], [100, 28]]; prof = [[0, 1.2], [0.3, 4.6], [0.65, 6.4], [0.9, 4.8], [1, 4.2]]; hd = "beak"; wing = "feather"; legs = 0; wk = 1; }
+      else if (sp === "fairy") { pts = [[16, 58], [32, 62], [48, 56], [62, 48], [76, 46], [88, 38], [96, 28]]; prof = [[0, 1.2], [0.3, 3.6], [0.55, 7.2], [0.75, 6.4], [0.9, 4.2], [1, 3.8]]; wing = "moth"; wk = 1; }
+      else if (sp === "cheshire") { pts = [[8, 58], [26, 52], [44, 58], [60, 50], [74, 46], [86, 42], [94, 34]]; prof = [[0, 1.4], [0.35, 5], [0.58, 9], [0.78, 8], [1, 6]]; hd = "cat"; wing = "none"; legs = 2; }
+      else if (sp === "spirit") { pts = [[8, 54], [26, 46], [44, 56], [62, 44], [80, 50], [92, 38], [100, 30]]; prof = [[0, 0.8], [0.3, 4.6], [0.65, 7.4], [0.9, 5], [1, 4.4]]; wing = "feather"; legs = 0; }
+      else { pts = [[8, 60], [26, 63 + j], [44, 58], [58, 50], [72, 48], [86, 42], [92, 32], [102, 28]]; prof = [[0, 1.2], [0.3, 4.2], [0.56, 8.6], [0.74, 7.6], [0.88, 5], [1, 4.2]]; wk = /voador|noturno/.test(strip(card.nome)) ? 1.3 : 0.95; legs = rnd() < 0.5 ? 2 : 1; }
+      const D = mk(pts, prof);
+      const sh = at(D, 0.64);
+      const wscale = (traco === "timido" ? 0.62 : 1) * wk * k * 0.9;
+      if (wing === "bat") { back += batWing(sh.x + 8, sh.y - sh.w * 0.6, wscale, C, true, 0.9, 4) + batWing(sh.x, sh.y - sh.w * 0.6, wscale * 1.1, C, false, 1, 4); }
+      else if (wing === "feather") { back += featherWing(sh.x + 6, sh.y - sh.w * 0.5, wscale, C, true) + featherWing(sh.x, sh.y - sh.w * 0.5, wscale * 1.05, C, false); }
+      else if (wing === "moth") { back += mothWings(sh.x + 2, sh.y - sh.w * 0.5, wscale * 1.15, C); }
+      back += spines(D, 0.15, 0.9, 3, traco === "agressivo" ? 6 : 4.2, C.spine);
+      if (legs >= 1) { back += leg(D, 0.42, 12, 3, bf, 4.8); }
+      if (legs >= 2) { front += leg(D, 0.64, 12, -2, bf, 4.4); }
+      // cauda: ponta em losango
+      const t0 = D[0]; const tk = Math.floor(rnd() * 3); back += tk === 0 ? `<path d="M${f1(t0.x)} ${f1(t0.y)}l-5 -3.6l1 3.6l-1 3.6z" fill="${C.spine}" stroke="${C.line}" stroke-width="0.5"/>` : tk === 1 ? `<circle cx="${f1(t0.x - 1.2)}" cy="${f1(t0.y)}" r="3.2" fill="${C.spine}" stroke="${C.line}" stroke-width="0.5"/><path d="M${f1(t0.x - 2)} ${f1(t0.y - 2.8)}l-1 -3l2 2.4m-1 3.4l-3 -1l3 -0.4" stroke="${C.line}" stroke-width="0.5" fill="${C.horn}"/>` : `<path d="M${f1(t0.x)} ${f1(t0.y)}q-6 -6 -9 0q3 6 9 0z" fill="${C.wing}" stroke="${C.line}" stroke-width="0.5"/>`;
+      front += body(D) + `<path d="${bellyPath(D, 0.12, 0.9, 0.5)}" fill="${C.belly}" opacity=".95"/>` + scaleDots(D, 0.2, 0.85, 3);
+      if (sp === "cheshire") front += `<path d="${tubePath(tubeData(catmull([[40, 56], [48, 53], [58, 52]], 4), [[0, 2.6], [1, 2.6]]))}" fill="${C.wing2}" opacity=".7"/><path d="M52 44l2 -5m4 5l2 -5m4 5l2 -5" stroke="${C.wing2}" stroke-width="1.8" stroke-linecap="round"/>`;
+      if (sp === "spirit") front += `<ellipse cx="60" cy="46" rx="44" ry="20" fill="#cfe6ff" opacity=".18"/>`;
+      const e = D[D.length - 1], a = Math.atan2(e.dy, e.dx) * 180 / Math.PI;
+      front += head(hd, e.x, e.y, Math.max(-25, Math.min(25, a * 0.55)), 0.95 * k, bf, traco, rnd);
+      if (sp === "fairy") front += `<path d="M${f1(e.x - 2)} ${f1(e.y - 5)}Q${f1(e.x - 7)} ${f1(e.y - 15)} ${f1(e.x - 12)} ${f1(e.y - 14)}M${f1(e.x + 1)} ${f1(e.y - 5)}Q${f1(e.x)} ${f1(e.y - 16)} ${f1(e.x - 4)} ${f1(e.y - 18)}" stroke="${C.line}" stroke-width="0.7" fill="none"/><circle cx="${f1(e.x - 12)}" cy="${f1(e.y - 14)}" r="1.4" fill="${C.eye}"/><circle cx="${f1(e.x - 4)}" cy="${f1(e.y - 18)}" r="1.4" fill="${C.eye}"/>`;
+    } else if (sp === "hydra") {
+      const D = mk([[6, 62], [24, 66], [42, 60], [58, 55], [72, 52]], [[0, 1.4], [0.35, 5.5], [0.7, 10.5], [1, 9.5]]);
+      const necks = [[[72, 52], [80, 38], [88, 26], [98, 20]], [[70, 54], [82, 48], [94, 42], [106, 38]], [[68, 50], [72, 34], [76, 20], [78, 10]]];
+      const headsAt = [];
+      necks.forEach((np, i) => { const ND = tubeData(catmull(np, 8), [[0, 5.2], [1, 3.4]]); back += `<path d="${tubePath(ND)}" fill="${bodyFill}" stroke="${C.line}" stroke-width="0.8"/>`; const e = ND[ND.length - 1]; headsAt.push([e.x, e.y, Math.max(-30, Math.min(25, Math.atan2(e.dy, e.dx) * 90 / Math.PI))]); });
+      back += batWing(52, 48, 0.8 * k, C, true, 0.9, 3);
+      back += leg(D, 0.45, 10, 3, bf, 4.8);
+      front += body(D) + `<path d="${bellyPath(D, 0.15, 0.95, 0.5)}" fill="${C.belly}"/>` + spines(D, 0.15, 0.85, 3, 4.5, C.spine) + leg(D, 0.7, 10, -2, bf, 4.6);
+      headsAt.forEach((h, i) => { front += head("dragon", h[0], h[1], h[2], 0.62 * k, bf, traco, rnd); });
+    } else if (sp === "rex") {
+      const pts = [[6, 58], [26, 58], [46, 52], [62, 40], [70, 26], [84, 18]];
+      const D = mk(pts, [[0, 1.4], [0.35, 6], [0.62, 11], [0.82, 8.6], [1, 6.4]]);
+      back += spines(D, 0.3, 0.8, 3, 4, C.spine);
+      front += `<path d="${tubePath(D)}" fill="${bodyFill}" stroke="${C.line}" stroke-width="0.9"/><path d="${bellyPath(D, 0.35, 0.9, 0.5)}" fill="${C.belly}"/>`;
+      const hp = at(D, 0.58); front += leg(D, 0.56, 18, 3, bf, 7) + leg(D, 0.62, 18, -1, bf, 6);
+      const ar = at(D, 0.82); front += `<path d="M${f1(ar.x)} ${f1(ar.y + 3)}q5 3 8 0" stroke="${C.body}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+      front += head("rex", 84, 18, 6, 1.1 * k, bf, traco, rnd);
+    } else { // basilisk
+      const pts = [[6, 60], [24, 56], [40, 58], [58, 54], [76, 55], [92, 50], [104, 48]];
+      const D = mk(pts, [[0, 1.2], [0.3, 4.4], [0.55, 7.6], [0.8, 6], [1, 4.6]]);
+      back += spines(D, 0.2, 0.9, 2, 5.5, C.spine) + leg(D, 0.3, 10, -3, bf, 4) + leg(D, 0.78, 10, 3, bf, 4);
+      front += body(D) + `<path d="${bellyPath(D, 0.1, 0.95, 0.5)}" fill="${C.belly}"/>` + scaleDots(D, 0.1, 0.9, 2) + leg(D, 0.36, 12, 4, bf, 4.4) + leg(D, 0.72, 12, -3, bf, 4.4);
+      const e = D[D.length - 1];
+      front += `<path d="M${f1(e.x - 4)} ${f1(e.y - 6)}l3 -9l3 6l3 -8l2 8l2 -6l-2 9z" fill="${C.eye}" stroke="${C.line}" stroke-width="0.6"/>` + head("dragon", e.x, e.y, 0, 0.9 * k, bf, traco, rnd);
+    }
+
+    // brilhos por traço
+    let extra = "";
+    if (traco === "misterioso") for (let i = 0; i < 6; i++) extra += `<path d="M${f1(8 + rnd() * 104)} ${f1(6 + rnd() * 30)}l1 2.2l2.2 1l-2.2 1l-1 2.2l-1 -2.2l-2.2 -1l2.2 -1z" fill="#d8b4fe" opacity=".85"/>`;
+    if (traco === "brincalhao") for (let i = 0; i < 4; i++) extra += `<circle cx="${f1(10 + rnd() * 100)}" cy="${f1(8 + rnd() * 30)}" r="${f1(1.2 + rnd() * 1.6)}" fill="#fff" stroke="#9fd3ff" stroke-width="0.6" opacity=".85"/>`;
+    if (traco === "prestativo") extra += `<ellipse cx="60" cy="36" rx="40" ry="22" fill="none" stroke="#fde68a" stroke-width="1.2" opacity=".55" stroke-dasharray="2 3"/>`;
+    if (traco === "agressivo") extra += `<path d="M10 12l6 6m-1 -6l-5 6M104 8l6 6m-1 -6l-5 6" stroke="#b91c1c" stroke-width="1.1" opacity=".5" stroke-linecap="round"/>`;
+    const tr = flip ? ` transform="translate(60 40) scale(-0.86 0.86) translate(-60 -38)"` : ` transform="translate(60 40) scale(0.86) translate(-60 -38)"`;
+    return `<svg viewBox="0 0 120 74" class="w-full h-16" role="img" aria-label="${(card.nome || "").replace(/"/g, "")}"><defs>${defs}</defs><ellipse cx="60" cy="38" rx="56" ry="34" fill="url(#${id}a)"/>${extra}<g${tr}>${ground}${back}${front}</g></svg>`;
+  }
+  root.dragonArt = dragonArt;
+  if (typeof module !== "undefined") module.exports = { dragonArt };
+})(typeof window !== "undefined" ? window : globalThis);
+
     function getDragonIllustrationSVG(card) {
+      try {
+        const C = (window.__dragonArtCache = window.__dragonArtCache || {});
+        const key = "dgs" + card.numero;
+        if (!C[key]) {
+          const raw = window.dragonArt(card);
+          const inner = raw.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "");
+          let host = document.getElementById("dragon-symbols");
+          if (!host) {
+            host = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            host.id = "dragon-symbols"; host.setAttribute("width", "0"); host.setAttribute("height", "0");
+            host.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
+            document.body.appendChild(host);
+          }
+          const sym = document.createElementNS("http://www.w3.org/2000/svg", "symbol");
+          sym.id = key; sym.setAttribute("viewBox", "0 0 120 74");
+          sym.innerHTML = inner;
+          host.appendChild(sym);
+          C[key] = true;
+        }
+        return `<svg viewBox="0 0 120 74" class="w-full h-[72px]" role="img" aria-label="${(card.nome || "").replace(/"/g, "")}"><use href="#${key}"/></svg>`;
+      }
+      catch (e) { return getDragonIllustrationSVG_old(card); }
+    }
+    function getDragonIllustrationSVG_old(card) {
       const hue = ((card.numero * 47) % 360);
       const primaryColor = `hsl(${hue}, 44%, 32%)`;
       const accentColor = `hsl(${(hue + 35) % 360}, 58%, 48%)`;
